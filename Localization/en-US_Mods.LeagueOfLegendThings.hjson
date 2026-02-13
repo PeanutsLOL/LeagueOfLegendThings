@@ -1,0 +1,178 @@
+Buffs: {
+	LethalTempo: {
+		DisplayName: Lethal Tempo
+		Description: Mods.LeagueOfLegendThings.Buffs.LethalTempo.Description
+	}
+
+	Conqueror: {
+		DisplayName: Conqueror
+		Description: Mods.LeagueOfLegendThings.Buffs.Conqueror.Description
+	}
+
+	FleetFootwork: {
+		DisplayName: Fleet Footwork
+		Description: Mods.LeagueOfLegendThings.Buffs.FleetFootwork.Description
+	}
+
+	AbsorbLife: {
+		DisplayName: Absorb Life
+		Description: Mods.LeagueOfLegendThings.Buffs.AbsorbLife.Description
+	}
+
+	Triumph: {
+		DisplayName: Triumph
+		Description: Mods.LeagueOfLegendThings.Buffs.Triumph.Description
+	}
+
+	PresenceOfMind: {
+		DisplayName: Presence Of Mind
+		Description: Mods.LeagueOfLegendThings.Buffs.PresenceOfMind.Description
+	}
+
+	LegendAlacrity: {
+		DisplayName: Legend Alacrity
+		Description: Mods.LeagueOfLegendThings.Buffs.LegendAlacrity.Description
+	}
+
+	LegendBloodline: {
+		DisplayName: Legend Bloodline
+		Description: Mods.LeagueOfLegendThings.Buffs.LegendBloodline.Description
+	}
+
+	LegendHaste: {
+		DisplayName: Legend Haste
+		Description: Mods.LeagueOfLegendThings.Buffs.LegendHaste.Description
+	}
+
+	CoupDeGrace: {
+		DisplayName: Coup De Grace
+		Description: Mods.LeagueOfLegendThings.Buffs.CoupDeGrace.Description
+	}
+
+	CutDown: {
+		DisplayName: Cut Down
+		Description: Mods.LeagueOfLegendThings.Buffs.CutDown.Description
+	}
+
+	LastStand: {
+		DisplayName: Last Stand
+		Description: Mods.LeagueOfLegendThings.Buffs.LastStand.Description
+	}
+
+	SummonAery: {
+		DisplayName: Aery
+		Description: She said: Meow meow... (I get tanned...)
+	}
+}
+
+Projectiles: {
+	LethalTempoNoteProjectile.DisplayName: Lethal Tempo Note Projectile
+	DarkHarvestSoulProjectile.DisplayName: Dark Harvest Soul Projectile
+	AeryProj.DisplayName: Aery Proj
+	ArcaneCometProj.DisplayName: Arcane Comet Proj
+}
+
+Configs: {
+	RuneConfig: {
+		DisplayName: Rune Config
+
+		EnableLethalTempoRune: {
+			Label: Enable Lethal Tempo Rune
+			Tooltip: ""
+		}
+	}
+}
+
+UI: {
+	Runes: {
+		Path: {
+			Precision: {
+				Name: Precision
+				Desc: Improved attacks and sustained damage.
+			}
+
+			Domination: {
+				Name: Domination
+				Desc: Burst damage and target access.
+			}
+
+			Sorcery: {
+				Name: Sorcery
+				Desc: Empowered abilities and resource manipulation.
+			}
+
+			Resolve: {
+				Name: Resolve
+				Desc: Durability and crowd control.
+			}
+
+			Inspiration: {
+				Name: Inspiration
+				Desc: Creative tools and rule bending.
+			}
+		}
+
+		Desc: {
+			Press_the_Attack: Not implemented yet.
+			Lethal_Tempo: Not implemented yet.
+			Fleet_Footwork: Not implemented yet.
+			Conqueror: Not implemented yet.
+			Absorb_Life: Heal on hit.
+			Triumph: Heal on kill after boss fight. Earn an extra treasure bag.
+			Presence_of_Mind: Restore mana on hit/kill.
+			Legend_Alacrity: +1.5% attack speed per stack (max 6).
+			Legend_Haste: Potion cooldown reduced per stack.
+			Legend_Bloodline: Life steal per stack, bonus max life at full stacks.
+			Coup_de_Grace: +8% damage to bosses below 40% HP.
+			Cut_Down: Not implemented yet.
+			Last_Stand: Damage scales with missing health vs bosses.
+			Electrocute: 3 hits on same target triggers bonus damage.
+			Hail_of_Blades: +160% attack speed for next 3 hits. 10s cooldown.
+			Dark_Harvest: Low HP target: bonus damage, souls after 1.75s. 35s cooldown.
+			Cheap_Shot: Bonus damage vs crowd-controlled targets. 4s cooldown.
+			Taste_of_Blood: Heal 16 on hit when not full HP. 20s cooldown.
+			Sudden_Impact: Dash/teleport grants ready state. Next hit deals 40/140/240.
+			Eyeball_Collection: Kills stack up to 10. +0.8% damage per stack.
+			Ravenous_Hunter: Life steal 0.05% per hunter stack.
+			Ingenious_Hunter: Potion cooldown -3% per hunter stack.
+			Treasure_Hunter: Extra gold on kill based on hunter stacks.
+			Relentless_Hunter: +3% move speed per hunter stack after 5s no damage.
+			Summon_Aery: Not implemented yet.
+			Arcane_Comet: Not implemented yet.
+			Phase_Rush: Not implemented yet.
+			Axiom_Arcanist: +4% magic damage.
+			Manaflow_Band: +5 max mana per stack (max 6), hit cooldown 20s.
+			Nimbus_Cloak: After potion: +20% move speed for 2s.
+			Transcendence: Potion cooldown reduced by 5% on use.
+			Celerity: +25% move speed.
+			Absolute_Focus: HP >=70%: +10% magic damage.
+			Scorch: Extra 10 damage on hit. 8s cooldown.
+			Waterwalking: In water: +10% move speed.
+			Gathering_Storm: Every 1h: +1% damage stack.
+			Grasp_of_the_Undying: Not implemented yet.
+			Aftershock: Not implemented yet.
+			Guardian: Not implemented yet.
+			Demolish: Boss nearby stacks to 6. Next hit: 100 + 35% max HP. 35s cooldown.
+			Font_of_Life: Heal 4 on hit. 10s cooldown.
+			Shield_Bash: Defense >=50: +5% damage.
+			Conditioning: After 8 minutes: +6 defense.
+			Second_Wind: After damage: heal 1 per second for 5s.
+			Bone_Plating: After damage: next 3 hits reduce by 6.
+			Overgrowth: Every minute: +5 max life (max +50).
+			Revitalize: Healing +10%.
+			Unflinching: After damage: +10% move speed for 2s.
+			Glacial_Augment: Not implemented yet.
+			Unsealed_Spellbook: Not implemented yet.
+			First_Strike: Not implemented yet.
+			Hextech_Flashtraption: No Chaos State; Rod of Discord costs 150 mana.
+			Magical_Footwear: After 8 minutes: +10% move speed.
+			Cash_Back: Refund 5% gold on kills (cap 50 silver).
+			Triple_Tonic: After potion: +14% damage for 30 min.
+			Time_Warp_Tonic: Potion grants extra slow heal of same amount.
+			Biscuit_Delivery: Every 20s: heal 10 and restore 10 mana.
+			Cosmic_Insight: Potion cooldown -10% on use.
+			Approach_Velocity: Near debuffed enemies: +20% move speed.
+			Jack_of_All_Trades: 3 damage types in 10s: +100% damage for 5s. 10s cooldown.
+		}
+	}
+}
