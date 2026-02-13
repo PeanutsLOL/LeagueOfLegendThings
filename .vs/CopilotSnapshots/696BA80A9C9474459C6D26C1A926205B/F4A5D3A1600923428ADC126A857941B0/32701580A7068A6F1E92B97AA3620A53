@@ -1,0 +1,450 @@
+﻿using Terraria.UI;
+using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Systems;
+using Terraria.ModLoader;
+using System.Collections.Generic;
+using System.Linq;
+using ReLogic.Content;
+using Terraria.GameContent;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUIState : UIState
+    {
+        private DraggableUIPanel _panel;
+        private UIElement _primaryGroup;
+        private UIElement _secondaryGroup;
+        private bool _open;
+
+        private readonly string[] Paths = { "Precision", "Domination", "Sorcery", "Resolve", "Inspiration" };
+
+        private readonly Dictionary<string, string[]> _keystones = new()
+        {
+            { "Precision", new[]{"Press the Attack","Lethal Tempo","Fleet Footwork","Conqueror"} },
+            { "Domination", new[]{"Electrocute", "Hail of Blades", "Dark Harvest"} },
+            { "Sorcery", new[]{"Summon Aery","Arcane Comet","Phase Rush"} },
+            { "Resolve", new[]{"Grasp of the Undying","Aftershock","Guardian"} },
+            { "Inspiration", new[]{"Glacial Augment","Unsealed Spellbook","First Strike"} },
+        };
+
+        private readonly Dictionary<string, string[][]> _rows = new()
+        {
+            { "Precision", new[]{ new[]{ "Absorb Life", "Triumph","Presence of Mind"}, new[]{"Legend: Alacrity","Legend: Haste","Legend: Bloodline"}, new[]{"Coup de Grace","Cut Down","Last Stand"} } },
+            { "Domination", new[]{ new[]{"Cheap Shot","Taste of Blood","Sudden Impact"}, new[]{"Eyeball Collection","Ravenous Hunter","Ingenious Hunter"}, new[]{"Treasure Hunter","Relentless Hunter"} } },
+            { "Sorcery", new[]{ new[]{ "Axiom Arcanist", "Manaflow Band","Nimbus Cloak"}, new[]{"Transcendence","Celerity","Absolute Focus"}, new[]{"Scorch","Waterwalking","Gathering Storm"} } },
+            { "Resolve", new[]{ new[]{"Demolish","Font of Life","Shield Bash"}, new[]{"Conditioning","Second Wind","Bone Plating"}, new[]{"Overgrowth","Revitalize","Unflinching"} } },
+            { "Inspiration", new[]{ new[]{"Hextech Flashtraption","Magical Footwear", "Cash Back" }, new[]{ "Triple Tonic", "Time Warp Tonic", "Biscuit Delivery"}, new[]{"Cosmic Insight","Approach Velocity", "Jack of All Trades" } } },
+        };
+
+        public override void OnInitialize()
+        {
+            // Toggle button above defense display area (upper-left), can tweak as needed
+            var mainButton = new UITextPanel<string>("Runes", 0.8f)
+            {
+                Width = { Pixels = 70 },
+                Height = { Pixels = 26 },
+                Left = { Percent = 1f, Pixels = -100 },
+                Top = { Percent = 1f, Pixels = -80 },
+                BackgroundColor = new Color(60, 60, 120) * 0.8f
+            };
+            mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            Append(mainButton);
+
+            _panel = new DraggableUIPanel
+            {
+                Width = { Pixels = 900 },
+                Height = { Pixels = 640 },
+                Left = { Percent = 1f, Pixels = -980 }, // panel to the left of button
+                Top = { Percent = 1f, Pixels = -660 },
+                BackgroundColor = new Color(67, 67, 67) * 1f,
+                BorderColor = new Color(180, 180, 180) * 0.7f,
+                PaddingLeft = 14,
+                PaddingRight = 14,
+                PaddingTop = 14,
+                PaddingBottom = 14
+            };
+
+            var title = new UIText("Rune Selection", 0.9f) { HAlign = 0f, Top = { Pixels = 0 } };
+            _panel.Append(title);
+
+            _primaryGroup = new UIElement { Width = { Pixels = 880 }, Height = { Pixels = 330 }, Top = { Pixels = 32 } };
+            _panel.Append(_primaryGroup);
+
+            _secondaryGroup = new UIElement { Width = { Pixels = 880 }, Height = { Pixels = 210 }, Top = { Pixels = 380 } };
+            _panel.Append(_secondaryGroup);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+            Refresh();
+        }
+
+        private void ToggleOpen()
+        {
+            _open = !_open;
+            if (_open)
+            {
+                if (_panel.Parent == null)
+                    Append(_panel);
+                _panel.StopDrag();
+                Refresh();
+            }
+            else
+            {
+                _panel.StopDrag();
+                _panel.Remove();
+            }
+        }
+
+        private void Refresh()
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            BuildPrimaryGroup(save);
+            BuildSecondaryGroup(save);
+        }
+
+        private void BuildPrimaryGroup(RuneSaveSystem save)
+        {
+            _primaryGroup.RemoveAllChildren();
+            float xStart = 0f;
+            float y = 0f;
+            // Primary path selection
+            var label = new UIText("Primary", 0.85f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _primaryGroup.Append(label);
+            y += 26;
+            float x = xStart;
+            foreach (var path in Paths)
+            {
+                var btn = MakeIconButton(path, x, y, (evt, elem) => SetPrimary(path));
+                Highlight(btn, save.PrimaryPath == path, true);
+                _primaryGroup.Append(btn);
+                x += 72;
+            }
+            y += 58;
+
+            // Keystone
+            var ksLabel = new UIText("Keystone", 0.8f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _primaryGroup.Append(ksLabel);
+            y += 26;
+            x = xStart;
+            foreach (var k in _keystones[save.PrimaryPath])
+            {
+                var btn = MakeIconButton(k, x, y, (evt, elem) => SetKeystone(k));
+                Highlight(btn, save.PrimaryKeystone == k, true);
+                _primaryGroup.Append(btn);
+                x += 72;
+            }
+            y += 58;
+
+            // Three rows of minor runes
+            for (int row = 0; row < 3; row++)
+            {
+                var rowLabel = new UIText($"Row {row + 1}", 0.75f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+                _primaryGroup.Append(rowLabel);
+                x = xStart + 60;
+                foreach (var r in _rows[save.PrimaryPath][row])
+                {
+                    int captureRow = row;
+                    var btn = MakeIconButton(r, x, y, (evt, elem) => SetPrimaryRow(captureRow, r));
+                    string picked = row switch { 0 => save.PrimaryRow1, 1 => save.PrimaryRow2, _ => save.PrimaryRow3 };
+                    Highlight(btn, picked == r, true);
+                    _primaryGroup.Append(btn);
+                    x += 72;
+                }
+                y += 58;
+            }
+        }
+
+        private void BuildSecondaryGroup(RuneSaveSystem save)
+        {
+            _secondaryGroup.RemoveAllChildren();
+            float xStart = 0f;
+            float y = 0f;
+            var label = new UIText("Secondary (must differ from Primary)", 0.85f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _secondaryGroup.Append(label);
+            y += 26;
+            float x = xStart;
+            foreach (var path in Paths)
+            {
+                bool enabled = path != save.PrimaryPath;
+                var btn = MakeIconButton(path, x, y, (evt, elem) => SetSecondary(path));
+                Highlight(btn, save.SecondaryPath == path, enabled);
+                _secondaryGroup.Append(btn);
+                x += 72;
+            }
+            y += 58;
+
+            // Secondary can only select two non-keystone runes from different rows
+            var subRows = _rows[save.SecondaryPath];
+            for (int row = 0; row < subRows.Length; row++)
+            {
+                var rowLabel = new UIText($"Row {row + 1}", 0.75f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+                _secondaryGroup.Append(rowLabel);
+                x = xStart + 60;
+                foreach (var r in subRows[row])
+                {
+                    int captureRow = row;
+                    var btn = MakeIconButton(r, x, y, (evt, elem) => SetSecondaryPick(captureRow, r));
+                    bool selected = (save.SecondaryPick1Row == captureRow && save.SecondaryPick1 == r) || (save.SecondaryPick2Row == captureRow && save.SecondaryPick2 == r);
+                    Highlight(btn, selected, true);
+                    _secondaryGroup.Append(btn);
+                    x += 72;
+                }
+                y += 58;
+            }
+        }
+
+        private void SetPrimary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (save.PrimaryPath == path) return;
+            save.PrimaryPath = path;
+            // 重置主系选项
+            save.PrimaryKeystone = _keystones[path][0];
+            save.PrimaryRow1 = _rows[path][0][0];
+            save.PrimaryRow2 = _rows[path][1][0];
+            save.PrimaryRow3 = _rows[path][2][0];
+            // 如果副系等于主系，重置副系到另一路径
+            if (save.SecondaryPath == path)
+            {
+                foreach (var p in Paths)
+                {
+                    if (p != path) { save.SecondaryPath = p; break; }
+                }
+                save.SecondaryPick1 = _rows[save.SecondaryPath][0][0];
+                save.SecondaryPick2 = _rows[save.SecondaryPath][1][0];
+                save.SecondaryPick1Row = 0;
+                save.SecondaryPick2Row = 1;
+            }
+            Refresh();
+        }
+
+        private void SetSecondary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (path == save.PrimaryPath) return; // 副系不可与主系相同
+            save.SecondaryPath = path;
+            save.SecondaryPick1 = "";
+            save.SecondaryPick2 = "";
+            save.SecondaryPick1Row = -1;
+            save.SecondaryPick2Row = -1;
+            Refresh();
+        }
+
+        private void SetKeystone(string k)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_keystones[save.PrimaryPath].Contains(k)) return;
+            save.PrimaryKeystone = k;
+            Refresh();
+        }
+
+        private void SetPrimaryRow(int row, string rune)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_rows[save.PrimaryPath][row].Contains(rune)) return;
+            switch (row)
+            {
+                case 0: save.PrimaryRow1 = rune; break;
+                case 1: save.PrimaryRow2 = rune; break;
+                case 2: save.PrimaryRow3 = rune; break;
+            }
+            Refresh();
+        }
+
+        private void SetSecondaryPick(int row, string rune)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_rows[save.SecondaryPath][row].Contains(rune)) return;
+
+            // Toggle if same rune/row already selected
+            if (save.SecondaryPick1Row == row && save.SecondaryPick1 == rune)
+            {
+                save.SecondaryPick1 = ""; save.SecondaryPick1Row = -1; Refresh(); return;
+            }
+            if (save.SecondaryPick2Row == row && save.SecondaryPick2 == rune)
+            {
+                save.SecondaryPick2 = ""; save.SecondaryPick2Row = -1; Refresh(); return;
+            }
+
+            // Assign to existing slot on same row, or free slot
+            if (save.SecondaryPick1Row == row)
+            {
+                save.SecondaryPick1 = rune;
+            }
+            else if (save.SecondaryPick2Row == row)
+            {
+                save.SecondaryPick2 = rune;
+            }
+            else if (save.SecondaryPick1Row == -1)
+            {
+                save.SecondaryPick1 = rune; save.SecondaryPick1Row = row;
+            }
+            else if (save.SecondaryPick2Row == -1)
+            {
+                save.SecondaryPick2 = rune; save.SecondaryPick2Row = row;
+            }
+            else
+            {
+                // Both slots used on different rows: replace second slot with new row/rune
+                save.SecondaryPick2 = rune; save.SecondaryPick2Row = row;
+            }
+            Refresh();
+        }
+
+        private IconButton MakeIconButton(string name, float x, float y, UIElement.MouseEvent click, float size = 48f)
+        {
+            var tex = LoadRuneTexture(name);
+            var btn = new IconButton(tex, size)
+            {
+                Left = { Pixels = x },
+                Top = { Pixels = y }
+            };
+            btn.OnLeftClick += click;
+            btn.Tooltip = name;
+            return btn;
+        }
+
+        private Asset<Texture2D> LoadRuneTexture(string name)
+        {
+            string safe = SanitizeName(name);
+            var candidates = new List<string> { safe, safe + "_" };
+            if (safe.StartsWith("Legend_", System.StringComparison.Ordinal) && !safe.Contains("-_"))
+            {
+                candidates.Add(safe.Replace("Legend_", "Legend-_"));
+            }
+
+            foreach (var c in candidates)
+            {
+                string path = $"LeagueOfLegendThings/Content/Buffs/{c}";
+                try
+                {
+                    return ModContent.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad);
+                }
+                catch
+                {
+                    // try next
+                }
+            }
+            return TextureAssets.MagicPixel; // 占位
+        }
+
+        private string SanitizeName(string name)
+        {
+            var chars = name.Select(ch => char.IsLetterOrDigit(ch) ? ch : '_').ToArray();
+            var s = new string(chars);
+            while (s.Contains("__")) s = s.Replace("__", "_");
+            return s.Trim('_');
+        }
+
+        private void Highlight(IconButton btn, bool selected, bool enabled = true)
+        {
+            btn.SetVisual(selected, enabled);
+        }
+
+        private class IconButton : UIElement
+        {
+            private readonly Texture2D _texture;
+            private readonly Texture2D _dotTex = TextureAssets.MagicPixel.Value;
+            private readonly float _size;
+            private bool _selected;
+            private bool _enabled = true;
+            public string Tooltip { get; set; } = string.Empty;
+
+            public IconButton(Asset<Texture2D> texture, float size)
+            {
+                _texture = texture?.Value ?? TextureAssets.MagicPixel.Value;
+                _size = size;
+                Width.Set(size, 0f);
+                Height.Set(size, 0f);
+            }
+
+            public void SetVisual(bool selected, bool enabled)
+            {
+                _selected = selected;
+                _enabled = enabled;
+            }
+
+            protected override void DrawSelf(SpriteBatch spriteBatch)
+            {
+                base.DrawSelf(spriteBatch);
+                var dims = GetDimensions();
+                var center = dims.Position() + new Vector2(dims.Width * 0.5f, dims.Height * 0.5f);
+                float targetSize = _selected ? _size * 1.05f : _size * 0.92f;
+                float scale = targetSize / MathF.Max(_texture.Width, _texture.Height);
+                var iconColor = _enabled ? Color.White : Color.Gray;
+
+                // 背景底色（统一 #676767），禁用时降低亮度
+                Color bg = new Color(0x67, 0x67, 0x67) * (_enabled ? 1f : 0.6f);
+                spriteBatch.Draw(_dotTex, new Rectangle((int)dims.X, (int)dims.Y, (int)dims.Width, (int)dims.Height), bg);
+
+                spriteBatch.Draw(_texture, center, null, iconColor, 0f, _texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+
+                if (_selected)
+                {
+                    const int dotSize = 8;
+                    Vector2 dotPos = dims.Position() + new Vector2(dims.Width - dotSize - 4, dims.Height - dotSize - 4);
+                    spriteBatch.Draw(_dotTex, new Rectangle((int)dotPos.X, (int)dotPos.Y, dotSize, dotSize), Color.LimeGreen);
+                }
+            }
+
+            public override void MouseOver(UIMouseEvent evt)
+            {
+                base.MouseOver(evt);
+                if (!string.IsNullOrEmpty(Tooltip))
+                    Main.instance.MouseText(Tooltip);
+            }
+        }
+
+        private class DraggableUIPanel : UIPanel
+        {
+            private bool _dragging;
+            private Vector2 _dragOffset;
+
+            public void StopDrag() => _dragging = false;
+
+            public override void LeftMouseDown(UIMouseEvent evt)
+            {
+                base.LeftMouseDown(evt);
+                if (evt.Target != this)
+                    return;
+                _dragging = true;
+                Left.Percent = 0f;
+                Top.Percent = 0f;
+                _dragOffset = evt.MousePosition - GetDimensions().Position();
+            }
+
+            public override void LeftMouseUp(UIMouseEvent evt)
+            {
+                base.LeftMouseUp(evt);
+                _dragging = false;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                base.Update(gameTime);
+                if (_dragging && !Main.mouseLeft)
+                {
+                    _dragging = false;
+                }
+                if (_dragging)
+                {
+                    Vector2 mouse = Main.MouseScreen;
+                    Left.Set(mouse.X - _dragOffset.X, 0f);
+                    Top.Set(mouse.Y - _dragOffset.Y, 0f);
+                    Recalculate();
+                }
+            }
+        }
+    }
+}

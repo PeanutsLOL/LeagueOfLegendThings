@@ -1,0 +1,301 @@
+﻿using Terraria.UI;
+using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Systems;
+using Terraria.ModLoader;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUIState : UIState
+    {
+        private UIPanel _panel;
+        private UIElement _primaryGroup;
+        private UIElement _secondaryGroup;
+        private bool _open;
+
+        private readonly string[] Paths = { "Precision", "Domination", "Sorcery", "Resolve", "Inspiration" };
+
+        private readonly Dictionary<string, string[]> _keystones = new()
+        {
+            { "Precision", new[]{"Press the Attack","Lethal Tempo","Fleet Footwork"} },
+            { "Domination", new[]{"Electrocute","Predator","Dark Harvest"} },
+            { "Sorcery", new[]{"Summon Aery","Arcane Comet","Phase Rush"} },
+            { "Resolve", new[]{"Grasp of the Undying","Aftershock","Guardian"} },
+            { "Inspiration", new[]{"Glacial Augment","Unsealed Spellbook","First Strike"} },
+        };
+
+        private readonly Dictionary<string, string[][]> _rows = new()
+        {
+            { "Precision", new[]{ new[]{"Overheal","Triumph","Presence of Mind"}, new[]{"Legend: Alacrity","Legend: Tenacity","Legend: Bloodline"}, new[]{"Coup de Grace","Cut Down","Last Stand"} } },
+            { "Domination", new[]{ new[]{"Cheap Shot","Taste of Blood","Sudden Impact"}, new[]{"Eyeball Collection","Ravenous Hunter","Ingenious Hunter"}, new[]{"Treasure Hunter","Ingenious Hunter","Relentless Hunter"} } },
+            { "Sorcery", new[]{ new[]{ "Axiom Arcanist", "Manaflow Band","Nimbus Cloak"}, new[]{"Transcendence","Celerity","Absolute Focus"}, new[]{"Scorch","Waterwalking","Gathering Storm"} } },
+            { "Resolve", new[]{ new[]{"Demolish","Font of Life","Shield Bash"}, new[]{"Conditioning","Second Wind","Bone Plating"}, new[]{"Overgrowth","Revitalize","Unflinching"} } },
+            { "Inspiration", new[]{ new[]{"Hextech Flashtraption","Magical Footwear","Perfect Timing"}, new[]{"Future's Market","Minion Dematerializer","Biscuit Delivery"}, new[]{"Cosmic Insight","Approach Velocity","Time Warp Tonic"} } },
+        };
+
+        public override void OnInitialize()
+        {
+            // Toggle button above defense display area (upper-left), can tweak as needed
+            var mainButton = new UITextPanel<string>("Runes", 0.8f)
+            {
+                Width = { Pixels = 70 },
+                Height = { Pixels = 26 },
+                Left = { Percent = 1f, Pixels = -100 },
+                Top = { Percent = 1f, Pixels = -80 },
+                BackgroundColor = new Color(60, 60, 120) * 0.8f
+            };
+            mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            Append(mainButton);
+
+            _panel = new UIPanel
+            {
+                Width = { Pixels = 900 },
+                Height = { Pixels = 640 },
+                Left = { Percent = 1f, Pixels = -980 }, // panel to the left of button
+                Top = { Percent = 1f, Pixels = -660 },
+                BackgroundColor = new Color(33, 33, 55) * 0.85f,
+                BorderColor = new Color(200, 200, 255) * 0.9f,
+                PaddingLeft = 14,
+                PaddingRight = 14,
+                PaddingTop = 14,
+                PaddingBottom = 14
+            };
+
+            var title = new UIText("Rune Selection (Placeholder)", 0.9f) { HAlign = 0f, Top = { Pixels = 0 } };
+            _panel.Append(title);
+
+            _primaryGroup = new UIElement { Width = { Pixels = 880 }, Height = { Pixels = 330 }, Top = { Pixels = 32 } };
+            _panel.Append(_primaryGroup);
+
+            _secondaryGroup = new UIElement { Width = { Pixels = 880 }, Height = { Pixels = 210 }, Top = { Pixels = 380 } };
+            _panel.Append(_secondaryGroup);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+            Refresh();
+        }
+
+        private void ToggleOpen()
+        {
+            _open = !_open;
+            if (_open)
+            {
+                if (_panel.Parent == null)
+                    Append(_panel);
+                Refresh();
+            }
+            else
+            {
+                _panel.Remove();
+            }
+        }
+
+        private void Refresh()
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            BuildPrimaryGroup(save);
+            BuildSecondaryGroup(save);
+        }
+
+        private void BuildPrimaryGroup(RuneSaveSystem save)
+        {
+            _primaryGroup.RemoveAllChildren();
+            float xStart = 0f;
+            float y = 0f;
+            // Primary path selection
+            var label = new UIText("Primary", 0.85f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _primaryGroup.Append(label);
+            y += 26;
+            float x = xStart;
+            foreach (var path in Paths)
+            {
+                var btn = MakeButton(path, x, y, (evt, elem) => SetPrimary(path));
+                Highlight(btn, save.PrimaryPath == path, true);
+                _primaryGroup.Append(btn);
+                x += 180;
+            }
+            y += 45;
+
+            // Keystone
+            var ksLabel = new UIText("Keystone", 0.8f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _primaryGroup.Append(ksLabel);
+            y += 26;
+            x = xStart;
+            foreach (var k in _keystones[save.PrimaryPath])
+            {
+                var btn = MakeButton(k, x, y, (evt, elem) => SetKeystone(k));
+                Highlight(btn, save.PrimaryKeystone == k, true);
+                _primaryGroup.Append(btn);
+                x += 200;
+            }
+            y += 45;
+
+            // Three rows of minor runes
+            for (int row = 0; row < 3; row++)
+            {
+                var rowLabel = new UIText($"Row {row + 1}", 0.75f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+                _primaryGroup.Append(rowLabel);
+                x = xStart + 80;
+                foreach (var r in _rows[save.PrimaryPath][row])
+                {
+                    int captureRow = row;
+                    var btn = MakeButton(r, x, y, (evt, elem) => SetPrimaryRow(captureRow, r));
+                    string picked = row switch { 0 => save.PrimaryRow1, 1 => save.PrimaryRow2, _ => save.PrimaryRow3 };
+                    Highlight(btn, picked == r, true);
+                    _primaryGroup.Append(btn);
+                    x += 200;
+                }
+                y += 44;
+            }
+        }
+
+        private void BuildSecondaryGroup(RuneSaveSystem save)
+        {
+            _secondaryGroup.RemoveAllChildren();
+            float xStart = 0f;
+            float y = 0f;
+            var label = new UIText("Secondary (must differ from Primary)", 0.85f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+            _secondaryGroup.Append(label);
+            y += 26;
+            float x = xStart;
+            foreach (var path in Paths)
+            {
+                bool enabled = path != save.PrimaryPath;
+                var btn = MakeButton(path, x, y, (evt, elem) => SetSecondary(path));
+                Highlight(btn, save.SecondaryPath == path, enabled);
+                _secondaryGroup.Append(btn);
+                x += 180;
+            }
+            y += 45;
+
+            // Secondary can only select two non-keystone runes from different rows
+            var subRows = _rows[save.SecondaryPath];
+            for (int row = 0; row < subRows.Length; row++)
+            {
+                var rowLabel = new UIText($"Row {row + 1}", 0.75f) { Left = { Pixels = xStart }, Top = { Pixels = y } };
+                _secondaryGroup.Append(rowLabel);
+                x = xStart + 90;
+                foreach (var r in subRows[row])
+                {
+                    int captureRow = row;
+                    var btn = MakeButton(r, x, y, (evt, elem) => SetSecondaryPick(captureRow, r));
+                    bool selected = (save.SecondaryPick1Row == captureRow && save.SecondaryPick1 == r) || (save.SecondaryPick2Row == captureRow && save.SecondaryPick2 == r);
+                    Highlight(btn, selected, true);
+                    _secondaryGroup.Append(btn);
+                    x += 200;
+                }
+                y += 44;
+            }
+        }
+
+        private UITextPanel<string> MakeButton(string text, float x, float y, UIElement.MouseEvent click)
+        {
+            var btn = new UITextPanel<string>(text, 0.8f)
+            {
+                Width = { Pixels = 160 },
+                Height = { Pixels = 28 },
+                Left = { Pixels = x },
+                Top = { Pixels = y },
+                BackgroundColor = new Color(50, 50, 80) * 0.8f
+            };
+
+            btn.OnLeftClick += click;
+            return btn;
+        }
+
+        private void SetPrimary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (save.PrimaryPath == path) return;
+            save.PrimaryPath = path;
+            // 重置主系选项
+            save.PrimaryKeystone = _keystones[path][0];
+            save.PrimaryRow1 = _rows[path][0][0];
+            save.PrimaryRow2 = _rows[path][1][0];
+            save.PrimaryRow3 = _rows[path][2][0];
+            // 如果副系等于主系，重置副系到另一路径
+            if (save.SecondaryPath == path)
+            {
+                foreach (var p in Paths)
+                {
+                    if (p != path) { save.SecondaryPath = p; break; }
+                }
+                save.SecondaryPick1 = _rows[save.SecondaryPath][0][0];
+                save.SecondaryPick2 = _rows[save.SecondaryPath][1][0];
+                save.SecondaryPick1Row = 0;
+                save.SecondaryPick2Row = 1;
+            }
+            Refresh();
+        }
+
+        private void SetSecondary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (path == save.PrimaryPath) return; // 副系不可与主系相同
+            save.SecondaryPath = path;
+            save.SecondaryPick1 = "";
+            save.SecondaryPick2 = "";
+            save.SecondaryPick1Row = -1;
+            save.SecondaryPick2Row = -1;
+            Refresh();
+        }
+
+        private void SetKeystone(string k)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_keystones[save.PrimaryPath].Contains(k)) return;
+            save.PrimaryKeystone = k;
+            Refresh();
+        }
+
+        private void SetPrimaryRow(int row, string rune)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_rows[save.PrimaryPath][row].Contains(rune)) return;
+            switch (row)
+            {
+                case 0: save.PrimaryRow1 = rune; break;
+                case 1: save.PrimaryRow2 = rune; break;
+                case 2: save.PrimaryRow3 = rune; break;
+            }
+            Refresh();
+        }
+
+        private void SetSecondaryPick(int row, string rune)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!_rows[save.SecondaryPath][row].Contains(rune)) return;
+
+            // 副系只能选两枚，且来自不同行；如果同一行已被 pick1，就替换它；否则填充 pick2，否则覆盖 pick2
+            if (save.SecondaryPick1Row == row)
+            {
+                save.SecondaryPick1 = rune; save.SecondaryPick1Row = row;
+            }
+            else if (save.SecondaryPick2Row == row)
+            {
+                save.SecondaryPick2 = rune; save.SecondaryPick2Row = row;
+            }
+            else if (save.SecondaryPick1Row == -1)
+            {
+                save.SecondaryPick1 = rune; save.SecondaryPick1Row = row;
+            }
+            else if (save.SecondaryPick2Row == -1)
+            {
+                save.SecondaryPick2 = rune; save.SecondaryPick2Row = row;
+            }
+            else
+            {
+                // 若已有两行，占用第二个槽位为新行
+                save.SecondaryPick2 = rune; save.SecondaryPick2Row = row;
+            }
+            Refresh();
+        }
+
+        private void Highlight(UITextPanel<string> btn, bool selected, bool enabled = true)
+        {
+       

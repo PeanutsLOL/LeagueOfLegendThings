@@ -1,0 +1,112 @@
+﻿using Terraria.ModLoader.Config;
+using Terraria.UI;
+using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Config;
+using Terraria.ModLoader;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUIState : UIState
+    {
+        private UIPanel _panel;
+        private UIText _title;
+        private UIText _toggleLabel;
+        private UITextPanel<string> _toggleButton;
+        private bool _open;
+
+        public override void OnInitialize()
+        {
+            var mainButton = new UITextPanel<string>("符文", 0.8f)
+            {
+                Width = { Pixels = 64 },
+                Height = { Pixels = 28 },
+                Left = { Pixels = 14 },
+                Top = { Pixels = 120 },
+                BackgroundColor = new Color(60, 60, 120) * 0.8f
+            };
+            mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            Append(mainButton);
+
+            _panel = new UIPanel
+            {
+                Width = { Pixels = 220 },
+                Height = { Pixels = 120 },
+                Left = { Pixels = 14 },
+                Top = { Pixels = 160 },
+                BackgroundColor = new Color(33, 33, 55) * 0.85f,
+                BorderColor = new Color(200, 200, 255) * 0.9f,
+                PaddingLeft = 12,
+                PaddingRight = 12,
+                PaddingTop = 12,
+                PaddingBottom = 12
+            };
+
+            _title = new UIText("符文设置", 0.85f)
+            {
+                HAlign = 0f,
+                Top = { Pixels = 0 }
+            };
+            _panel.Append(_title);
+
+            _toggleLabel = new UIText("致命节奏", 0.8f)
+            {
+                HAlign = 0f,
+                Top = { Pixels = 34 }
+            };
+            _panel.Append(_toggleLabel);
+
+            _toggleButton = new UITextPanel<string>("", 0.8f)
+            {
+                Width = { Pixels = 80 },
+                Height = { Pixels = 26 },
+                Left = { Pixels = 110 },
+                Top = { Pixels = 32 },
+                BackgroundColor = new Color(40, 80, 40) * 0.8f
+            };
+            _toggleButton.OnLeftClick += (_, __) => ToggleLethalTempo();
+            _panel.Append(_toggleButton);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+            RefreshText();
+        }
+
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            base.Update(gameTime);
+            RefreshText();
+        }
+
+        private void ToggleOpen()
+        {
+            _open = !_open;
+            if (_open)
+            {
+                if (_panel.Parent == null)
+                    Append(_panel);
+            }
+            else
+            {
+                _panel.Remove();
+            }
+        }
+
+        private void ToggleLethalTempo()
+        {
+            var cfg = ModContent.GetInstance<RuneConfig>();
+            cfg.EnableLethalTempoRune = !cfg.EnableLethalTempoRune;
+            RefreshText();
+        }
+
+        private void RefreshText()
+        {
+            var cfg = ModContent.GetInstance<RuneConfig>();
+            _toggleButton.SetText(cfg.EnableLethalTempoRune ? "开启" : "关闭");
+            _toggleButton.BackgroundColor = (cfg.EnableLethalTempoRune ? new Color(40, 120, 60) : new Color(120, 40, 40)) * 0.8f;
+        }
+    }
+}

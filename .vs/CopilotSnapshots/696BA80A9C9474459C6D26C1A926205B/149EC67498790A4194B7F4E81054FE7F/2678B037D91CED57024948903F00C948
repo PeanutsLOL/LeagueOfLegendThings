@@ -1,0 +1,275 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace LeagueOfLegendThings.Content.Projectiles
+{
+    public class LethalTempoNoteProjectile : ModProjectile
+    {
+        // 使用 L 贴图作为默认贴图，避免缺少默认资源导致加载失败
+        public override string Texture => "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
+        // ai[0]：0 = L 贴图，1 = R 贴图（同时决定上下交替）
+        // ai[1]：起始抛物线方向符号，-1 = 向上拋，+1 = 向下拋
+        // localAI[0]：阶段，0 = 抛物线，1 = 追踪
+        // localAI[1]：抛物线计时器
+
+        private static float ForwardSpeed = 8f;       // 抛物线前向初速度（减慢前半段）
+        private static float ArcLift = 4.5f;          // 抛物线初始垂直速度幅度（配合减速）
+        private static float Gravity = 0.35f;         // 抛物线重力
+        private static int ArcTimeLimit = 26;         // 抛物线最长持续帧数，防止一直不转阶段
+        private static int ArcMinTime = 6;            // 至少跑这么多帧再允许进入追踪
+        private static float HomingRange = 720f;      // 追踪范围
+        private static float HomingSpeedStart = 10f;  // 追踪初速度（开始较慢）
+        private static float HomingSpeedMax = 26f;    // 追踪最大速度（后半段很快）
+        private static float HomingAccel = 1.0f;      // 追踪加速度（每帧加速）
+        private static float HomingInertia = 10f;     // 追踪转向惯性（减小以便快速贴合）
+
+        public override void SetDefaults()
+        {
+            // 碰撞盒 48x48，贴图 512x512，渲染缩放按 48/512 = 0.09375
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.scale = 0.0625f;
+
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Generic;
+            Projectile.tileCollide = false; // 穿过物块
+            Projectile.penetrate = 1;
+            Projectile.timeLeft = 600;
+            Projectile.light = 0.5f;
+            Projectile.alpha = 0;
+            Projectile.aiStyle = -1; // 自定义 AI
+
+            // 保证命中后立即消失，不重复触发
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Vector2 dir = Projectile.velocity.SafeNormalize(Vector2.UnitX);
+            float arcSign = Projectile.ai[1] >= 0 ? 1f : -1f; // -1 上抛，+1 下抛
+
+            // 初速度：前向 + 垂直（正负号对称）
+            Projectile.velocity = dir * ForwardSpeed + new Vector2(0f, ArcLift * arcSign);
+            Projectile.localAI[0] = 0f; // 阶段：抛物线
+            Projectile.localAI[1] = 0f; // 计时（抛物线阶段计时）
+        }
+
+        public override void AI()
+        {
+            if (Projectile.localAI[0] == 0f)
+            {
+                RunArcPhase();
+            }
+            else
+            {
+                RunHomingPhase();
+            }
+
+            // 贴图默认朝上：统一按速度方向 +90° 旋转，避免朝向左右时翻转问题
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+            if (Projectile.ai[1] > 0)
+            {
+                // 下半贴图再旋转 180 度
+                Projectile.rotation += MathHelper.Pi;
+            }
+
+            if (Main.rand.NextBool(2))
+            {
+                Vector2 tailPos = Projectile.position - Projectile.velocity * 0.6f;
+
+                // 主尾焰
+                Dust star = Dust.NewDustDirect(
+                    tailPos,
+                    Projectile.width,
+                    Projectile.height,
+                    DustID.Enchanted_Gold,
+                    Projectile.velocity.X * 0.15f,
+                    Projectile.velocity.Y * 0.15f,
+                    100,
+                    default,
+                    1.8f
+                );
+                star.noGravity = true;
+                star.velocity *= 0.35f;
+                star.fadeIn = 1.3f;
+
+                // 辅助光晕：金色火焰
+                Dust glow = Dust.NewDustDirect(
+                    tailPos,
+                    Projectile.width,
+                    Projectile.height,
+                    DustID.GoldFlame,
+                    Projectile.velocity.X * 0.1f,
+                    Projectile.velocity.Y * 0.1f,
+                    120,
+                    default,
+                    1.0f
+                );
+                glow.noGravity = true;
+                glow.velocity *= 0.3f;
+            }
+        }
+
+        private void RunArcPhase()
+        {
+            Projectile.localAI[1]++;
+
+            // 水平速度稍作阻尼，确保前半段更慢
+            Projectile.velocity.X *= 0.9f;
+
+            // 对称重力：上抛使用 +Gravity，下抛使用 -Gravity，使轨迹镜像
+            float gravityDir = Projectile.ai[1] >= 0 ? -0.8f : 0.8f;
+            Projectile.velocity.Y += Gravity * gravityDir;
+
+            bool passedApex = (Projectile.ai[1] < 0 && Projectile.velocity.Y >= 0f) // 上抛：由上到下
+                               || (Projectile.ai[1] > 0 && Projectile.velocity.Y <= 0f); // 下抛：由下到上
+            bool timeout = Projectile.localAI[1] >= ArcTimeLimit;
+            if ((passedApex && Projectile.localAI[1] >= ArcMinTime) || timeout)
+            {
+                Projectile.localAI[0] = 1f;
+                Projectile.localAI[1] = 0f; // 切换追踪后计时重新开始，用于加速
+            }
+        }
+
+        private void RunHomingPhase()
+        {
+            NPC target = FindTarget();
+            if (target == null) return;
+
+            // 根据追踪时间逐帧提速，直到封顶
+            float desiredSpeed = HomingSpeedStart + Projectile.localAI[1] * HomingAccel;
+            if (desiredSpeed > HomingSpeedMax)
+                desiredSpeed = HomingSpeedMax;
+            Projectile.localAI[1]++;
+
+            Vector2 desiredVel = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * desiredSpeed;
+            Projectile.velocity = (Projectile.velocity * (HomingInertia - 1f) + desiredVel) / HomingInertia;
+
+            // 保持上限
+            float speed = Projectile.velocity.Length();
+            if (speed > desiredSpeed)
+            {
+                Projectile.velocity *= desiredSpeed / speed;
+            }
+        }
+
+        private NPC FindTarget()
+        {
+            NPC best = null;
+            float bestDist = HomingRange;
+
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC npc = Main.npc[i];
+                if (!npc.CanBeChasedBy()) continue;
+
+                float dist = Vector2.Distance(Projectile.Center, npc.Center);
+                if (dist < bestDist && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height))
+                {
+                    bestDist = dist;
+                    best = npc;
+                }
+            }
+
+            return best;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            // 根据上下弧线选择贴图：上弧用 R，下弧用 L
+            bool useRight = Projectile.ai[1] < 0; // 上抛（ai1<0）用 R，下抛用 L
+            string texPath = useRight
+                ? "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_R"
+                : "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
+
+            Texture2D tex = ModContent.Request<Texture2D>(texPath, AssetRequestMode.ImmediateLoad).Value;
+            Vector2 origin = tex.Size() * 0.5f;
+            Vector2 drawPos = Projectile.Center - Main.screenPosition;
+
+            // 不再垂直翻转下弧，恢复原样
+            SpriteEffects fx = SpriteEffects.None;
+
+            Main.EntitySpriteDraw(
+                tex,
+                drawPos,
+                null,
+                Projectile.GetAlpha(lightColor),
+                Projectile.rotation,
+                origin,
+                Projectile.scale,
+                fx,
+                0
+            );
+            return false; // 自绘
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Dust dust = Dust.NewDustDirect(
+                    Projectile.position,
+                    Projectile.width,
+                    Projectile.height,
+                    DustID.GoldFlame,
+                    0f,
+                    0f,
+                    100,
+                    default,
+                    1.5f
+                );
+                dust.noGravity = true;
+                dust.velocity *= 1.4f;
+            }
+
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item92, Projectile.position);
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Dust dust = Dust.NewDustDirect(
+                    target.position,
+                    target.width,
+                    target.height,
+                    DustID.Electric,
+                    0f,
+                    0f,
+                    100,
+                    Color.Yellow,
+                    1f
+                );
+                dust.noGravity = true;
+                dust.velocity *= 0.5f;
+            }
+
+            // 命中即移除
+            Dust dustOnHit = Dust.NewDustDirect(
+                target.position,
+                target.width,
+                target.height,
+                DustID.Electric,
+                0f,
+                0f,
+                100,
+                Color.Yellow,
+                1f
+            );
+            Projectile.Kill();
+        }
+    }
+}

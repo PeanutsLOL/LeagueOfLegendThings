@@ -1,0 +1,49 @@
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.ModLoader;
+using Terraria.UI;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUISystem : ModSystem
+    {
+        private UserInterface _interface;
+        internal RuneUIState RuneUI;
+
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
+                RuneUI = new RuneUIState();
+                RuneUI.Activate();
+                _interface = new UserInterface();
+                _interface.SetState(RuneUI);
+            }
+        }
+
+        public override void UpdateUI(GameTime gameTime)
+        {
+            _interface?.Update(gameTime);
+        }
+
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            if (_interface == null)
+                return;
+
+            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            if (mouseTextIndex != -1)
+            {
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "LeagueOfLegendThings: Rune UI",
+                    delegate
+                    {
+                        _interface.Draw(Main.spriteBatch, new GameTime());
+                        return true;
+                    },
+                    InterfaceScaleType.UI));
+            }
+        }
+    }
+}

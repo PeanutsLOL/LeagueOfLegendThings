@@ -1,0 +1,83 @@
+﻿using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using LeagueOfLegendThings.Content.Config;
+
+namespace LeagueOfLegendThings.Content.Systems
+{
+    public class RuneSaveSystem : ModSystem
+    {
+        public string PrimaryPath = "Precision";
+        public string SecondaryPath = "Domination";
+
+        public string PrimaryKeystone = "Lethal Tempo";
+        public string PrimaryRow1 = "Overheal";
+        public string PrimaryRow2 = "Legend: Alacrity";
+        public string PrimaryRow3 = "Coup de Grace";
+
+        public string SecondaryPick1 = ""; // not forced, can be empty
+        public string SecondaryPick2 = ""; // not forced, can be empty
+        public int SecondaryPick1Row = -1;
+        public int SecondaryPick2Row = -1;
+
+        public bool PressTheAttackSelected => PrimaryPath == "Precision" && PrimaryKeystone == "Press the Attack";
+        public bool LethalTempoSelected => PrimaryPath == "Precision" && PrimaryKeystone == "Lethal Tempo";
+
+        public override void OnWorldLoad()
+        {
+            var cfg = ModContent.GetInstance<RuneConfig>();
+            // 默认：精密主系+致命节奏
+            PrimaryPath = "Precision";
+            SecondaryPath = "Domination";
+            PrimaryKeystone = cfg.EnableLethalTempoRune ? "Lethal Tempo" : "Press the Attack";
+            PrimaryRow1 = "Overheal";
+            PrimaryRow2 = "Legend: Alacrity";
+            PrimaryRow3 = "Coup de Grace";
+            SecondaryPick1 = "";
+            SecondaryPick2 = "";
+            SecondaryPick1Row = -1;
+            SecondaryPick2Row = -1;
+        }
+
+        public override void OnWorldUnload()
+        {
+            PrimaryPath = "Precision";
+            SecondaryPath = "Domination";
+            PrimaryKeystone = "Lethal Tempo";
+            PrimaryRow1 = "Overheal";
+            PrimaryRow2 = "Legend: Alacrity";
+            PrimaryRow3 = "Coup de Grace";
+            SecondaryPick1 = "";
+            SecondaryPick2 = "";
+            SecondaryPick1Row = -1;
+            SecondaryPick2Row = -1;
+        }
+
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag[nameof(PrimaryPath)] = PrimaryPath;
+            tag[nameof(SecondaryPath)] = SecondaryPath;
+            tag[nameof(PrimaryKeystone)] = PrimaryKeystone;
+            tag[nameof(PrimaryRow1)] = PrimaryRow1;
+            tag[nameof(PrimaryRow2)] = PrimaryRow2;
+            tag[nameof(PrimaryRow3)] = PrimaryRow3;
+            tag[nameof(SecondaryPick1)] = SecondaryPick1;
+            tag[nameof(SecondaryPick2)] = SecondaryPick2;
+            tag[nameof(SecondaryPick1Row)] = SecondaryPick1Row;
+            tag[nameof(SecondaryPick2Row)] = SecondaryPick2Row;
+        }
+
+        public override void LoadWorldData(TagCompound tag)
+        {
+            if (tag.ContainsKey(nameof(PrimaryPath))) PrimaryPath = tag.GetString(nameof(PrimaryPath));
+            if (tag.ContainsKey(nameof(SecondaryPath))) SecondaryPath = tag.GetString(nameof(SecondaryPath));
+            if (tag.ContainsKey(nameof(PrimaryKeystone))) PrimaryKeystone = tag.GetString(nameof(PrimaryKeystone));
+            if (tag.ContainsKey(nameof(PrimaryRow1))) PrimaryRow1 = tag.GetString(nameof(PrimaryRow1));
+            if (tag.ContainsKey(nameof(PrimaryRow2))) PrimaryRow2 = tag.GetString(nameof(PrimaryRow2));
+            if (tag.ContainsKey(nameof(PrimaryRow3))) PrimaryRow3 = tag.GetString(nameof(PrimaryRow3));
+            if (tag.ContainsKey(nameof(SecondaryPick1))) SecondaryPick1 = tag.GetString(nameof(SecondaryPick1));
+            if (tag.ContainsKey(nameof(SecondaryPick2))) SecondaryPick2 = tag.GetString(nameof(SecondaryPick2));
+            if (tag.ContainsKey(nameof(SecondaryPick1Row))) SecondaryPick1Row = tag.GetInt(nameof(SecondaryPick1Row));
+            if (tag.ContainsKey(nameof(SecondaryPick2Row))) SecondaryPick2Row = tag.GetInt(nameof(SecondaryPick2Row));
+        }
+    }
+}

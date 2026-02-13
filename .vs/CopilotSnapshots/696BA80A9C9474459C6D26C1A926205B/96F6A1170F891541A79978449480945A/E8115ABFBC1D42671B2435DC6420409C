@@ -1,0 +1,13 @@
+﻿using Terraria.ModLoader;
+
+namespace LeagueOfLegendThings.Content.Config
+{
+    public class LethalTempoConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [Label("启用致命节奏符文")]
+        [DefaultValue(true)]
+        public bool EnableLethalTempoRune { get; set; } = true;
+    }
+}

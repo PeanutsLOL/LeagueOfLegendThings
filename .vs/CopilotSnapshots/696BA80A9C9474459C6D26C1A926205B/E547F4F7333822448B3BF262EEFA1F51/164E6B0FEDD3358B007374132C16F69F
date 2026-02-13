@@ -1,0 +1,42 @@
+﻿using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using LeagueOfLegendThings.Content.Config;
+
+namespace LeagueOfLegendThings.Content.Systems
+{
+    public class RuneSaveSystem : ModSystem
+    {
+        public string PrimaryPath = "Precision";
+        public string SecondaryPath = "Sorcery";
+        public bool LethalTempoSelected = true;
+
+        public override void OnWorldLoad()
+        {
+            var cfg = ModContent.GetInstance<RuneConfig>();
+            LethalTempoSelected = cfg.EnableLethalTempoRune;
+            PrimaryPath = "Precision";
+            SecondaryPath = "Sorcery";
+        }
+
+        public override void OnWorldUnload()
+        {
+            LethalTempoSelected = true;
+            PrimaryPath = "Precision";
+            SecondaryPath = "Sorcery";
+        }
+
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag[nameof(PrimaryPath)] = PrimaryPath;
+            tag[nameof(SecondaryPath)] = SecondaryPath;
+            tag[nameof(LethalTempoSelected)] = LethalTempoSelected;
+        }
+
+        public override void LoadWorldData(TagCompound tag)
+        {
+            if (tag.ContainsKey(nameof(PrimaryPath))) PrimaryPath = tag.GetString(nameof(PrimaryPath));
+            if (tag.ContainsKey(nameof(SecondaryPath))) SecondaryPath = tag.GetString(nameof(SecondaryPath));
+            if (tag.ContainsKey(nameof(LethalTempoSelected))) LethalTempoSelected = tag.GetBool(nameof(LethalTempoSelected));
+        }
+    }
+}

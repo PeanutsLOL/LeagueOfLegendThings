@@ -1,0 +1,617 @@
+﻿using System;
+using Terraria.UI;
+using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Systems;
+using Terraria.ModLoader;
+using System.Collections.Generic;
+using System.Linq;
+using ReLogic.Content;
+using Terraria.GameContent;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUIState : UIState
+    {
+        private DraggableUIPanel _panel;
+        private UIElement _primaryGroup;
+        private UIElement _secondaryGroup;
+        private UIElement _primaryOptions;
+        private UIElement _secondaryOptions;
+        private bool _open;
+
+        private string _activePrimarySlot; // "Keystone" or "Row0/1/2"
+        private int _activeSecondarySlot = -1; // 0 or 1
+
+        private float _activePrimarySlotY;
+        private float _activeSecondarySlotY;
+        private float _activePrimaryPathY;
+        private float _activeSecondaryPathY;
+        private bool _primaryPathOpen;
+        private bool _secondaryPathOpen;
+
+        private readonly string[] Paths = { "Precision", "Domination", "Sorcery", "Resolve", "Inspiration" };
+
+        private readonly Dictionary<string, string[]> _keystones = new()
+        {
+            { "Precision", new[]{"Press the Attack","Lethal Tempo","Fleet Footwork","Conqueror"} },
+            { "Domination", new[]{"Electrocute", "Hail of Blades", "Dark Harvest"} },
+            { "Sorcery", new[]{"Summon Aery","Arcane Comet","Phase Rush"} },
+            { "Resolve", new[]{"Grasp of the Undying","Aftershock","Guardian"} },
+            { "Inspiration", new[]{"Glacial Augment","Unsealed Spellbook","First Strike"} },
+        };
+
+        private readonly Dictionary<string, string[][]> _rows = new()
+        {
+            { "Precision", new[]{ new[]{ "Absorb Life", "Triumph","Presence of Mind"}, new[]{"Legend: Alacrity","Legend: Haste","Legend: Bloodline"}, new[]{"Coup de Grace","Cut Down","Last Stand"} } },
+            { "Domination", new[]{ new[]{"Cheap Shot","Taste of Blood","Sudden Impact"}, new[]{"Eyeball Collection","Ravenous Hunter","Ingenious Hunter"}, new[]{"Treasure Hunter","Relentless Hunter"} } },
+            { "Sorcery", new[]{ new[]{ "Axiom Arcanist", "Manaflow Band","Nimbus Cloak"}, new[]{"Transcendence","Celerity","Absolute Focus"}, new[]{"Scorch","Waterwalking","Gathering Storm"} } },
+            { "Resolve", new[]{ new[]{"Demolish","Font of Life","Shield Bash"}, new[]{"Conditioning","Second Wind","Bone Plating"}, new[]{"Overgrowth","Revitalize","Unflinching"} } },
+            { "Inspiration", new[]{ new[]{"Hextech Flashtraption","Magical Footwear", "Cash Back" }, new[]{ "Triple Tonic", "Time Warp Tonic", "Biscuit Delivery"}, new[]{"Cosmic Insight","Approach Velocity", "Jack of All Trades" } } },
+        };
+
+        private readonly float SlotSize = 48f;
+        private readonly float SlotSpacing = 8f;
+
+        public override void OnInitialize()
+        {
+            // Toggle button above defense display area (upper-left), can tweak as needed
+            var mainButton = new UITextPanel<string>("Runes", 0.8f)
+            {
+                Width = { Pixels = 70 },
+                Height = { Pixels = 26 },
+                Left = { Percent = 1f, Pixels = -100 },
+                Top = { Percent = 1f, Pixels = -80 },
+                BackgroundColor = new Color(60, 60, 120) * 0.8f
+            };
+            mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            Append(mainButton);
+
+            _panel = new DraggableUIPanel
+            {
+                Width = { Pixels = 900 },
+                Height = { Pixels = 560 },
+                Left = { Percent = 1f, Pixels = -980 }, // panel to the left of button
+                Top = { Percent = 1f, Pixels = -580 },
+                BackgroundColor = new Color(67, 67, 67) * 1f,
+                BorderColor = new Color(180, 180, 180) * 0.7f,
+                PaddingLeft = 14,
+                PaddingRight = 14,
+                PaddingTop = 14,
+                PaddingBottom = 14
+            };
+
+            var title = new UIText("Rune Selection", 0.9f) { HAlign = 0f, Top = { Pixels = 0 } };
+            _panel.Append(title);
+
+            // 左侧主系，右侧副系
+            _primaryGroup = new UIElement { Width = { Pixels = 420 }, Height = { Pixels = 260 }, Left = { Pixels = 0 }, Top = { Pixels = 30 } };
+            _panel.Append(_primaryGroup);
+
+            _secondaryGroup = new UIElement { Width = { Pixels = 420 }, Height = { Pixels = 260 }, Left = { Pixels = 440 }, Top = { Pixels = 30 } };
+            _panel.Append(_secondaryGroup);
+
+            _primaryOptions = new UIElement { Width = { Pixels = 240 }, Height = { Pixels = 160 } };
+            _panel.Append(_primaryOptions);
+
+            _secondaryOptions = new UIElement { Width = { Pixels = 240 }, Height = { Pixels = 160 } };
+            _panel.Append(_secondaryOptions);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+            Refresh();
+        }
+
+        private void ToggleOpen()
+        {
+            _open = !_open;
+            if (_open)
+            {
+                if (_panel.Parent == null)
+                    Append(_panel);
+                _panel.StopDrag();
+                Refresh();
+            }
+            else
+            {
+                _panel.StopDrag();
+                _panel.Remove();
+            }
+        }
+
+        private void Refresh()
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            BuildPrimaryGroup(save);
+            BuildSecondaryGroup(save);
+            BuildPrimaryOptions(save);
+            BuildSecondaryOptions(save);
+        }
+
+        private void BuildPrimaryGroup(RuneSaveSystem save)
+        {
+            _primaryGroup.RemoveAllChildren();
+            float y = 0f;
+
+            var pathLabel = new UIText("Primary Path", 0.85f) { Left = { Pixels = 0 }, Top = { Pixels = y } };
+            _primaryGroup.Append(pathLabel);
+            y += 4;
+            float slotYPath = y + 16f;
+            var pathSlot = MakeSlotButton(save.PrimaryPath, 0f, slotYPath, () =>
+            {
+                _primaryPathOpen = !_primaryPathOpen;
+                _activePrimarySlot = null;
+                _activePrimaryPathY = _primaryGroup.Top.Pixels + slotYPath;
+                BuildPrimaryOptions(save);
+            }, SlotSize);
+            _primaryGroup.Append(pathSlot);
+            y += SlotSize + SlotSpacing;
+
+            var ksLabel = new UIText("Keystone", 0.8f) { Left = { Pixels = 0 }, Top = { Pixels = y } };
+            _primaryGroup.Append(ksLabel);
+            var keystoneSlotY = y + 20f;
+            var keystoneSlot = MakeSlotButton(save.PrimaryKeystone, 0f, keystoneSlotY, () =>
+            {
+                _activePrimarySlot = _activePrimarySlot == "Keystone" ? null : "Keystone";
+                _primaryPathOpen = false;
+                _activePrimarySlotY = _primaryGroup.Top.Pixels + keystoneSlotY;
+                BuildPrimaryOptions(save);
+            }, SlotSize);
+            _primaryGroup.Append(keystoneSlot);
+            y += 84;
+
+            for (int row = 0; row < 3; row++)
+            {
+                var rowLabel = new UIText($"Row {row + 1}", 0.75f) { Left = { Pixels = 0 }, Top = { Pixels = y } };
+                _primaryGroup.Append(rowLabel);
+                string slotKey = $"Row{row}";
+                float slotY = y + 20f;
+                var slot = MakeSlotButton(GetPrimaryRowValue(save, row), 0f, slotY, () =>
+                {
+                    _activePrimarySlot = _activePrimarySlot == slotKey ? null : slotKey;
+                    _primaryPathOpen = false;
+                    _activePrimarySlotY = _primaryGroup.Top.Pixels + slotY;
+                    BuildPrimaryOptions(save);
+                }, SlotSize);
+                _primaryGroup.Append(slot);
+                y += SlotSize + SlotSpacing;
+            }
+        }
+
+        private void BuildSecondaryGroup(RuneSaveSystem save)
+        {
+            _secondaryGroup.RemoveAllChildren();
+            float y = 0f;
+            var label = new UIText("Secondary", 0.85f) { Left = { Pixels = 0 }, Top = { Pixels = y } };
+            _secondaryGroup.Append(label);
+            y += 4;
+
+            float slotYPath = y + 16f;
+            var pathSlot = MakeSlotButton(save.SecondaryPath, 0f, slotYPath, () =>
+            {
+                _secondaryPathOpen = !_secondaryPathOpen;
+                _activeSecondarySlot = -1;
+                _activeSecondarySlotY = 0f;
+                _activeSecondaryPathY = _secondaryGroup.Top.Pixels + slotYPath;
+                BuildSecondaryOptions(save);
+            }, SlotSize);
+            _secondaryGroup.Append(pathSlot);
+            y += SlotSize + SlotSpacing;
+
+            var slot1Y = y;
+            var slot1 = MakeSlotButton(save.SecondaryPick1, 0f, slot1Y, () => { _activeSecondarySlot = _activeSecondarySlot == 0 ? -1 : 0; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot1Y; BuildSecondaryOptions(save); }, SlotSize);
+            var slot2Y = y + SlotSize + SlotSpacing;
+            var slot2 = MakeSlotButton(save.SecondaryPick2, 0f, slot2Y, () => { _activeSecondarySlot = _activeSecondarySlot == 1 ? -1 : 1; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot2Y; BuildSecondaryOptions(save); }, SlotSize);
+            _secondaryGroup.Append(slot1);
+            _secondaryGroup.Append(slot2);
+        }
+
+        private void BuildPrimaryOptions(RuneSaveSystem save)
+        {
+            _primaryOptions.RemoveAllChildren();
+            _primaryOptions.Left.Pixels = _primaryGroup.Left.Pixels + 70f;
+
+            if (_primaryPathOpen)
+            {
+                _primaryOptions.Top.Pixels = _activePrimaryPathY;
+                float x = 0f;
+                foreach (var p in Paths)
+                {
+                    var btn = MakeIconButton(p, x, 0f, (evt, elem) =>
+                    {
+                        SetPrimary(p);
+                        _primaryPathOpen = false;
+                        _activePrimarySlot = null;
+                    });
+                    btn.SetPlaceholder(false);
+                    btn.SetVisual(save.PrimaryPath == p, true);
+                    _primaryOptions.Append(btn);
+                    x += SlotSize + SlotSpacing;
+                }
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_activePrimarySlot))
+            {
+                _primaryOptions.Left.Pixels = -10000f;
+                _primaryOptions.Top.Pixels = -10000f;
+                return;
+            }
+            _primaryOptions.Top.Pixels = _activePrimarySlotY;
+
+            string[] list;
+            if (_activePrimarySlot == "Keystone")
+            {
+                list = _keystones[save.PrimaryPath];
+            }
+            else
+            {
+                int row = int.Parse(_activePrimarySlot.Substring(3));
+                list = _rows[save.PrimaryPath][row];
+            }
+
+            float size = SlotSize;
+            float gap = SlotSpacing;
+            int col = 0; int rowIdx = 0;
+            foreach (var r in list)
+            {
+                var btn = MakeIconButton(r, col * (size + gap), rowIdx * (size + gap), (evt, elem) =>
+                {
+                    if (_activePrimarySlot == "Keystone")
+                    {
+                        save.PrimaryKeystone = save.PrimaryKeystone == r ? "" : r;
+                    }
+                    else
+                    {
+                        int rowSel = int.Parse(_activePrimarySlot.Substring(3));
+                        string current = GetPrimaryRowValue(save, rowSel);
+                        SetPrimaryRowValue(save, rowSel, current == r ? "" : r);
+                    }
+                    _activePrimarySlot = null; // auto-collapse
+                    Refresh();
+                }, size);
+                btn.SetPlaceholder(false);
+                bool selected = (_activePrimarySlot == "Keystone" && save.PrimaryKeystone == r) || (_activePrimarySlot != "Keystone" && GetPrimaryRowValue(save, int.Parse(_activePrimarySlot.Substring(3))) == r);
+                btn.SetVisual(selected, true);
+                _primaryOptions.Append(btn);
+                col++;
+                if (col >= 3) { col = 0; rowIdx++; }
+            }
+        }
+
+        private void BuildSecondaryOptions(RuneSaveSystem save)
+        {
+            _secondaryOptions.RemoveAllChildren();
+            _secondaryOptions.Left.Pixels = _secondaryGroup.Left.Pixels + 70f;
+
+            if (_secondaryPathOpen)
+            {
+                _secondaryOptions.Top.Pixels = _secondaryGroup.Top.Pixels + 32f; // fixed position
+                float x = 0f;
+                foreach (var p in Paths)
+                {
+                    if (p == save.PrimaryPath) continue;
+                    var btn = MakeIconButton(p, x, 0f, (evt, elem) =>
+                    {
+                        SetSecondary(p);
+                        _secondaryPathOpen = false;
+                        _activeSecondarySlot = -1;
+                    });
+                    btn.SetPlaceholder(false);
+                    btn.SetVisual(save.SecondaryPath == p, true);
+                    _secondaryOptions.Append(btn);
+                    x += SlotSize + SlotSpacing;
+                }
+                return;
+            }
+
+            if (_activeSecondarySlot == -1)
+            {
+                _secondaryOptions.Left.Pixels = -10000f;
+                _secondaryOptions.Top.Pixels = -10000f;
+                return;
+            }
+            _secondaryOptions.Top.Pixels = _secondaryGroup.Top.Pixels + 32f; // fixed menu position
+
+            var subRows = _rows[save.SecondaryPath];
+            float sizeS = SlotSize;
+            float gapS = SlotSpacing;
+            int colS = 0; int rowS = 0;
+            for (int row = 0; row < subRows.Length; row++)
+            {
+                foreach (var r in subRows[row])
+                {
+                    int capturedRow = row;
+                    var btn = MakeIconButton(r, colS * (sizeS + gapS), rowS * (sizeS + gapS), (evt, elem) =>
+                    {
+                        if (save.SecondaryPick1 == r)
+                        {
+                            save.SecondaryPick1 = ""; save.SecondaryPick1Row = -1;
+                        }
+                        else if (save.SecondaryPick2 == r)
+                        {
+                            save.SecondaryPick2 = ""; save.SecondaryPick2Row = -1;
+                        }
+                        else
+                        {
+                            if (save.SecondaryPick1Row == capturedRow)
+                            {
+                                save.SecondaryPick1 = r; save.SecondaryPick1Row = capturedRow;
+                            }
+                            else if (save.SecondaryPick2Row == capturedRow)
+                            {
+                                save.SecondaryPick2 = r; save.SecondaryPick2Row = capturedRow;
+                            }
+                            else if (_activeSecondarySlot == 0 || string.IsNullOrEmpty(save.SecondaryPick1))
+                            {
+                                save.SecondaryPick1 = r; save.SecondaryPick1Row = capturedRow;
+                            }
+                            else if (_activeSecondarySlot == 1 || string.IsNullOrEmpty(save.SecondaryPick2))
+                            {
+                                save.SecondaryPick2 = r; save.SecondaryPick2Row = capturedRow;
+                            }
+                            else
+                            {
+                                save.SecondaryPick2 = r; save.SecondaryPick2Row = capturedRow;
+                            }
+                        }
+                        _activeSecondarySlot = -1; // auto-collapse
+                        Refresh();
+                    }, sizeS);
+                    btn.SetPlaceholder(false);
+                    bool selected = save.SecondaryPick1 == r || save.SecondaryPick2 == r;
+                    btn.SetVisual(selected, true);
+                    _secondaryOptions.Append(btn);
+                    colS++;
+                    if (colS >= 3) { colS = 0; rowS++; }
+                }
+            }
+        }
+
+        private void SetPrimary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (save.PrimaryPath == path) { _primaryPathOpen = false; Refresh(); return; }
+            save.PrimaryPath = path;
+            save.PrimaryKeystone = "";
+            save.PrimaryRow1 = "";
+            save.PrimaryRow2 = "";
+            save.PrimaryRow3 = "";
+            if (save.SecondaryPath == path)
+            {
+                foreach (var p in Paths)
+                {
+                    if (p != path) { save.SecondaryPath = p; break; }
+                }
+                save.SecondaryPick1 = "";
+                save.SecondaryPick2 = "";
+                save.SecondaryPick1Row = -1;
+                save.SecondaryPick2Row = -1;
+            }
+            _primaryPathOpen = false;
+            _activePrimarySlot = null;
+            _activeSecondarySlot = -1;
+            Refresh();
+        }
+
+        private void SetSecondary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (path == save.PrimaryPath) return;
+            if (save.SecondaryPath == path) { _secondaryPathOpen = false; Refresh(); return; }
+            save.SecondaryPath = path;
+            save.SecondaryPick1 = "";
+            save.SecondaryPick2 = "";
+            save.SecondaryPick1Row = -1;
+            save.SecondaryPick2Row = -1;
+            _secondaryPathOpen = false;
+            _activeSecondarySlot = -1;
+            Refresh();
+        }
+
+        private IconButton MakeSlotButton(string runeName, float x, float y, Action onClick, float size = 48f)
+        {
+            bool hasValue = !string.IsNullOrEmpty(runeName);
+            var btn = MakeIconButton(hasValue ? runeName : null, x, y, (evt, elem) => onClick?.Invoke(), size);
+            btn.SetPlaceholder(!hasValue);
+            btn.SetVisual(false, true);
+            return btn;
+        }
+
+        private IconButton MakeIconButton(string name, float x, float y, UIElement.MouseEvent click, float size = 48f)
+        {
+            var tex = string.IsNullOrEmpty(name) ? null : LoadRuneTexture(name);
+            var btn = new IconButton(tex, size)
+            {
+                Left = { Pixels = x },
+                Top = { Pixels = y }
+            };
+            btn.OnLeftClick += click;
+            btn.Tooltip = name ?? "";
+            return btn;
+        }
+
+        private Asset<Texture2D> LoadRuneTexture(string name)
+        {
+            string safe = SanitizeName(name);
+            var candidates = new List<string> { safe, safe + "_" };
+            if (safe.StartsWith("Legend_", System.StringComparison.Ordinal) && !safe.Contains("-_"))
+            {
+                candidates.Add(safe.Replace("Legend_", "Legend-_"));
+            }
+
+            foreach (var c in candidates)
+            {
+                string path = $"LeagueOfLegendThings/Content/Buffs/{c}";
+                try
+                {
+                    return ModContent.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad);
+                }
+                catch
+                {
+                    // try next
+                }
+            }
+            return TextureAssets.MagicPixel; // 占位
+        }
+
+        private string SanitizeName(string name)
+        {
+            var chars = name.Select(ch => char.IsLetterOrDigit(ch) ? ch : '_').ToArray();
+            var s = new string(chars);
+            while (s.Contains("__")) s = s.Replace("__", "_");
+            return s.Trim('_');
+        }
+
+        private void Highlight(IconButton btn, bool selected, bool enabled = true)
+        {
+            btn.SetVisual(selected, enabled);
+        }
+
+        private class IconButton : UIElement
+        {
+            private readonly Texture2D _texture;
+            private readonly Texture2D _dotTex = TextureAssets.MagicPixel.Value;
+            private readonly float _size;
+            private bool _selected;
+            private bool _enabled = true;
+            private bool _placeholder;
+            public string Tooltip { get; set; } = string.Empty;
+
+            public IconButton(Asset<Texture2D> texture, float size)
+            {
+                _texture = texture?.Value ?? TextureAssets.MagicPixel.Value;
+                _size = size;
+                Width.Set(size, 0f);
+                Height.Set(size, 0f);
+            }
+
+            public void SetPlaceholder(bool placeholder) => _placeholder = placeholder;
+
+            public void SetVisual(bool selected, bool enabled)
+            {
+                _selected = selected;
+                _enabled = enabled;
+            }
+
+            protected override void DrawSelf(SpriteBatch spriteBatch)
+            {
+                base.DrawSelf(spriteBatch);
+                var dims = GetDimensions();
+                var center = dims.Position() + new Vector2(dims.Width * 0.5f, dims.Height * 0.5f);
+                float targetSize = _selected ? _size * 1.05f : _size * 0.92f;
+                float scale = targetSize / MathF.Max(_texture.Width, _texture.Height);
+                var iconColor = _enabled ? Color.White : Color.Gray;
+
+                bool hoverNow = IsMouseHovering;
+
+                if (hoverNow || _selected)
+                {
+                    var bgCol = new Color(60, 60, 60) * (_enabled ? 0.6f : 0.4f);
+                    spriteBatch.Draw(_dotTex, new Rectangle((int)dims.X, (int)dims.Y, (int)dims.Width, (int)dims.Height), bgCol);
+                }
+
+                if (_placeholder)
+                {
+                    // Draw a subtle placeholder plus
+                    var border = new Rectangle((int)dims.X, (int)dims.Y, (int)dims.Width, (int)dims.Height);
+                    DrawBorder(spriteBatch, border, 1, new Color(90, 90, 90));
+                    spriteBatch.Draw(_dotTex, new Rectangle((int)center.X - 8, (int)center.Y - 1, 16, 2), new Color(120, 120, 120));
+                    spriteBatch.Draw(_dotTex, new Rectangle((int)center.X - 1, (int)center.Y - 8, 2, 16), new Color(120, 120, 120));
+                }
+                else
+                {
+                    spriteBatch.Draw(_texture, center, null, iconColor, 0f, _texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                }
+
+                if (_selected)
+                {
+                    var border = new Rectangle((int)dims.X, (int)dims.Y, (int)dims.Width, (int)dims.Height);
+                    DrawBorder(spriteBatch, border, 2, new Color(196, 145, 63));
+                }
+            }
+
+            private void DrawBorder(SpriteBatch spriteBatch, Rectangle rect, int thickness, Color color)
+            {
+                spriteBatch.Draw(_dotTex, new Rectangle(rect.X, rect.Y, rect.Width, thickness), color);
+                spriteBatch.Draw(_dotTex, new Rectangle(rect.X, rect.Bottom - thickness, rect.Width, thickness), color);
+                spriteBatch.Draw(_dotTex, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
+                spriteBatch.Draw(_dotTex, new Rectangle(rect.Right - thickness, rect.Y, thickness, rect.Height), color);
+            }
+
+            public override void MouseOver(UIMouseEvent evt)
+            {
+                base.MouseOver(evt);
+                if (!string.IsNullOrEmpty(Tooltip))
+                    Main.instance.MouseText(Tooltip);
+            }
+        }
+
+        private class DraggableUIPanel : UIPanel
+        {
+            private bool _dragging;
+            private Vector2 _dragOffset;
+
+            public void StopDrag() => _dragging = false;
+
+            public override void LeftMouseDown(UIMouseEvent evt)
+            {
+                base.LeftMouseDown(evt);
+                if (evt.Target != this)
+                    return;
+                _dragging = true;
+                Left.Percent = 0f;
+                Top.Percent = 0f;
+                _dragOffset = evt.MousePosition - GetDimensions().Position();
+            }
+
+            public override void LeftMouseUp(UIMouseEvent evt)
+            {
+                base.LeftMouseUp(evt);
+                _dragging = false;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                base.Update(gameTime);
+                if (_dragging && !Main.mouseLeft)
+                {
+                    _dragging = false;
+                }
+                if (_dragging)
+                {
+                    Vector2 mouse = Main.MouseScreen;
+                    Left.Set(mouse.X - _dragOffset.X, 0f);
+                    Top.Set(mouse.Y - _dragOffset.Y, 0f);
+                    Recalculate();
+                }
+            }
+        }
+        private string GetPrimaryRowValue(RuneSaveSystem save, int row) => row switch
+        {
+            0 => save.PrimaryRow1,
+            1 => save.PrimaryRow2,
+            _ => save.PrimaryRow3
+        };
+
+        private void SetPrimaryRowValue(RuneSaveSystem save, int row, string value)
+        {
+            switch (row)
+            {
+                case 0: save.PrimaryRow1 = value; break;
+                case 1: save.PrimaryRow2 = value; break;
+                case 2: save.PrimaryRow3 = value; break;
+            }
+        }
+    }
+}

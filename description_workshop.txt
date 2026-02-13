@@ -1,0 +1,28 @@
+[h1]League Of Legend Things[/h1]
+[i]LoL-inspired rune system for tModLoader.[/i]
+
+[h2]English[/h2]
+[list]
+[*]Keystones and small runes inspired by League of Legends
+[*]Custom UI for rune selection and descriptions
+[*]Visual and SFX feedback for procs
+[/list]
+
+[h3]Notes[/h3]
+[list]
+[*]Single-player and multiplayer supported
+[*]Balance may change over time
+[/list]
+
+[h2]中文[/h2]
+[list]
+[*]参考英雄联盟的符文系统（基石 + 小符文）
+[*]内置符文选择与说明界面
+[*]触发效果带视觉与音效反馈
+[/list]
+
+[h3]说明[/h3]
+[list]
+[*]支持单人/多人
+[*]数值可能会持续调整
+[/list]

@@ -1,0 +1,12 @@
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\bin\Debug\net8.0\LeagueOfLegendThings.deps.json
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\bin\Debug\net8.0\LeagueOfLegendThings.dll
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\bin\Debug\net8.0\LeagueOfLegendThings.pdb
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.csproj.AssemblyReference.cache
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.AssemblyInfoInputs.cache
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.AssemblyInfo.cs
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.csproj.CoreCompileInputs.cache
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.dll
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\refint\LeagueOfLegendThings.dll
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\LeagueOfLegendThings.pdb
+C:\Users\30285\Documents\My Games\Terraria\tModLoader\ModSources\LeagueOfLegendThings\obj\Debug\net8.0\ref\LeagueOfLegendThings.dll

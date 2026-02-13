@@ -1,0 +1,172 @@
+﻿using Terraria.UI;
+using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Systems;
+using Terraria.ModLoader;
+
+namespace LeagueOfLegendThings.Content.UI
+{
+    public class RuneUIState : UIState
+    {
+        private UIPanel _panel;
+        private UIText _title;
+        private UITextPanel<string> _toggleButton;
+        private UITextPanel<string> _primaryPrecision;
+        private UITextPanel<string> _primarySorcery;
+        private UITextPanel<string> _keystoneLethal;
+        private UITextPanel<string> _secondaryDomination;
+        private UITextPanel<string> _secondaryResolve;
+        private bool _open;
+
+        public override void OnInitialize()
+        {
+            // 按钮放在防御显示下方（大约左上角护甲旁的位置，可按需再调整）
+            var mainButton = new UITextPanel<string>("符文", 0.8f)
+            {
+                Width = { Pixels = 60 },
+                Height = { Pixels = 24 },
+                Left = { Pixels = 16 },
+                Top = { Pixels = 260 },
+                BackgroundColor = new Color(60, 60, 120) * 0.8f
+            };
+            mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            Append(mainButton);
+
+            _panel = new UIPanel
+            {
+                Width = { Pixels = 420 },
+                Height = { Pixels = 280 },
+                Left = { Pixels = 16 },
+                Top = { Pixels = 290 },
+                BackgroundColor = new Color(33, 33, 55) * 0.85f,
+                BorderColor = new Color(200, 200, 255) * 0.9f,
+                PaddingLeft = 12,
+                PaddingRight = 12,
+                PaddingTop = 12,
+                PaddingBottom = 12
+            };
+
+            _title = new UIText("符文选择", 0.9f)
+            {
+                HAlign = 0f,
+                Top = { Pixels = 0 }
+            };
+            _panel.Append(_title);
+
+            // 主系选择
+            _primaryPrecision = MakeButton("精密 (主系)", 12, 36, () => SetPrimary("Precision"));
+            _primarySorcery = MakeButton("巫术 (主系)", 140, 36, () => SetPrimary("Sorcery"));
+            _panel.Append(_primaryPrecision);
+            _panel.Append(_primarySorcery);
+
+            // 基石符文（示例：致命节奏，属于精密）
+            _keystoneLethal = MakeButton("致命节奏 (基石)", 12, 80, () => SelectKeystoneLethal());
+            _panel.Append(_keystoneLethal);
+
+            // 副系选择
+            _secondaryDomination = MakeButton("主宰 (副系)", 12, 140, () => SetSecondary("Domination"));
+            _secondaryResolve = MakeButton("坚决 (副系)", 140, 140, () => SetSecondary("Resolve"));
+            _panel.Append(_secondaryDomination);
+            _panel.Append(_secondaryResolve);
+        }
+
+        public override void OnActivate()
+        {
+            base.OnActivate();
+            Refresh();
+        }
+
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        private UITextPanel<string> MakeButton(string text, float x, float y, UIElement.MouseEvent click)
+        {
+            var btn = new UITextPanel<string>(text, 0.8f)
+            {
+                Width = { Pixels = 120 },
+                Height = { Pixels = 28 },
+                Left = { Pixels = x },
+                Top = { Pixels = y },
+                BackgroundColor = new Color(50, 50, 80) * 0.8f
+            };
+            btn.OnLeftClick += click;
+            return btn;
+        }
+
+        private void ToggleOpen()
+        {
+            _open = !_open;
+            if (_open)
+            {
+                if (_panel.Parent == null)
+                    Append(_panel);
+                Refresh();
+            }
+            else
+            {
+                _panel.Remove();
+            }
+        }
+
+        private void SetPrimary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            save.PrimaryPath = path;
+            // 若主系不是精密，则基石致命节奏不可选
+            if (path != "Precision")
+                save.LethalTempoSelected = false;
+            Refresh();
+        }
+
+        private void SetSecondary(string path)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            save.SecondaryPath = path;
+            Refresh();
+        }
+
+        private void SelectKeystoneLethal()
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (save.PrimaryPath == "Precision")
+            {
+                save.LethalTempoSelected = !save.LethalTempoSelected;
+            }
+            Refresh();
+        }
+
+        private void Refresh()
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+
+            // 主系按钮高亮
+            Highlight(_primaryPrecision, save.PrimaryPath == "Precision");
+            Highlight(_primarySorcery, save.PrimaryPath == "Sorcery");
+
+            // 基石按钮高亮/禁用
+            bool lethalEnabled = save.PrimaryPath == "Precision";
+            _keystoneLethal.SetText(lethalEnabled ? (save.LethalTempoSelected ? "致命节奏 (已选)" : "致命节奏") : "致命节奏 (主系需精密)");
+            Highlight(_keystoneLethal, save.LethalTempoSelected && lethalEnabled, lethalEnabled);
+
+            // 副系按钮高亮
+            Highlight(_secondaryDomination, save.SecondaryPath == "Domination");
+            Highlight(_secondaryResolve, save.SecondaryPath == "Resolve");
+        }
+
+        private void Highlight(UITextPanel<string> btn, bool selected, bool enabled = true)
+        {
+            if (!enabled)
+            {
+                btn.TextColor = Color.Gray;
+                btn.BackgroundColor = new Color(60, 60, 60) * 0.7f;
+                return;
+            }
+
+            btn.TextColor = Color.White;
+            btn.BackgroundColor = (selected ? new Color(80, 140, 80) : new Color(50, 50, 80)) * 0.85f;
+        }
+    }
+}

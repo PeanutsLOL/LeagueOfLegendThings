@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "启动 tModLoader (支持热重载)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "D:\\SteamLibrary\\steamapps\\common\\tModLoader\\dotnet\\dotnet.exe",
+            "cwd": "D:\\SteamLibrary\\steamapps\\common\\tModLoader",
+            "args": [
+                "tModLoader.dll",
+                "-skipselect:LeagueOfLegendThings"
+            ],
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "requireExactSource": false,
+            "enableHotReload": true,
+            "preLaunchTask": "build"
+        }
+    ]
+}

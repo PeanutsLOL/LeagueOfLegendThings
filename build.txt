@@ -1,0 +1,3 @@
+displayName = League of Legend Things
+author = PeanutsLOL
+version = 0.1

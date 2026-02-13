@@ -1,0 +1,169 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\ui\\runeuistate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\ui\\runeuistate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\ui\\runeuisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\ui\\runeuisystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\projectiles\\lethaltemponoteprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\projectiles\\lethaltemponoteprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\config\\runeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\config\\runeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\systems\\runesavesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\systems\\runesavesystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\buffs\\lethaltempo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\buffs\\lethaltempo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\content\\buffs\\presstheattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:content\\buffs\\presstheattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Config\\LethalTempoConfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Content\\Config\\LethalTempoConfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|c:\\users\\30285\\documents\\my games\\terraria\\tmodloader\\modsources\\leagueoflegendthings\\leagueoflegendthings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{670D7A65-7908-BC9B-B564-14A3BD3B364D}|LeagueOfLegendThings.csproj|solutionrelative:leagueoflegendthings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PressTheAttack.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Buffs\\PressTheAttack.cs",
+              "RelativeDocumentMoniker": "Content\\Buffs\\PressTheAttack.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Buffs\\PressTheAttack.cs",
+              "RelativeToolTip": "Content\\Buffs\\PressTheAttack.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAIwF8AAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T15:41:55.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RuneSaveSystem.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Systems\\RuneSaveSystem.cs",
+              "RelativeDocumentMoniker": "Content\\Systems\\RuneSaveSystem.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Systems\\RuneSaveSystem.cs",
+              "RelativeToolTip": "Content\\Systems\\RuneSaveSystem.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAIwB4AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T11:50:38.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RuneUISystem.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\UI\\RuneUISystem.cs",
+              "RelativeDocumentMoniker": "Content\\UI\\RuneUISystem.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\UI\\RuneUISystem.cs",
+              "RelativeToolTip": "Content\\UI\\RuneUISystem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T11:22:11.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RuneUIState.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\UI\\RuneUIState.cs",
+              "RelativeDocumentMoniker": "Content\\UI\\RuneUIState.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\UI\\RuneUIState.cs",
+              "RelativeToolTip": "Content\\UI\\RuneUIState.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAQwGoCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T11:22:00.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RuneConfig.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Config\\RuneConfig.cs",
+              "RelativeDocumentMoniker": "Content\\Config\\RuneConfig.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Config\\RuneConfig.cs",
+              "RelativeToolTip": "Content\\Config\\RuneConfig.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAuwAoAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T11:18:01.916Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "LethalTempoConfig.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Config\\LethalTempoConfig.cs",
+              "RelativeDocumentMoniker": "Content\\Config\\LethalTempoConfig.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Config\\LethalTempoConfig.cs",
+              "RelativeToolTip": "Content\\Config\\LethalTempoConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T11:17:38.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LethalTempoNoteProjectile.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Projectiles\\LethalTempoNoteProjectile.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\LethalTempoNoteProjectile.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Projectiles\\LethalTempoNoteProjectile.cs",
+              "RelativeToolTip": "Content\\Projectiles\\LethalTempoNoteProjectile.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAgwBAAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-06T19:45:12.44Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LethalTempo.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Buffs\\LethalTempo.cs",
+              "RelativeDocumentMoniker": "Content\\Buffs\\LethalTempo.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\Content\\Buffs\\LethalTempo.cs",
+              "RelativeToolTip": "Content\\Buffs\\LethalTempo.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAQwBEAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-06T19:05:08.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "LeagueOfLegendThings.cs",
+              "DocumentMoniker": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\LeagueOfLegendThings.cs",
+              "RelativeDocumentMoniker": "LeagueOfLegendThings.cs",
+              "ToolTip": "C:\\Users\\30285\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LeagueOfLegendThings\\LeagueOfLegendThings.cs",
+              "RelativeToolTip": "LeagueOfLegendThings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-06T18:58:24.942Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

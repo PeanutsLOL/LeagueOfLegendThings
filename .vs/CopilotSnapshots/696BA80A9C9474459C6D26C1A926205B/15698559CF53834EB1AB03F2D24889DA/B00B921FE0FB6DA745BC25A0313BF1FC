@@ -1,0 +1,198 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent;
+using LeagueOfLegendThings.Content.Projectiles;
+using Microsoft.Xna.Framework;
+
+namespace LeagueOfLegendThings.Content.Buffs
+{
+    public class LethalTempo : ModBuff
+    {
+        // 最大叠加层数
+        public const int MaxStacks = 6;
+        // 每层近战攻击速度加成
+        public const float MeleeAttackSpeedBonusPerStack = 0.06f;
+        // 每层远程攻击速度加成
+        public const float RangedAttackSpeedBonusPerStack = 0.04f;
+        // 持续时间（以帧为单位，60帧 = 1秒）
+        public const int BuffDuration = 6 * 60;
+
+        public override void SetStaticDefaults()
+        {
+            // 表明这个Buff不是减益效果
+            Main.debuff[Type] = false;
+            // 退出世界时不保存此Buff
+            Main.buffNoSave[Type] = true;
+            // 显示这个Buff的剩余时间
+            Main.buffNoTimeDisplay[Type] = false;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            var lethalTempoPlayer = player.GetModPlayer<LethalTempoPlayer>();
+
+            if (lethalTempoPlayer.LethalTempoStacks > 0)
+            {
+                float attackSpeedBonus = 0f;
+                if (player.HeldItem.DamageType == DamageClass.Melee)
+                {
+                    attackSpeedBonus = MeleeAttackSpeedBonusPerStack * lethalTempoPlayer.LethalTempoStacks;
+                }
+                else if (player.HeldItem.DamageType == DamageClass.Ranged)
+                {
+                    attackSpeedBonus = RangedAttackSpeedBonusPerStack * lethalTempoPlayer.LethalTempoStacks;
+                }
+                player.GetAttackSpeed(player.HeldItem.DamageType) += attackSpeedBonus;
+
+                // 添加视觉效果
+                if (Main.rand.NextBool(20)) // 每帧有5%的概率生成粒子
+                {
+                    Dust dust = Dust.NewDustDirect(
+                        player.position,
+                        player.width,
+                        player.height,
+                        DustID.Electric, // 使用电气效果
+                        0f,
+                        0f,
+                        100,
+                        Color.Yellow * (lethalTempoPlayer.LethalTempoStacks / (float)MaxStacks),
+                        0.8f + (0.2f * lethalTempoPlayer.LethalTempoStacks)
+                    );
+                    dust.noGravity = true;
+                    dust.velocity *= 0.3f;
+                }
+
+                // 满层时的额外效果
+                if (lethalTempoPlayer.LethalTempoStacks >= MaxStacks)
+                {
+                    if (Main.rand.NextBool(10)) // 每帧10%概率
+                    {
+                        Dust dust = Dust.NewDustDirect(
+                            player.position,
+                            player.width,
+                            player.height,
+                            DustID.GoldFlame,
+                            0f,
+                            -2f,
+                            150,
+                            default,
+                            1.2f
+                        );
+                        dust.noGravity = true;
+                    }
+                }
+            }
+
+            // 检查Buff是否即将结束
+            if (player.buffTime[buffIndex] <= 1)
+            {
+                // 重置层数
+                lethalTempoPlayer.LethalTempoStacks = 0;
+            }
+        }
+    }
+
+    public class LethalTempoPlayer : ModPlayer
+    {
+        // 致命节奏的叠加层数
+        public int LethalTempoStacks;
+
+        // 轮流发射 L / R（0 = L 上抛，1 = R 下抛）
+        private int nextNoteSide = 0;
+
+        public override void OnHitNPCWithItem(Item item,
+                                              NPC target,
+                                              NPC.HitInfo hit,
+                                              int damageDone
+                                              )
+        {
+            HandleLethalTempo(item, target, damageDone);
+        }
+
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            // 由致命节奏投射物自身造成的命中不再叠层/触发
+            if (proj.type == ModContent.ProjectileType<LethalTempoNoteProjectile>())
+                return;
+
+            HandleLethalTempo(proj, target, damageDone);
+        }
+
+        private void HandleLethalTempo(object source, NPC target, int damageDone)
+        {
+            if (target.lifeMax > 5 && target.friendly == false)
+            {
+                if (LethalTempoStacks < LethalTempo.MaxStacks)
+                {
+                    LethalTempoStacks++;
+                }
+
+                Player.AddBuff(ModContent.BuffType<LethalTempo>(), LethalTempo.BuffDuration);
+
+                if (LethalTempoStacks >= LethalTempo.MaxStacks)
+                {
+                    float baseDamage = 0f;
+                    DamageClass damageClass;
+
+                    // 主手面板伤害（未受致命节奏加成前的武器面板）
+                    int panelDamage = Player.HeldItem != null ? Player.HeldItem.damage : 0;
+
+                    if (source is Item item)
+                    {
+                        panelDamage = item.damage;
+                        damageClass = item.DamageType;
+                    }
+                    else if (source is Projectile proj)
+                    {
+                        damageClass = proj.DamageType;
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    if (damageClass == DamageClass.Melee)
+                    {
+                        baseDamage = panelDamage * 0.30f;
+                    }
+                    else if (damageClass == DamageClass.Ranged)
+                    {
+                        baseDamage = panelDamage * 0.70f;
+                    }
+                    else
+                    {
+                        return; // 非近战/远程不触发
+                    }
+
+                    float extraAttackSpeed = Player.GetTotalAttackSpeed(damageClass) - 1f;
+                    float finalDamage = baseDamage * (1f + extraAttackSpeed);
+
+                    // ai0：0/1 轮流决定 L/R，ai1：-1 上抛，+1 下抛
+                    float side = nextNoteSide;
+                    float arcSign = side == 0 ? -1f : 1f;
+
+                    Projectile.NewProjectile(
+                        new EntitySource_OnHit(Player, target),
+                        Player.Center,
+                        Player.DirectionTo(target.Center) * 10f,
+                        ModContent.ProjectileType<LethalTempoNoteProjectile>(),
+                        (int)finalDamage,
+                        0f,
+                        Player.whoAmI,
+                        side,
+                        arcSign
+                    );
+
+                    nextNoteSide ^= 1; // 轮流切换
+                }
+            }
+        }
+    }
+}
