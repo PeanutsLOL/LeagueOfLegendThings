@@ -1,0 +1,16 @@
+.vs/
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.log
+.DS_Store
+*.ncb
+*.sdf
+TestResults/
+_ReSharper*/
+packages/
+*.ide
+.history/
