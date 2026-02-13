@@ -113,10 +113,10 @@ UI: {
 		}
 
 		Desc: {
-			Press_the_Attack: Not implemented yet.
-			Lethal_Tempo: Not implemented yet.
-			Fleet_Footwork: Not implemented yet.
-			Conqueror: Not implemented yet.
+			Press_the_Attack: Deals more damage after 3 hits on the same target. 6s cooldown.
+			Lethal_Tempo: Increase your ATK speed. Fires extra bullets after a few hits.
+			Fleet_Footwork: Heals on hit, and a burst speed boost.
+			Conqueror: Deals more damage after a few hits, then gets heal based on damage dealt.
 			Absorb_Life: Heal on hit.
 			Triumph: Heal on kill after boss fight. Earn an extra treasure bag.
 			Presence_of_Mind: Restore mana on hit/kill.
@@ -137,9 +137,9 @@ UI: {
 			Ingenious_Hunter: Potion cooldown -3% per hunter stack.
 			Treasure_Hunter: Extra gold on kill based on hunter stacks.
 			Relentless_Hunter: +3% move speed per hunter stack after 5s no damage.
-			Summon_Aery: Not implemented yet.
-			Arcane_Comet: Not implemented yet.
-			Phase_Rush: Not implemented yet.
+			Summon_Aery: Summon Aery to help you.
+			Arcane_Comet: An Arcane comet goes around you. Strike while you hit an enemy.
+			Phase_Rush: Three consecutive hits on a target grant a short movement-speed burst.
 			Axiom_Arcanist: +4% magic damage.
 			Manaflow_Band: +5 max mana per stack (max 6), hit cooldown 20s.
 			Nimbus_Cloak: After potion: +20% move speed for 2s.
@@ -149,9 +149,9 @@ UI: {
 			Scorch: Extra 10 damage on hit. 8s cooldown.
 			Waterwalking: In water: +10% move speed.
 			Gathering_Storm: Every 1h: +1% damage stack.
-			Grasp_of_the_Undying: Not implemented yet.
-			Aftershock: Not implemented yet.
-			Guardian: Not implemented yet.
+			Grasp_of_the_Undying: Stack in combat (max 4); at 4 stacks, next basic attack on a boss heals, deals magic damage, and grants permanent max HP.
+			Aftershock: Melee hits grant temporary resistance; when it ends, release a shockwave that deals magic damage. 20s shared CD.
+			Guardian: When Ice Barrier is applied, instantly heal 120 and trigger a 50s cooldown.
 			Demolish: Boss nearby stacks to 6. Next hit: 100 + 35% max HP. 35s cooldown.
 			Font_of_Life: Heal 4 on hit. 10s cooldown.
 			Shield_Bash: Defense >=50: +5% damage.
