@@ -142,7 +142,7 @@ namespace LeagueOfLegendThings.Content.Buffs
             {
                 int bonusDamage = 100 + (int)(target.lifeMax * 0.35f);
                 target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
-                var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_3")
+                var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_3")
                 {
                     Volume = 0.75f,
                     PitchVariance = 0f
@@ -236,7 +236,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
             if (inRange && !demolishInRange)
             {
-                var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_0")
+                var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_0")
                 {
                     Volume = 0.75f,
                     PitchVariance = 0f
@@ -257,7 +257,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                         demolishStacks++;
                         if (demolishStacks < DemolishMaxStacks)
                         {
-                            var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_1")
+                            var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_1")
                             {
                                 Volume = 0.75f,
                                 PitchVariance = 0f
@@ -266,7 +266,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                         }
                         else
                         {
-                            var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_2")
+                            var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_2")
                             {
                                 Volume = 0.75f,
                                 PitchVariance = 0f
@@ -286,7 +286,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                     {
                         demolishDecayTimer = 0;
                         demolishStacks--;
-                        var sfx4 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_4")
+                        var sfx4 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_4")
                         {
                             Volume = 0.75f,
                             PitchVariance = 0f
@@ -295,7 +295,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
                         if (demolishStacks <= 0)
                         {
-                            var sfx5 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Demolish_SFX_5")
+                            var sfx5 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Demolish_SFX_5")
                             {
                                 Volume = 0.75f,
                                 PitchVariance = 0f

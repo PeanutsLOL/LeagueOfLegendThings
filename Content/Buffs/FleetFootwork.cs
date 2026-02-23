@@ -10,7 +10,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class FleetFootwork : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Buffs/Fleet_Footwork";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Fleet_Footwork";
 
         public override void SetStaticDefaults()
         {
@@ -167,7 +167,7 @@ namespace LeagueOfLegendThings.Content.Buffs
             {
                 try
                 {
-                    var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Fleet_Footwork_SFX_3")
+                    var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Fleet_Footwork_SFX_3")
                     {
                         Volume = 0.67f,
                         PitchVariance = 0f
@@ -200,8 +200,8 @@ namespace LeagueOfLegendThings.Content.Buffs
             try
             {
                 string sfxPath = Main.rand.NextBool() 
-                    ? "LeagueOfLegendThings/Content/Buffs/Fleet_Footwork_SFX_1"
-                    : "LeagueOfLegendThings/Content/Buffs/Fleet_Footwork_SFX_5";
+                    ? "LeagueOfLegendThings/Content/SFX/Fleet_Footwork_SFX_1"
+                    : "LeagueOfLegendThings/Content/SFX/Fleet_Footwork_SFX_5";
                 var sfx = new SoundStyle(sfxPath)
                 {
                     Volume = 0.67f,
@@ -241,7 +241,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 try
                 {
                     int[] healSfxOptions = { 2, 4, 6 };
-                    string sfxPath = $"LeagueOfLegendThings/Content/Buffs/Fleet_Footwork_SFX_{healSfxOptions[Main.rand.Next(3)]}";
+                    string sfxPath = $"LeagueOfLegendThings/Content/SFX/Fleet_Footwork_SFX_{healSfxOptions[Main.rand.Next(3)]}";
                     var sfx = new SoundStyle(sfxPath)
                     {
                         Volume = 0.5f,

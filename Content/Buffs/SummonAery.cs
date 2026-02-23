@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 public class SummonAery : ModBuff
 {
-    public override string Texture => "LeagueOfLegendThings/Content/Buffs/SummonAeryBuff";
+    public override string Texture => "LeagueOfLegendThings/Content/Icon/SummonAeryBuff";
 
     public override void SetStaticDefaults()
     {
@@ -266,11 +266,8 @@ public class SummonAeryPlayer : ModPlayer
 
     private void DebugAery(string message)
     {
-        if (!EnableAeryDebugLog)
-            return;
-
-        ModContent.GetInstance<global::LeagueOfLegendThings.LeagueOfLegendThings>()
-            .Logger.Info($"[AeryDebug][Player:{Player.whoAmI}] {message} | cacheLife={pendingPotionHealLife}, cacheMana={pendingPotionHealMana}, cacheTimer={pendingPotionTimer}, aeryProjId={aeryProjectileId}");
+        // Debug logging disabled in production build
+        return;
     }
 }
 
@@ -599,16 +596,13 @@ public class AeryProj : ModProjectile
 
     private void DebugAery(string message)
     {
-        if (!EnableAeryDebugLog)
-            return;
-
-        ModContent.GetInstance<global::LeagueOfLegendThings.LeagueOfLegendThings>()
-            .Logger.Info($"[AeryDebug][Proj:{Projectile.whoAmI}][Owner:{Projectile.owner}] {message} | state={State}, targetId={targetId}, cacheLife={pendingHealLife}, cacheMana={pendingHealMana}, pos={Projectile.Center}");
+        // Debug logging disabled in production build
+        return;
     }
 
     private void PlayAerySound(int[] options, Vector2 pos)
     {
         int choice = options[Main.rand.Next(options.Length)];
-        SoundEngine.PlaySound(new SoundStyle($"LeagueOfLegendThings/Content/Buffs/Summon_Aery_SFX_{choice}"), pos);
+        SoundEngine.PlaySound(new SoundStyle($"LeagueOfLegendThings/Content/SFX/Summon_Aery_SFX_{choice}"), pos);
     }
 }

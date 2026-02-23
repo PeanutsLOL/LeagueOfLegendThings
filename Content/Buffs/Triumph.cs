@@ -8,6 +8,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class Triumph : ModBuff
     {
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Triumph";
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;

@@ -187,7 +187,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
         private static void PlayElectrocuteSfx(Vector2 pos)
         {
-            var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Electrocute_SFX")
+            var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Electrocute_SFX")
             {
                 Volume = 0.75f,
                 PitchVariance = 0.5f

@@ -589,7 +589,7 @@ namespace LeagueOfLegendThings.Content.UI
 
             foreach (var c in candidates)
             {
-                string path = $"LeagueOfLegendThings/Content/Buffs/{c}";
+                string path = $"LeagueOfLegendThings/Content/Icon/{c}";
                 try
                 {
                     return ModContent.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad);
@@ -649,7 +649,22 @@ namespace LeagueOfLegendThings.Content.UI
 
         private void ShowDetail(string runeName, float left, float top)
         {
+            // Try to get a localized display name from Buffs.<Key>.DisplayName
             HideDetail();
+            var buffKeyChars = runeName.Where(ch => char.IsLetterOrDigit(ch)).ToArray();
+            var buffKey = new string(buffKeyChars);
+            string titleKey = $"Mods.LeagueOfLegendThings.Buffs.{buffKey}.DisplayName";
+            string title = Language.GetTextValue(titleKey);
+            if (string.IsNullOrEmpty(title) || title == titleKey)
+                title = runeName;
+
+            string desc = GetRuneDescription(runeName);
+
+            _detailTitle.SetText(title);
+            _detailDesc.SetText(desc);
+            _detailPanel.Left.Pixels = left;
+            _detailPanel.Top.Pixels = top;
+            SetDetailVisible(true);
         }
 
         private void HideDetail()
@@ -685,7 +700,13 @@ namespace LeagueOfLegendThings.Content.UI
         private void AddRuneDescLine(UIElement parent, string runeName, float x, float y, Color titleColor)
         {
             string desc = GetRuneDescription(runeName);
-            string title = runeName;
+            // Use Buffs.<Key>.DisplayName when available. Convert runeName to a buff key by stripping non-alphanumeric chars.
+            var buffKeyChars = runeName.Where(ch => char.IsLetterOrDigit(ch)).ToArray();
+            var buffKey = new string(buffKeyChars);
+            string titleKey = $"Mods.LeagueOfLegendThings.Buffs.{buffKey}.DisplayName";
+            string title = Language.GetTextValue(titleKey);
+            if (string.IsNullOrEmpty(title) || title == titleKey)
+                title = runeName;
             string body = WrapText(desc, 42);
             var line = new RuneDescBlock(title, body, titleColor, DescWidth)
             {

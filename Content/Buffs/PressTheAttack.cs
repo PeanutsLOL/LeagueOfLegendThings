@@ -95,8 +95,8 @@ namespace LeagueOfLegendThings.Content.Buffs
                 }
 
                 var sfx = new SoundStyle(Main.rand.NextBool()
-                    ? "LeagueOfLegendThings/Content/Buffs/Press_the_Attack_SFX"
-                    : "LeagueOfLegendThings/Content/Buffs/Press_the_Attack_SFX_2")
+                    ? "LeagueOfLegendThings/Content/SFX/Press_the_Attack_SFX"
+                    : "LeagueOfLegendThings/Content/SFX/Press_the_Attack_SFX_2")
                 {
                     Volume = 0.75f,
                     PitchVariance = 0f

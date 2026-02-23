@@ -1,0 +1,414 @@
+Buffs: {
+	LethalTempo: {
+		DisplayName: 致命节奏
+		Description: 提高攻击速度；连续命中后发射额外子弹。
+	}
+
+	Conqueror: {
+		DisplayName: 征服者
+		Description: 连续攻击对目标造成更多伤害，并根据造成的伤害恢复生命值。
+	}
+
+	FleetFootwork: {
+		DisplayName: 迅捷步法
+		Description: 攻击时治疗并短暂获得移动速度提升。
+	}
+
+	AbsorbLife: {
+		DisplayName: 吸收生命力
+		Description: 攻击命中时吸取生命恢复自身。
+	}
+
+	Triumph: {
+		DisplayName: 凯旋
+		Description: 击杀后治疗并在击败Boss后额外获得战利品。
+	}
+
+	PresenceOfMind: {
+		DisplayName: 气定神闲
+		Description: 攻击或击杀时恢复法力。
+	}
+
+	LegendAlacrity: {
+		DisplayName: 传说：欢欣
+		Description: 每层增加攻击速度（最多6层）。
+	}
+
+	LegendBloodline: {
+		DisplayName: 传说：血统
+		Description: 每层提供吸血效果，满层时有额外最大生命加成。
+	}
+
+	LegendHaste: {
+		DisplayName: 传说：急速
+		Description: 每层减少药水冷却时间。
+	}
+
+	CoupDeGrace: {
+		DisplayName: 致命一击
+		Description: 对低于40%生命值的Boss造成额外伤害。
+	}
+
+	CutDown: {
+		DisplayName: 砍倒
+		Description: 对高于60%生命值的Boss造成更多伤害。
+	}
+
+	LastStand: {
+		DisplayName: 坚毅不倒
+		Description: 对Boss的伤害会随失去生命增加。
+	}
+
+	SummonAery: {
+		DisplayName: 召唤：艾黎
+		Description: 召唤艾瑞来协助你攻击或防护。
+	}
+
+	GlacialAugment: {
+		DisplayName: 冰川增幅
+		Description: 冰系伤害命中时造成强烈减速效果（有冷却）。
+	}
+
+	UnsealedSpellbook: {
+		DisplayName: 解封的秘籍
+		Description: 增加额外饰品栏、外观栏和染色栏位。
+	}
+
+	FirstStrike: {
+		DisplayName: 先攻
+		Description: 记录3秒内对同一目标造成的伤害；触发后造成额外伤害并进入冷却。
+	}
+
+	PressTheAttack: {
+		DisplayName: 强攻
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Press_the_Attack
+	}
+
+	Electrocute: {
+		DisplayName: 电刑
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Electrocute
+	}
+
+	HailOfBlades: {
+		DisplayName: 丛刃
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Hail_of_Blades
+	}
+
+	DarkHarvest: {
+		DisplayName: 黑暗收割
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Dark_Harvest
+	}
+
+	CheapShot: {
+		DisplayName: 恶意中伤
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cheap_Shot
+	}
+
+	TasteOfBlood: {
+		DisplayName: 血之滋味
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Taste_of_Blood
+	}
+
+	SuddenImpact: {
+		DisplayName: 猛然冲击
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sudden_Impact
+	}
+
+	EyeballCollection: {
+		DisplayName: 眼球收集器
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Eyeball_Collection
+	}
+
+	RavenousHunter: {
+		DisplayName: 贪婪猎手
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ravenous_Hunter
+	}
+
+	IngeniousHunter: {
+		DisplayName: 灵性猎手
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ingenious_Hunter
+	}
+
+	TreasureHunter: {
+		DisplayName: 寻宝猎人
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Treasure_Hunter
+	}
+
+	RelentlessHunter: {
+		DisplayName: 无情猎手
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Relentless_Hunter
+	}
+
+	ArcaneComet: {
+		DisplayName: 奥术彗星
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Arcane_Comet
+	}
+
+	PhaseRush: {
+		DisplayName: 相位猛冲
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Phase_Rush
+	}
+
+	AxiomArcanist: {
+		DisplayName: 公理秘术
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Axiom_Arcanist
+	}
+
+	ManaflowBand: {
+		DisplayName: 法力流系带
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Manaflow_Band
+	}
+
+	NimbusCloak: {
+		DisplayName: 灵光披风
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Nimbus_Cloak
+	}
+
+	Transcendence: {
+		DisplayName: 超然
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Transcendence
+	}
+
+	Celerity: {
+		DisplayName: 迅捷
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Celerity
+	}
+
+	AbsoluteFocus: {
+		DisplayName: 绝对专注
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Absolute_Focus
+	}
+
+	Scorch: {
+		DisplayName: 焦灼
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Scorch
+	}
+
+	Waterwalking: {
+		DisplayName: 水上行走
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Waterwalking
+	}
+
+	GatheringStorm: {
+		DisplayName: 风暴聚集
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Gathering_Storm
+	}
+
+	GraspOfTheUndying: {
+		DisplayName: 不灭之握
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Grasp_of_the_Undying
+	}
+
+	Aftershock: {
+		DisplayName: 余震
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Aftershock
+	}
+
+	Guardian: {
+		DisplayName: 守护者
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Guardian
+	}
+
+	Demolish: {
+		DisplayName: 爆破
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Demolish
+	}
+
+	FontOfLife: {
+		DisplayName: 生命源泉
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Font_of_Life
+	}
+
+	ShieldBash: {
+		DisplayName: 护盾猛击
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Shield_Bash
+	}
+
+	Conditioning: {
+		DisplayName: 调节
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Conditioning
+	}
+
+	SecondWind: {
+		DisplayName: 复苏之风
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Second_Wind
+	}
+
+	BonePlating: {
+		DisplayName: 骸骨镀层
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Bone_Plating
+	}
+
+	Overgrowth: {
+		DisplayName: 过度生长
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Overgrowth
+	}
+
+	Revitalize: {
+		DisplayName: 复苏
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Revitalize
+	}
+
+	Unflinching: {
+		DisplayName: 坚定
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Unflinching
+	}
+
+	HextechFlashtraption: {
+		DisplayName: 海克斯科技闪现罗网
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Hextech_Flashtraption
+	}
+
+	MagicalFootwear: {
+		DisplayName: 神奇之鞋
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Magical_Footwear
+	}
+
+	CashBack: {
+		DisplayName: 返现
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cash_Back
+	}
+
+	TripleTonic: {
+		DisplayName: 三重补剂
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Triple_Tonic
+	}
+
+	TimeWarpTonic: {
+		DisplayName: 时间扭曲补药
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Time_Warp_Tonic
+	}
+
+	BiscuitDelivery: {
+		DisplayName: 饼干配送
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Biscuit_Delivery
+	}
+
+	CosmicInsight: {
+		DisplayName: 星界洞悉
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cosmic_Insight
+	}
+
+	ApproachVelocity: {
+		DisplayName: 行进速率
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Approach_Velocity
+	}
+
+	JackOfAllTrades: {
+		DisplayName: 多面手
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Jack_of_All_Trades
+	}
+}
+
+Projectiles: {
+	LethalTempoNoteProjectile.DisplayName: 致命节奏射弹
+	DarkHarvestSoulProjectile.DisplayName: 黑暗收割灵魂
+	AeryProj.DisplayName: 艾黎投射物
+	ArcaneCometProj.DisplayName: 奥术彗星投射物
+	FirstStrikeProj.DisplayName: 先攻投射物
+}
+
+Configs: {
+	RuneConfig: {
+		DisplayName: 符文配置
+
+		EnableLethalTempoRune: {
+			Label: 启用致命节奏符文
+			Tooltip: ""
+		}
+	}
+}
+
+UI: {
+	Runes: {
+		Path: {
+			Precision: {
+				Name: 精密
+				Desc: 成为一个传说
+			}
+
+			Domination: {
+				Name: 主宰
+				Desc: 猎杀并消灭猎物
+			}
+
+			Sorcery: {
+				Name: 巫术
+				Desc: 释放毁灭
+			}
+
+			Resolve: {
+				Name: 坚决
+				Desc: 永生
+			}
+
+			Inspiration: {
+				Name: 启迪
+				Desc: 智胜区区凡人
+			}
+		}
+
+		Desc: {
+			Press_the_Attack: 在同一目标连续命中3次后造成更多伤害。6秒冷却。
+			Lethal_Tempo: 提高攻击速度；命中数达到一定后发射一枚音符。
+			Fleet_Footwork: 命中时回复生命，并获得短暂的移速提升。
+			Conqueror: 连续命中造成更多伤害，并根据造成伤害进行治疗。
+			Absorb_Life: 命中时治疗。
+			Triumph: 击杀后回复生命并在击败Boss后获得额外的宝藏袋。
+			Presence_of_Mind: 命中或击杀时恢复法力。
+			Legend_Alacrity: 每层增加1.5%攻击速度（最多6层）。
+			Legend_Haste: 每层减少药水冷却时间。
+			Legend_Bloodline: 每层提供吸血，满层时有额外最大生命加成。
+			Coup_de_Grace: 对低于40%生命的Boss增加大约8%伤害。
+			Cut_Down: 对高于60%生命的Boss造成更多伤害。
+			Last_Stand: 对Boss的伤害随失去生命而提升。
+			Electrocute: 对同一目标连续命中3次触发额外伤害。
+			Hail_of_Blades: 接下来的3次命中获得高额攻击速度。10秒冷却。
+			Dark_Harvest: 对低生命目标造成额外伤害；1.75秒后收割灵魂。35秒冷却。
+			Cheap_Shot: 对移动受损的目标造成额外伤害。4秒冷却。
+			Taste_of_Blood: 未满血时命中回复16生命。20秒冷却。
+			Sudden_Impact: 位移后进入准备状态，下一击造成额外伤害。
+			Eyeball_Collection: 击杀累计最多10层，每层增加约0.8%伤害。
+			Ravenous_Hunter: 每层给予少量吸血。
+			Ingenious_Hunter: 每层减少药水冷却。
+			Treasure_Hunter: 击杀时额外获得基于宝藏猎人层数的钱币。
+			Relentless_Hunter: 在5秒内未受伤后，每层增加约3%移动速度。
+			Summon_Aery: 召唤艾黎协助你。
+			Arcane_Comet: 周围会有奥术彗星，魔法攻击命中时触发额外攻击效果。
+			Phase_Rush: 对同一目标连续三次命中会短暂提高移动速度。
+			Axiom_Arcanist: 增加4%法术伤害。
+			Manaflow_Band: 每层增加5点最大法力（最多6层），命中有冷却。
+			Nimbus_Cloak: 使用药水后短时间获得移动速度加成。
+			Transcendence: 使用药水时减少药水冷却5%。
+			Celerity: 增加约25%移动速度。
+			Absolute_Focus: 生命>=70%时增加约10%法术伤害。
+			Scorch: 命中额外造成10点伤害。8秒冷却。
+			Waterwalking: 在水中获得约10%移动速度加成。
+			Gathering_Storm: 每小时获得1%伤害增益。
+			Grasp_of_the_Undying: 战斗中叠加一个层数（最多4层）；满层时对Boss的下一次普攻会治疗、造成魔法伤害并永久增加最大生命。
+			Aftershock: 近战命中给予临时抗性；结束时释放魔法冲击波。20秒共享冷却。
+			Guardian: 获得冰冻护盾的效果，当冰障触发时，立刻恢复120血并进入50s的冷却。
+			Demolish: 靠近Boss会叠加一个层数，最多叠至6层；满层后下一击造成大量基于最大生命的伤害。35秒冷却。
+			Font_of_Life: 命中时回复4点生命。10秒冷却。
+			Shield_Bash: 防御>=50时增加5%伤害。
+			Conditioning: 游戏8分钟后增加6点防御。
+			Second_Wind: 受伤后每秒回复1点生命，持续5秒。
+			Bone_Plating: 受伤后接下来的3次命中减伤6点。
+			Overgrowth: 每分钟增加5点最大生命（最多+50）。
+			Revitalize: 提高治疗效果10%。
+			Unflinching: 受伤后短时间增加约10%移动速度。
+			Glacial_Augment: 冷系伤害命中时造成75%减速。10秒冷却。
+			Unsealed_Spellbook: 给予一个额外饰品栏。
+			First_Strike: 触发后造成额外伤害，10秒冷却。
+			Hextech_Flashtraption: 多次使用混沌传送杖不再进入混沌状态，转而消耗150法力。
+			Magical_Footwear: 游戏8分钟后增加约10%移动速度。
+			Cash_Back: 击杀时返还5%的钱币（上限50银）。
+			Triple_Tonic: 使用药水后30分钟内增加14%伤害。
+			Time_Warp_Tonic: 药水额外提供缓慢恢复效果。
+			Biscuit_Delivery: 每20秒回复10点生命并恢复10点法力。
+			Cosmic_Insight: 使用药水时减少10%药水冷却。
+			Approach_Velocity: 靠近被减益的敌人时增加20%移动速度。
+			Jack_of_All_Trades: 在10秒内触发三种伤害类型可获得短时间大幅伤害增益。10秒冷却。
+		}
+	}
+}

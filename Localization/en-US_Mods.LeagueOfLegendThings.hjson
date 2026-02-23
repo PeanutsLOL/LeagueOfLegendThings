@@ -63,6 +63,241 @@ Buffs: {
 		DisplayName: Aery
 		Description: She said: Meow meow... (I get tanned...)
 	}
+
+	GlacialAugment: {
+		DisplayName: Glacial Augment
+		Description: Mods.LeagueOfLegendThings.Buffs.GlacialAugment.Description
+	}
+
+	UnsealedSpellbook: {
+		DisplayName: Unsealed Spellbook
+		Description: Mods.LeagueOfLegendThings.Buffs.UnsealedSpellbook.Description
+	}
+
+	FirstStrike: {
+		DisplayName: First Strike
+		Description: Mods.LeagueOfLegendThings.Buffs.FirstStrike.Description
+	}
+
+	PressTheAttack: {
+		DisplayName: Press The Attack
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Press_the_Attack
+	}
+
+	Electrocute: {
+		DisplayName: Electrocute
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Electrocute
+	}
+
+	HailOfBlades: {
+		DisplayName: Hail of Blades
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Hail_of_Blades
+	}
+
+	DarkHarvest: {
+		DisplayName: Dark Harvest
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Dark_Harvest
+	}
+
+	CheapShot: {
+		DisplayName: Cheap Shot
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cheap_Shot
+	}
+
+	TasteOfBlood: {
+		DisplayName: Taste of Blood
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Taste_of_Blood
+	}
+
+	SuddenImpact: {
+		DisplayName: Sudden Impact
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sudden_Impact
+	}
+
+	EyeballCollection: {
+		DisplayName: Eyeball Collection
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Eyeball_Collection
+	}
+
+	RavenousHunter: {
+		DisplayName: Ravenous Hunter
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ravenous_Hunter
+	}
+
+	IngeniousHunter: {
+		DisplayName: Ingenious Hunter
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ingenious_Hunter
+	}
+
+	TreasureHunter: {
+		DisplayName: Treasure Hunter
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Treasure_Hunter
+	}
+
+	RelentlessHunter: {
+		DisplayName: Relentless Hunter
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Relentless_Hunter
+	}
+
+	ArcaneComet: {
+		DisplayName: Arcane Comet
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Arcane_Comet
+	}
+
+	PhaseRush: {
+		DisplayName: Phase Rush
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Phase_Rush
+	}
+
+	AxiomArcanist: {
+		DisplayName: Axiom Arcanist
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Axiom_Arcanist
+	}
+
+	ManaflowBand: {
+		DisplayName: Manaflow Band
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Manaflow_Band
+	}
+
+	NimbusCloak: {
+		DisplayName: Nimbus Cloak
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Nimbus_Cloak
+	}
+
+	Transcendence: {
+		DisplayName: Transcendence
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Transcendence
+	}
+
+	Celerity: {
+		DisplayName: Celerity
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Celerity
+	}
+
+	AbsoluteFocus: {
+		DisplayName: Absolute Focus
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Absolute_Focus
+	}
+
+	Scorch: {
+		DisplayName: Scorch
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Scorch
+	}
+
+	Waterwalking: {
+		DisplayName: Waterwalking
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Waterwalking
+	}
+
+	GatheringStorm: {
+		DisplayName: Gathering Storm
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Gathering_Storm
+	}
+
+	GraspOfTheUndying: {
+		DisplayName: Grasp of the Undying
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Grasp_of_the_Undying
+	}
+
+	Aftershock: {
+		DisplayName: Aftershock
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Aftershock
+	}
+
+	Guardian: {
+		DisplayName: Guardian
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Guardian
+	}
+
+	Demolish: {
+		DisplayName: Demolish
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Demolish
+	}
+
+	FontOfLife: {
+		DisplayName: Font of Life
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Font_of_Life
+	}
+
+	ShieldBash: {
+		DisplayName: Shield Bash
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Shield_Bash
+	}
+
+	Conditioning: {
+		DisplayName: Conditioning
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Conditioning
+	}
+
+	SecondWind: {
+		DisplayName: Second Wind
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Second_Wind
+	}
+
+	BonePlating: {
+		DisplayName: Bone Plating
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Bone_Plating
+	}
+
+	Overgrowth: {
+		DisplayName: Overgrowth
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Overgrowth
+	}
+
+	Revitalize: {
+		DisplayName: Revitalize
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Revitalize
+	}
+
+	Unflinching: {
+		DisplayName: Unflinching
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Unflinching
+	}
+
+	HextechFlashtraption: {
+		DisplayName: Hextech Flashtraption
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Hextech_Flashtraption
+	}
+
+	MagicalFootwear: {
+		DisplayName: Magical Footwear
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Magical_Footwear
+	}
+
+	CashBack: {
+		DisplayName: Cash Back
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cash_Back
+	}
+
+	TripleTonic: {
+		DisplayName: Triple Tonic
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Triple_Tonic
+	}
+
+	TimeWarpTonic: {
+		DisplayName: Time Warp Tonic
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Time_Warp_Tonic
+	}
+
+	BiscuitDelivery: {
+		DisplayName: Biscuit Delivery
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Biscuit_Delivery
+	}
+
+	CosmicInsight: {
+		DisplayName: Cosmic Insight
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Cosmic_Insight
+	}
+
+	ApproachVelocity: {
+		DisplayName: Approach Velocity
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Approach_Velocity
+	}
+
+	JackOfAllTrades: {
+		DisplayName: Jack of All Trades
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Jack_of_All_Trades
+	}
 }
 
 Projectiles: {
@@ -70,6 +305,7 @@ Projectiles: {
 	DarkHarvestSoulProjectile.DisplayName: Dark Harvest Soul Projectile
 	AeryProj.DisplayName: Aery Proj
 	ArcaneCometProj.DisplayName: Arcane Comet Proj
+	FirstStrikeProj.DisplayName: First Strike Proj
 }
 
 Configs: {
@@ -124,7 +360,7 @@ UI: {
 			Legend_Haste: Potion cooldown reduced per stack.
 			Legend_Bloodline: Life steal per stack, bonus max life at full stacks.
 			Coup_de_Grace: +8% damage to bosses below 40% HP.
-			Cut_Down: Not implemented yet.
+			Cut_Down: Dealt more damage to bosses while it's above 60% HP.
 			Last_Stand: Damage scales with missing health vs bosses.
 			Electrocute: 3 hits on same target triggers bonus damage.
 			Hail_of_Blades: +160% attack speed for next 3 hits. 10s cooldown.
@@ -161,9 +397,9 @@ UI: {
 			Overgrowth: Every minute: +5 max life (max +50).
 			Revitalize: Healing +10%.
 			Unflinching: After damage: +10% move speed for 2s.
-			Glacial_Augment: Not implemented yet.
-			Unsealed_Spellbook: Not implemented yet.
-			First_Strike: Not implemented yet.
+			Glacial_Augment: Cause 75% slow on hit with cold damage. 5s cooldown.
+			Unsealed_Spellbook: Give an extra accessory slot, vanity slot and dye slot.
+			First_Strike: After triggering: deal bonus damage, 10s cooldown.
 			Hextech_Flashtraption: No Chaos State; Rod of Discord costs 150 mana.
 			Magical_Footwear: After 8 minutes: +10% move speed.
 			Cash_Back: Refund 5% gold on kills (cap 50 silver).

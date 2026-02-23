@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class LegendAlacrity : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Buffs/Legend_Alacrity";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Legend_Alacrity";
 
         public override void SetStaticDefaults()
         {

@@ -9,6 +9,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class Conqueror : ModBuff
     {
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Conqueror";
         // 最大叠加层数
         public const int MaxStacks = 12;
         // 每层伤害加成（自适应之力）
@@ -132,7 +133,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                     // 层数消失时播放音效
                     try
                     {
-                        var clearSfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Conqueror_SFX")
+                        var clearSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Conqueror_SFX")
                         {
                             Volume = 0.5f,
                             PitchVariance = 0f
@@ -229,7 +230,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                     {
                         try
                         {
-                            var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Conqueror_SFX_2")
+                            var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Conqueror_SFX_2")
                             {
                                 Volume = 0.67f,
                                 PitchVariance = 0f
@@ -249,7 +250,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 {
                     try
                     {
-                        var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Conqueror_SFX_3")
+                        var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Conqueror_SFX_3")
                         {
                             Volume = 0.67f,
                             PitchVariance = 0f

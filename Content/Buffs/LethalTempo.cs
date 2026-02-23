@@ -10,6 +10,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class LethalTempo : ModBuff
     {
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/LethalTempo";
         // 最大叠加层数
         public const int MaxStacks = 6;
         // 每层近战攻击速度加成
@@ -137,7 +138,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 lethalTempoTimer = 0;
                 if (hadStacks)
                 {
-                    var clearSfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Lethal_Tempo_SFX_4")
+                    var clearSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Lethal_Tempo_SFX_4")
                     {
                         Volume = 0.67f,
                         PitchVariance = 0f
@@ -187,7 +188,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
                 if (LethalTempoStacks >= LethalTempo.MaxStacks && !lethalTempoProcPlayed)
                 {
-                    var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Lethal_Tempo_SFX_3")
+                    var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Lethal_Tempo_SFX_3")
                     {
                         Volume = 0.67f,
                         PitchVariance = 0f

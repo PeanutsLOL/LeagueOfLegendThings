@@ -77,7 +77,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 {
                     remainingDuration = 4 * 60; // 4秒
                     hitCount = 0;
-                    var procSfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Phase_Rush_SFX")
+                    var procSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Phase_Rush_SFX")
                     {
                         Volume = 0.5f,
                         PitchVariance = 0f

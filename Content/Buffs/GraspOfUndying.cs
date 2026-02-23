@@ -8,9 +8,10 @@ using Terraria.ModLoader.IO;
 
 namespace LeagueOfLegendThings.Content.Buffs
 {
-	// Grasp of the Undying核心机制
+	// Grasp of the Undying
 	public class GraspOfUndyingPlayer : ModPlayer
 	{
+        public bool HasGraspOfUndying;
 		private const int MaxStacks = 4;
 		private const int StackDuration = 3 * 60; // 3秒，60帧每秒
 		private const int StackInterval = 60; // 每秒叠加一次
@@ -32,8 +33,26 @@ namespace LeagueOfLegendThings.Content.Buffs
 		public override void ResetEffects()
 		{
 			// 这里可以根据符文选择情况决定是否激活
-			//inCombat = false;
-			Player.statLifeMax2 += bonusMaxHealthInt;
+			HasGraspOfUndying = false;
+		}
+
+		public override void PostUpdateMiscEffects()
+		{
+			var save = ModContent.GetInstance<RuneSaveSystem>();
+			HasGraspOfUndying = save.GraspOfTheUndyingSelected;
+
+			if (HasGraspOfUndying)
+			{
+				Player.statLifeMax2 += bonusMaxHealthInt;
+			}
+			else
+			{
+				// 如果未选中符文，重置临时战斗状态以避免效果残留
+				inCombat = false;
+				readyToProc = false;
+				stacks = 0;
+				onHitTimer = 0;
+			}
 		}
 
 		public override void SaveData(TagCompound tag)
@@ -158,7 +177,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 				Knockback = 0f,
 				Crit = false
 			});
-            var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Grasp_of_the_Undying_SFX")
+			var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Grasp_of_the_Undying_SFX")
             {
                 Volume = 0.75f,
                 PitchVariance = 0.2f

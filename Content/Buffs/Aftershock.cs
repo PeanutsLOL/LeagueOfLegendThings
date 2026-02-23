@@ -96,7 +96,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 			aftershockDuration = DurationTicks;
 
 			// play sfx
-			var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Aftershock_SFX_1")
+			var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Aftershock_SFX_1")
 			{
 				Volume = 0.75f,
 				PitchVariance = 0.0f
@@ -107,7 +107,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 		private void ReleaseShockwave()
 		{
             // play shockwave sfx
-			var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Aftershock_SFX_2")
+			var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Aftershock_SFX_2")
 			{
 				Volume = 0.75f,
 				PitchVariance = 0.3f

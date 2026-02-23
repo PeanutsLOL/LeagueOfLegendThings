@@ -6,6 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class AbsorbLife : ModBuff
     {
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/AbsorbLife";
         public override void SetStaticDefaults()
         {
             // 表明这个Buff不是减益效果

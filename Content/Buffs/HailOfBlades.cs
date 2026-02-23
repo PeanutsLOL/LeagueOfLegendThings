@@ -43,7 +43,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
             if (wasOnCooldown && cooldownTimer == 0)
             {
-                var readySfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Hail_of_Blades_SFX")
+                var readySfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Hail_of_Blades_SFX")
                 {
                     Volume = 0.5f,
                     PitchVariance = 0f
@@ -81,7 +81,7 @@ namespace LeagueOfLegendThings.Content.Buffs
             if (remainingStrikes <= 0)
             {
                 remainingStrikes = MaxStrikes;
-                var procSfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Hail_of_Blades_SFX_2")
+                var procSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Hail_of_Blades_SFX_2")
                 {
                     Volume = 0.5f,
                     PitchVariance = 0f
