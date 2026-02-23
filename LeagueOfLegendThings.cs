@@ -1,10 +1,18 @@
 using System.IO;
 using Terraria.ModLoader;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 
+/// <Announcement>
+/// 版本管理模版：
+/// 1.2.3
+/// 1:大型版本更新，包含重大功能更新和/或重构
+/// 2:小型版本更新，包含功能完善和/或重要修复
+/// 3:补丁更新，包含小型修复和/或优化//平衡调整
+/// </Announcement>
 namespace LeagueOfLegendThings
 {
 	public enum LeaguePacketType : byte
@@ -18,6 +26,7 @@ namespace LeagueOfLegendThings
 
 	public class LeagueOfLegendThings : Mod
 	{
+
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			LeaguePacketType packetType = (LeaguePacketType)reader.ReadByte();
@@ -53,7 +62,7 @@ namespace LeagueOfLegendThings
 							Vector2 startPos = new Vector2(startX, startY);
 							Vector2 endPos = new Vector2(endX, endY);
 							LightningBoltSystem.SpawnBolt(startPos, endPos, Color.Red, duration: 60, width: 7.5f, segments: 14);
-							var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Electrocute_SFX")
+							var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Electrocute_SFX")
 							{
 								Volume = 0.75f,
 								PitchVariance = 0.5f
@@ -72,9 +81,9 @@ namespace LeagueOfLegendThings
 						{
 							SoundStyle style = packetType switch
 							{
-								LeaguePacketType.DarkHarvestProcSfx => new SoundStyle("LeagueOfLegendThings/Content/Buffs/Dark_Harvest_SFX_2") { Volume = 0.8f, PitchVariance = 0f },
-								LeaguePacketType.DarkHarvestGainSfx => new SoundStyle("LeagueOfLegendThings/Content/Buffs/Dark_Harvest_SFX") { Volume = 0.8f, PitchVariance = 0f },
-								_ => new SoundStyle("LeagueOfLegendThings/Content/Buffs/Dark_Harvest_SFX_4") { Volume = 0.8f, PitchVariance = 0f }
+								LeaguePacketType.DarkHarvestProcSfx => new SoundStyle("LeagueOfLegendThings/Content/SFX/Dark_Harvest_SFX_2") { Volume = 0.8f, PitchVariance = 0f },
+								LeaguePacketType.DarkHarvestGainSfx => new SoundStyle("LeagueOfLegendThings/Content/SFX/Dark_Harvest_SFX") { Volume = 0.8f, PitchVariance = 0f },
+								_ => new SoundStyle("LeagueOfLegendThings/Content/SFX/Dark_Harvest_SFX_4") { Volume = 0.8f, PitchVariance = 0f }
 							};
 							SoundEngine.PlaySound(style, new Vector2(x, y));
 						}
@@ -82,6 +91,5 @@ namespace LeagueOfLegendThings
 					}
 			}
 		}
-
 	}
 }

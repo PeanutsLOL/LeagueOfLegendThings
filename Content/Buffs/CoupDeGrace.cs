@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class CoupDeGrace : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Buffs/Coup_de_Grace";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Coup_de_Grace";
 
         public override void SetStaticDefaults()
         {

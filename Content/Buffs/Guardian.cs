@@ -30,7 +30,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 guardianPlayedCooldownEnd = false;
 
                 // Play SFX_4 and heal 120
-                var sfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Guardian_SFX_4")
+                var sfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Guardian_SFX_4")
                 {
                     Volume = 0.8f,
                     PitchVariance = 0.2f
@@ -53,7 +53,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 guardianCooldown--;
                 if (guardianCooldown <= 0 && !guardianPlayedCooldownEnd)
                 {
-                    var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Guardian_SFX_2")
+                    var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Guardian_SFX_2")
                     {
                         Volume = 0.8f,
                         PitchVariance = 0.2f

@@ -6,6 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class PresenceOfMind : ModBuff
     {
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/PresenceOfMind";
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;

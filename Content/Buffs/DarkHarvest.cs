@@ -73,7 +73,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                var procSfx = new SoundStyle("LeagueOfLegendThings/Content/Buffs/Dark_Harvest_SFX_2")
+                var procSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Dark_Harvest_SFX_2")
                 {
                     Volume = 0.8f,
                     PitchVariance = 0f

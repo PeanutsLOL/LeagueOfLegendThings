@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class CutDown : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Buffs/Cut_Down";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Cut_Down";
 
         public override void SetStaticDefaults()
         {

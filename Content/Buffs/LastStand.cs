@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs
 {
     public class LastStand : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Buffs/Last_Stand";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Last_Stand";
 
         public override void SetStaticDefaults()
         {

@@ -140,6 +140,9 @@ namespace LeagueOfLegendThings.Content.Systems
         public bool UnflinchingSelected =>
             (PrimaryPath == "Resolve" && PrimaryRow3 == "Unflinching") ||
             (SecondaryPath == "Resolve" && (SecondaryPick1 == "Unflinching" || SecondaryPick2 == "Unflinching"));
+        public bool GlacialAugmentSelected => PrimaryPath == "Inspiration" && PrimaryKeystone == "Glacial Augment";
+        public bool UnsealedSpellbookSelected => PrimaryPath == "Inspiration" && PrimaryKeystone == "Unsealed Spellbook";
+        public bool FirstStrikeSelected => PrimaryPath == "Inspiration" && PrimaryKeystone == "First Strike";
         public bool HextechFlashtraptionSelected =>
             (PrimaryPath == "Inspiration" && PrimaryRow1 == "Hextech Flashtraption") ||
             (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Hextech Flashtraption" || SecondaryPick2 == "Hextech Flashtraption"));

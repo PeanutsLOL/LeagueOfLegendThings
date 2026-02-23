@@ -36,10 +36,10 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override void SetDefaults()
         {
-            // 碰撞盒 48x48，贴图 512x512，渲染缩放按 48/512 = 0.09375
-            Projectile.width = 32;
-            Projectile.height = 32;
-            Projectile.scale = 0.0625f;
+            // 碰撞盒 24x24，贴图 512x512，渲染缩放 24/512 = 0.046875
+            Projectile.width = 24;
+            Projectile.height = 24;
+            Projectile.scale = 0.046875f;
 
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
