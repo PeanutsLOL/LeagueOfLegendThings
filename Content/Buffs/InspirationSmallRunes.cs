@@ -245,24 +245,57 @@ namespace LeagueOfLegendThings.Content.Buffs
             HandleHit(target, proj.DamageType);
         }
 
+        public override void PostBuyItem(NPC vendor, Item[] shopInventory, Item item)
+        {
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!save.CashBackSelected)
+                return;
+
+            if (item == null || item.IsAir)
+                return;
+
+            int paidCopper = item.shopCustomPrice ?? item.value;
+            if (paidCopper <= 0)
+                return;
+
+            int extraCopper = (int)(paidCopper * CashBackPercent);
+            extraCopper = System.Math.Min(extraCopper, CashBackCap);
+            if (extraCopper > 0)
+            {
+                SpawnCoins(extraCopper, "CashBack");
+            }
+        }
+
+        private void SpawnCoins(int totalCopper, string sourceContext)
+        {
+            if (totalCopper <= 0)
+                return;
+
+            int platinum = totalCopper / 1000000;
+            totalCopper %= 1000000;
+            int gold = totalCopper / 10000;
+            totalCopper %= 10000;
+            int silver = totalCopper / 100;
+            int copper = totalCopper % 100;
+
+            if (platinum > 0)
+                Player.QuickSpawnItem(Player.GetSource_Misc(sourceContext), ItemID.PlatinumCoin, platinum);
+            if (gold > 0)
+                Player.QuickSpawnItem(Player.GetSource_Misc(sourceContext), ItemID.GoldCoin, gold);
+            if (silver > 0)
+                Player.QuickSpawnItem(Player.GetSource_Misc(sourceContext), ItemID.SilverCoin, silver);
+            if (copper > 0)
+                Player.QuickSpawnItem(Player.GetSource_Misc(sourceContext), ItemID.CopperCoin, copper);
+        }
+
         private void HandleHit(NPC target, DamageClass damageType)
         {
             var save = ModContent.GetInstance<RuneSaveSystem>();
-            if (!(save.CashBackSelected || save.JackOfAllTradesSelected))
+            if (!save.JackOfAllTradesSelected)
                 return;
 
             if (target.friendly || target.lifeMax <= 5)
                 return;
-
-            if (save.CashBackSelected && target.life <= 0)
-            {
-                int extraCopper = (int)(target.value * CashBackPercent);
-                extraCopper = System.Math.Min(extraCopper, CashBackCap);
-                if (extraCopper > 0)
-                {
-                    Player.QuickSpawnItem(Player.GetSource_OnHit(target), ItemID.CopperCoin, extraCopper);
-                }
-            }
 
             if (save.JackOfAllTradesSelected && jackCooldownTimer <= 0 && jackActiveTimer <= 0)
             {

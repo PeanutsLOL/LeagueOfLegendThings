@@ -312,15 +312,22 @@ Configs: {
 	RuneConfig: {
 		DisplayName: 符文配置
 
-		EnableLethalTempoRune: {
-			Label: 启用致命节奏符文
-			Tooltip: ""
+		EnableHardMode: {
+			Label: 启用困难模式
+			Tooltip: 目前不改变任何东西，但也许将来会有用
 		}
 	}
 }
 
 UI: {
 	Runes: {
+		Label: {
+			MainButton: 符文
+			PanelTitle: 符文选择
+			ButtonLocked: 锁定
+			ButtonUnlocked: 解锁
+		}
+
 		Path: {
 			Precision: {
 				Name: 精密
@@ -402,7 +409,7 @@ UI: {
 			First_Strike: 触发后造成额外伤害，10秒冷却。
 			Hextech_Flashtraption: 多次使用混沌传送杖不再进入混沌状态，转而消耗150法力。
 			Magical_Footwear: 游戏8分钟后增加约10%移动速度。
-			Cash_Back: 击杀时返还5%的钱币（上限50银）。
+			Cash_Back: 在商店购买物品时返还5%花费（每次购买上限50银）。
 			Triple_Tonic: 使用药水后30分钟内增加14%伤害。
 			Time_Warp_Tonic: 药水额外提供缓慢恢复效果。
 			Biscuit_Delivery: 每20秒回复10点生命并恢复10点法力。

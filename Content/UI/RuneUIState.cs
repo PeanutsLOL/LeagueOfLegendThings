@@ -7,6 +7,7 @@ using LeagueOfLegendThings.Content.Systems;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ReLogic.Content;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,9 @@ namespace LeagueOfLegendThings.Content.UI
     public class RuneUIState : UIState
     {
         private DraggableUIPanel _panel;
+        private DraggableUITextPanel _mainButton;
+        private UITextPanel<string> _buttonLockToggle;
+        private bool _mainButtonLocked = true;
         private UIElement _primaryGroup;
         private UIElement _secondaryGroup;
         private UIElement _primaryOptions;
@@ -80,10 +84,19 @@ namespace LeagueOfLegendThings.Content.UI
         private readonly float DescWidth = 260f;
         private readonly float PathDescWidth = 300f;
 
+        private string GetUILabel(string key, string fallback)
+        {
+            string fullKey = $"Mods.LeagueOfLegendThings.UI.Runes.Label.{key}";
+            string value = Language.GetTextValue(fullKey);
+            if (string.IsNullOrEmpty(value) || value == fullKey)
+                return fallback;
+            return value;
+        }
+
         public override void OnInitialize()
         {
             // Toggle button above defense display area (upper-left), can tweak as needed
-            var mainButton = new UITextPanel<string>("Runes", 0.8f)
+            _mainButton = new DraggableUITextPanel(GetUILabel("MainButton", "Runes"), 0.8f)
             {
                 Width = { Pixels = 70 },
                 Height = { Pixels = 26 },
@@ -91,8 +104,9 @@ namespace LeagueOfLegendThings.Content.UI
                 Top = { Percent = 1f, Pixels = -80 },
                 BackgroundColor = new Color(60, 60, 120) * 0.8f
             };
-            mainButton.OnLeftClick += (_, __) => ToggleOpen();
-            Append(mainButton);
+            _mainButton.OnLeftClick += (_, __) => ToggleOpen();
+            _mainButton.DragEnabled = !_mainButtonLocked;
+            Append(_mainButton);
 
             _panel = new DraggableUIPanel
             {
@@ -108,8 +122,19 @@ namespace LeagueOfLegendThings.Content.UI
                 PaddingBottom = 14
             };
 
-            var title = new UIText("Rune Selection", 0.9f) { HAlign = 0f, Top = { Pixels = 0 } };
+            var title = new UIText(GetUILabel("PanelTitle", "Rune Selection"), 0.9f) { HAlign = 0f, Top = { Pixels = 0 } };
             _panel.Append(title);
+
+            _buttonLockToggle = new UITextPanel<string>(string.Empty, 0.75f)
+            {
+                Width = { Pixels = 92 },
+                Height = { Pixels = 24 },
+                Left = { Pixels = 170 },
+                Top = { Pixels = 0 }
+            };
+            _buttonLockToggle.OnLeftClick += (_, __) => ToggleMainButtonLock();
+            _panel.Append(_buttonLockToggle);
+            UpdateMainButtonLockVisual();
 
             // 连接线绘制层（底层）
             _primaryConnector = new ConnectorElement { Width = { Pixels = 100 }, Height = { Pixels = 520 }, Left = { Pixels = 0 }, Top = { Pixels = 30 } };
@@ -133,16 +158,16 @@ namespace LeagueOfLegendThings.Content.UI
 
             _detailPanel = new UIPanel
             {
-                Width = { Pixels = 260 },
-                Height = { Pixels = 120 },
+                    Width = { Pixels = 300 },
+                    Height = { Pixels = 140 },
                 Left = { Pixels = 120 },
                 Top = { Pixels = 120 },
                 BackgroundColor = Color.Transparent,
                 BorderColor = Color.Transparent
             };
             _detailPanel.IgnoresMouseInteraction = true;
-            _detailTitle = new UIText(string.Empty, 0.85f) { Left = { Pixels = 8 }, Top = { Pixels = 6 } };
-            _detailDesc = new UIText(string.Empty, 0.8f) { Left = { Pixels = 8 }, Top = { Pixels = 28 } };
+                _detailTitle = new UIText(string.Empty, 0.85f) { Left = { Pixels = 8 }, Top = { Pixels = 6 }, Width = { Pixels = 284 } };
+                _detailDesc = new UIText(string.Empty, 0.8f) { Left = { Pixels = 8 }, Top = { Pixels = 28 }, Width = { Pixels = 284 } };
             _detailPanel.Append(_detailTitle);
             _detailPanel.Append(_detailDesc);
             _panel.Append(_detailPanel);
@@ -176,6 +201,41 @@ namespace LeagueOfLegendThings.Content.UI
             }
         }
 
+        private void ToggleMainButtonLock()
+        {
+            _mainButtonLocked = !_mainButtonLocked;
+            if (_mainButton != null)
+            {
+                _mainButton.DragEnabled = !_mainButtonLocked;
+                if (_mainButtonLocked)
+                    _mainButton.StopDrag();
+            }
+            UpdateMainButtonLockVisual();
+        }
+
+        private void UpdateMainButtonLockVisual()
+        {
+            if (_buttonLockToggle == null)
+                return;
+
+            _buttonLockToggle.SetText(_mainButtonLocked
+                ? GetUILabel("ButtonLocked", "Locked")
+                : GetUILabel("ButtonUnlocked", "Unlocked"));
+            _buttonLockToggle.BackgroundColor = _mainButtonLocked
+                ? new Color(70, 70, 70) * 0.9f
+                : new Color(70, 110, 70) * 0.9f;
+        }
+
+        internal Vector2 GetPanelPosition() => _panel.GetDimensions().Position();
+
+        internal bool IsSelectionModeActive()
+        {
+            return _primaryPathOpen
+                || _secondaryPathOpen
+                || !string.IsNullOrEmpty(_activePrimarySlot)
+                || _activeSecondarySlot != -1;
+        }
+
         private void Refresh()
         {
             var save = ModContent.GetInstance<RuneSaveSystem>();
@@ -205,12 +265,12 @@ namespace LeagueOfLegendThings.Content.UI
                 _activePrimarySlot = null;
                 HideDetail();
                 _activePrimaryPathY = _primaryGroup.Top.Pixels + slotYPath;
-                BuildPrimaryOptions(save);
+                Refresh();
             }, SlotSize);
             pathSlot.RingColor = PathColors.GetValueOrDefault(save.PrimaryPath, Color.Gray);
             _primaryGroup.Append(pathSlot);
             _primarySlotCenters.Add(new Vector2(slotCenterX, slotYPath + SlotSize / 2f));
-            if (showDesc)
+            if (showDesc && !_primaryPathOpen)
             {
                 AddPathDescLine(_primaryGroup, save.PrimaryPath, SlotSize + 16f, slotYPath + 2f);
             }
@@ -224,20 +284,13 @@ namespace LeagueOfLegendThings.Content.UI
                 _activePrimarySlot = _activePrimarySlot == "Keystone" ? null : "Keystone";
                 _primaryPathOpen = false;
                 _activePrimarySlotY = _primaryGroup.Top.Pixels + keystoneSlotY;
-                if (!string.IsNullOrEmpty(save.PrimaryKeystone))
-                {
-                    ShowDetail(save.PrimaryKeystone, _primaryGroup.Left.Pixels + SlotSize + 16f, _activePrimarySlotY);
-                }
-                else
-                {
-                    HideDetail();
-                }
-                BuildPrimaryOptions(save);
+                HideDetail();
+                Refresh();
             }, KeystoneSlotSize);
             keystoneSlot.RingColor = PathColors.GetValueOrDefault(save.PrimaryPath, Color.Gray);
             _primaryGroup.Append(keystoneSlot);
             _primarySlotCenters.Add(new Vector2(slotCenterX, keystoneSlotY + KeystoneSlotSize / 2f)); // 使用统一的中心X
-            if (showDesc && !string.IsNullOrEmpty(save.PrimaryKeystone))
+            if (showDesc && !string.IsNullOrEmpty(save.PrimaryKeystone) && _activePrimarySlot != "Keystone")
             {
                 AddRuneDescLine(_primaryGroup, save.PrimaryKeystone, SlotSize + 16f, keystoneSlotY + 2f, Color.White);
             }
@@ -253,22 +306,14 @@ namespace LeagueOfLegendThings.Content.UI
                     _activePrimarySlot = _activePrimarySlot == slotKey ? null : slotKey;
                     _primaryPathOpen = false;
                     _activePrimarySlotY = _primaryGroup.Top.Pixels + slotY;
-                    string current = GetPrimaryRowValue(save, row);
-                    if (!string.IsNullOrEmpty(current))
-                    {
-                        ShowDetail(current, _primaryGroup.Left.Pixels + SlotSize + 16f, _activePrimarySlotY);
-                    }
-                    else
-                    {
-                        HideDetail();
-                    }
-                    BuildPrimaryOptions(save);
+                    HideDetail();
+                    Refresh();
                 }, SlotSize);
                 slot.RingColor = PathColors.GetValueOrDefault(save.PrimaryPath, Color.Gray);
                 _primaryGroup.Append(slot);
                 _primarySlotCenters.Add(new Vector2(slotCenterX, slotY + SlotSize / 2f));
                 string picked = GetPrimaryRowValue(save, row);
-                if (showDesc && !string.IsNullOrEmpty(picked))
+                if (showDesc && !string.IsNullOrEmpty(picked) && _activePrimarySlot != slotKey)
                 {
                     AddRuneDescLine(_primaryGroup, picked, SlotSize + 16f, slotY + 2f, Color.White);
                 }
@@ -293,12 +338,12 @@ namespace LeagueOfLegendThings.Content.UI
                 _activeSecondarySlotY = 0f;
                 HideDetail();
                 _activeSecondaryPathY = _secondaryGroup.Top.Pixels + slotYPath;
-                BuildSecondaryOptions(save);
+                Refresh();
             }, SlotSize);
             pathSlot.RingColor = PathColors.GetValueOrDefault(save.SecondaryPath, Color.Gray);
             _secondaryGroup.Append(pathSlot);
             _secondarySlotCenters.Add(new Vector2(slotCenterX, slotYPath + SlotSize / 2f));
-            if (showDesc)
+            if (showDesc && !_secondaryPathOpen)
             {
                 AddPathDescLine(_secondaryGroup, save.SecondaryPath, SlotSize + 16f, slotYPath + 2f);
             }
@@ -306,30 +351,22 @@ namespace LeagueOfLegendThings.Content.UI
 
             // Secondary pick 1
             var slot1Y = y;
-            var slot1 = MakeSlotButton(save.SecondaryPick1, 0f, slot1Y, () => { _activeSecondarySlot = _activeSecondarySlot == 0 ? -1 : 0; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot1Y; BuildSecondaryOptions(save); }, SlotSize);
-            if (!string.IsNullOrEmpty(save.SecondaryPick1))
-            {
-                ShowDetail(save.SecondaryPick1, _secondaryGroup.Left.Pixels + SlotSize + 16f, _secondaryGroup.Top.Pixels + slot1Y);
-            }
+            var slot1 = MakeSlotButton(save.SecondaryPick1, 0f, slot1Y, () => { _activeSecondarySlot = _activeSecondarySlot == 0 ? -1 : 0; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot1Y; HideDetail(); Refresh(); }, SlotSize);
             slot1.RingColor = PathColors.GetValueOrDefault(save.SecondaryPath, Color.Gray);
             _secondaryGroup.Append(slot1);
             _secondarySlotCenters.Add(new Vector2(slotCenterX, slot1Y + SlotSize / 2f));
-            if (showDesc && !string.IsNullOrEmpty(save.SecondaryPick1))
+            if (showDesc && !string.IsNullOrEmpty(save.SecondaryPick1) && _activeSecondarySlot != 0)
             {
                 AddRuneDescLine(_secondaryGroup, save.SecondaryPick1, SlotSize + 16f, slot1Y + 2f, Color.White);
             }
 
             // Secondary pick 2
             var slot2Y = y + RowVerticalSpacing;
-            var slot2 = MakeSlotButton(save.SecondaryPick2, 0f, slot2Y, () => { _activeSecondarySlot = _activeSecondarySlot == 1 ? -1 : 1; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot2Y; BuildSecondaryOptions(save); }, SlotSize);
-            if (!string.IsNullOrEmpty(save.SecondaryPick2))
-            {
-                ShowDetail(save.SecondaryPick2, _secondaryGroup.Left.Pixels + SlotSize + 16f, _secondaryGroup.Top.Pixels + slot2Y);
-            }
+            var slot2 = MakeSlotButton(save.SecondaryPick2, 0f, slot2Y, () => { _activeSecondarySlot = _activeSecondarySlot == 1 ? -1 : 1; _secondaryPathOpen = false; _activeSecondarySlotY = _secondaryGroup.Top.Pixels + slot2Y; HideDetail(); Refresh(); }, SlotSize);
             slot2.RingColor = PathColors.GetValueOrDefault(save.SecondaryPath, Color.Gray);
             _secondaryGroup.Append(slot2);
             _secondarySlotCenters.Add(new Vector2(slotCenterX, slot2Y + SlotSize / 2f));
-            if (showDesc && !string.IsNullOrEmpty(save.SecondaryPick2))
+            if (showDesc && !string.IsNullOrEmpty(save.SecondaryPick2) && _activeSecondarySlot != 1)
             {
                 AddRuneDescLine(_secondaryGroup, save.SecondaryPick2, SlotSize + 16f, slot2Y + 2f, Color.White);
             }
@@ -354,6 +391,7 @@ namespace LeagueOfLegendThings.Content.UI
                     });
                     btn.SetPlaceholder(false);
                     btn.SetVisual(save.PrimaryPath == p, true);
+                    btn.RingColor = PathColors.GetValueOrDefault(p, Color.Gray);
                     _primaryOptions.Append(btn);
                     x += SlotSize + SlotSpacing;
                 }
@@ -392,28 +430,21 @@ namespace LeagueOfLegendThings.Content.UI
                     if (_activePrimarySlot == "Keystone")
                     {
                         save.PrimaryKeystone = save.PrimaryKeystone == r ? "" : r;
-                        if (!string.IsNullOrEmpty(save.PrimaryKeystone))
-                        {
-                            ShowDetail(save.PrimaryKeystone, _primaryGroup.Left.Pixels + SlotSize + 16f, _activePrimarySlotY);
-                        }
                     }
                     else
                     {
                         int rowSel = int.Parse(_activePrimarySlot.Substring(3));
                         string current = GetPrimaryRowValue(save, rowSel);
                         SetPrimaryRowValue(save, rowSel, current == r ? "" : r);
-                        string updated = GetPrimaryRowValue(save, rowSel);
-                        if (!string.IsNullOrEmpty(updated))
-                        {
-                            ShowDetail(updated, _primaryGroup.Left.Pixels + SlotSize + 16f, _activePrimarySlotY);
-                        }
                     }
+                    HideDetail();
                     _activePrimarySlot = null; // auto-collapse
                     Refresh();
                 }, size);
                 btn.SetPlaceholder(false);
                 bool selected = (_activePrimarySlot == "Keystone" && save.PrimaryKeystone == r) || (_activePrimarySlot != "Keystone" && GetPrimaryRowValue(save, int.Parse(_activePrimarySlot.Substring(3))) == r);
                 btn.SetVisual(selected, true);
+                btn.RingColor = PathColors.GetValueOrDefault(save.PrimaryPath, Color.Gray);
                 _primaryOptions.Append(btn);
                 col++;
                 if (col >= maxCols) { col = 0; rowIdx++; }
@@ -440,6 +471,7 @@ namespace LeagueOfLegendThings.Content.UI
                     });
                     btn.SetPlaceholder(false);
                     btn.SetVisual(save.SecondaryPath == p, true);
+                    btn.RingColor = PathColors.GetValueOrDefault(p, Color.Gray);
                     _secondaryOptions.Append(btn);
                     x += SlotSize + SlotSpacing;
                 }
@@ -497,17 +529,14 @@ namespace LeagueOfLegendThings.Content.UI
                                 save.SecondaryPick2 = r; save.SecondaryPick2Row = capturedRow;
                             }
                         }
-                        string picked = _activeSecondarySlot == 0 ? save.SecondaryPick1 : save.SecondaryPick2;
-                        if (!string.IsNullOrEmpty(picked))
-                        {
-                            ShowDetail(picked, _secondaryGroup.Left.Pixels + SlotSize + 16f, _secondaryGroup.Top.Pixels + 32f);
-                        }
+                        HideDetail();
                         _activeSecondarySlot = -1; // auto-collapse
                         Refresh();
                     }, sizeS);
                     btn.SetPlaceholder(false);
                     bool selected = save.SecondaryPick1 == r || save.SecondaryPick2 == r;
                     btn.SetVisual(selected, true);
+                    btn.RingColor = PathColors.GetValueOrDefault(save.SecondaryPath, Color.Gray);
                     _secondaryOptions.Append(btn);
                     colS++;
                     if (colS >= 3) { colS = 0; rowS++; }
@@ -559,19 +588,20 @@ namespace LeagueOfLegendThings.Content.UI
         private IconButton MakeSlotButton(string runeName, float x, float y, Action onClick, float size = 48f)
         {
             bool hasValue = !string.IsNullOrEmpty(runeName);
-            var btn = MakeIconButton(hasValue ? runeName : null, x, y, (evt, elem) => onClick?.Invoke(), size);
+            var btn = MakeIconButton(hasValue ? runeName : null, x, y, (evt, elem) => onClick?.Invoke(), size, showBorder: true);
             btn.SetPlaceholder(!hasValue);
             btn.SetVisual(false, true);
             return btn;
         }
 
-        private IconButton MakeIconButton(string name, float x, float y, UIElement.MouseEvent click, float size = 48f)
+        private IconButton MakeIconButton(string name, float x, float y, UIElement.MouseEvent click, float size = 48f, bool showBorder = false)
         {
             var tex = string.IsNullOrEmpty(name) ? null : LoadRuneTexture(name);
-            var btn = new IconButton(tex, size)
+            var btn = new IconButton(tex, size, name, this)
             {
                 Left = { Pixels = x },
-                Top = { Pixels = y }
+                Top = { Pixels = y },
+                ShowSelectionBorder = showBorder
             };
             btn.OnLeftClick += click;
             btn.Tooltip = string.Empty;
@@ -637,6 +667,28 @@ namespace LeagueOfLegendThings.Content.UI
             return $"Mods.LeagueOfLegendThings.UI.Runes.Desc.{SanitizeName(name)}";
         }
 
+        private string GetBuffKey(string runeName)
+        {
+            if (string.IsNullOrWhiteSpace(runeName))
+                return string.Empty;
+
+            var sb = new StringBuilder();
+            bool makeUpper = true;
+            foreach (char ch in runeName)
+            {
+                if (!char.IsLetterOrDigit(ch))
+                {
+                    makeUpper = true;
+                    continue;
+                }
+
+                sb.Append(makeUpper ? char.ToUpperInvariant(ch) : ch);
+                makeUpper = false;
+            }
+
+            return sb.ToString();
+        }
+
         private string GetPathNameKey(string path)
         {
             return $"Mods.LeagueOfLegendThings.UI.Runes.Path.{SanitizeName(path)}.Name";
@@ -651,19 +703,25 @@ namespace LeagueOfLegendThings.Content.UI
         {
             // Try to get a localized display name from Buffs.<Key>.DisplayName
             HideDetail();
-            var buffKeyChars = runeName.Where(ch => char.IsLetterOrDigit(ch)).ToArray();
-            var buffKey = new string(buffKeyChars);
+            var buffKey = GetBuffKey(runeName);
             string titleKey = $"Mods.LeagueOfLegendThings.Buffs.{buffKey}.DisplayName";
             string title = Language.GetTextValue(titleKey);
             if (string.IsNullOrEmpty(title) || title == titleKey)
                 title = runeName;
 
             string desc = GetRuneDescription(runeName);
+            float detailTextWidth = _detailPanel.Width.Pixels - 16f;
+            if (detailTextWidth <= 0f)
+                detailTextWidth = 284f;
+            string wrappedDesc = WrapText(desc, detailTextWidth, 0.8f);
 
             _detailTitle.SetText(title);
-            _detailDesc.SetText(desc);
+            _detailDesc.SetText(wrappedDesc);
             _detailPanel.Left.Pixels = left;
             _detailPanel.Top.Pixels = top;
+            _detailPanel.Left.Percent = 0f;
+            _detailPanel.Top.Percent = 0f;
+            _detailPanel.Recalculate();
             SetDetailVisible(true);
         }
 
@@ -681,18 +739,69 @@ namespace LeagueOfLegendThings.Content.UI
             _detailPanel.BorderColor = visible ? new Color(120, 120, 120) * 0.9f : Color.Transparent;
         }
 
-        private static string WrapText(string text, int maxLen)
+        private static string WrapText(string text, float maxPixelWidth, float scale = 1f)
         {
-            if (string.IsNullOrEmpty(text) || text.Length <= maxLen)
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            var font = Terraria.GameContent.FontAssets.MouseText.Value;
+            if (font.MeasureString(text).X * scale <= maxPixelWidth)
                 return text;
 
             var parts = new List<string>();
             int idx = 0;
             while (idx < text.Length)
             {
-                int len = System.Math.Min(maxLen, text.Length - idx);
-                parts.Add(text.Substring(idx, len));
-                idx += len;
+                int remaining = text.Length - idx;
+                if (remaining == 0)
+                    break;
+
+                // 二分查找最大可容纳的字符数
+                int left = 1;
+                int right = remaining;
+                int bestPos = 1;
+
+                while (left <= right)
+                {
+                    int mid = (left + right) / 2;
+                    string testStr = text.Substring(idx, mid);
+                    float width = font.MeasureString(testStr).X * scale;
+
+                    if (width <= maxPixelWidth)
+                    {
+                        bestPos = mid;
+                        left = mid + 1;
+                    }
+                    else
+                    {
+                        right = mid - 1;
+                    }
+                }
+
+                // 尝试在标点或空格处优化断点
+                int breakPos = bestPos;
+
+                char[] breakChars = { '。', '，', '、', '；', '：', '！', '？', '.', ',', ';', ':', ' ', '）', ')', '}', ']' };
+                for (int i = System.Math.Min(bestPos, remaining - 1); i > bestPos / 2 && i > 0; i--)
+                {
+                    char ch = text[idx + i];
+                    if (System.Array.IndexOf(breakChars, ch) >= 0)
+                    {
+                        string testStr = text.Substring(idx, i + 1);
+                        float width = font.MeasureString(testStr).X * scale;
+                        if (width <= maxPixelWidth)
+                        {
+                            breakPos = i + 1;
+                            break;
+                        }
+                    }
+                }
+
+                if (breakPos == 0)
+                    breakPos = 1;
+
+                parts.Add(text.Substring(idx, breakPos).TrimEnd());
+                idx += breakPos;
             }
             return string.Join("\n", parts);
         }
@@ -700,14 +809,13 @@ namespace LeagueOfLegendThings.Content.UI
         private void AddRuneDescLine(UIElement parent, string runeName, float x, float y, Color titleColor)
         {
             string desc = GetRuneDescription(runeName);
-            // Use Buffs.<Key>.DisplayName when available. Convert runeName to a buff key by stripping non-alphanumeric chars.
-            var buffKeyChars = runeName.Where(ch => char.IsLetterOrDigit(ch)).ToArray();
-            var buffKey = new string(buffKeyChars);
+            // Use Buffs.<Key>.DisplayName when available.
+            var buffKey = GetBuffKey(runeName);
             string titleKey = $"Mods.LeagueOfLegendThings.Buffs.{buffKey}.DisplayName";
             string title = Language.GetTextValue(titleKey);
             if (string.IsNullOrEmpty(title) || title == titleKey)
                 title = runeName;
-            string body = WrapText(desc, 42);
+            string body = WrapText(desc, DescWidth - 20f, 0.72f);
             var line = new RuneDescBlock(title, body, titleColor, DescWidth)
             {
                 Left = { Pixels = x },
@@ -727,7 +835,7 @@ namespace LeagueOfLegendThings.Content.UI
             if (string.IsNullOrEmpty(desc) || desc == GetPathDescKey(path))
                 desc = string.Empty;
             var color = PathColors.GetValueOrDefault(path, Color.White);
-            var line = new RuneDescBlock(name, WrapText(desc, 48), color, PathDescWidth)
+            var line = new RuneDescBlock(name, WrapText(desc, PathDescWidth - 20f, 0.72f), color, PathDescWidth)
             {
                 Left = { Pixels = x },
                 Top = { Pixels = y }
@@ -745,16 +853,22 @@ namespace LeagueOfLegendThings.Content.UI
             private readonly Texture2D _texture;
             private readonly Texture2D _dotTex = TextureAssets.MagicPixel.Value;
             private readonly float _size;
+            private readonly string _runeName;
+            private readonly RuneUIState _parentState;
             private bool _selected;
             private bool _enabled = true;
             private bool _placeholder;
+            private bool _wasHovering = false;
             public string Tooltip { get; set; } = string.Empty;
             public Color RingColor { get; set; } = Color.Transparent; // 圆环颜色
+            public bool ShowSelectionBorder { get; set; } = false; // 是否显示选中边框
 
-            public IconButton(Asset<Texture2D> texture, float size)
+            public IconButton(Asset<Texture2D> texture, float size, string runeName = null, RuneUIState parentState = null)
             {
                 _texture = texture?.Value ?? TextureAssets.MagicPixel.Value;
                 _size = size;
+                _runeName = runeName;
+                _parentState = parentState;
                 Width.Set(size, 0f);
                 Height.Set(size, 0f);
             }
@@ -765,6 +879,27 @@ namespace LeagueOfLegendThings.Content.UI
             {
                 _selected = selected;
                 _enabled = enabled;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                base.Update(gameTime);
+                
+                bool isHoveringNow = IsMouseHovering;
+                if (isHoveringNow && !_wasHovering && !string.IsNullOrEmpty(_runeName) && _parentState != null && _parentState.IsSelectionModeActive())
+                {
+                    var btnDims = GetDimensions();
+                    var panelPos = _parentState.GetPanelPosition();
+                    // Calculate position relative to panel
+                    float relativeX = btnDims.X - panelPos.X + _size + 16f;
+                    float relativeY = btnDims.Y - panelPos.Y;
+                    _parentState.ShowDetail(_runeName, relativeX, relativeY);
+                }
+                else if (!isHoveringNow && _wasHovering && _parentState != null)
+                {
+                    _parentState.HideDetail();
+                }
+                _wasHovering = isHoveringNow;
             }
 
             protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -803,7 +938,7 @@ namespace LeagueOfLegendThings.Content.UI
                     DrawRing(spriteBatch, center, _size / 2f + 4f, 3, RingColor);
                 }
 
-                if (_selected)
+                if (_selected && ShowSelectionBorder)
                 {
                     var border = new Rectangle((int)dims.X, (int)dims.Y, (int)dims.Width, (int)dims.Height);
                     DrawBorder(spriteBatch, border, 2, new Color(196, 145, 63));
@@ -848,11 +983,6 @@ namespace LeagueOfLegendThings.Content.UI
                 spriteBatch.Draw(_dotTex, new Rectangle(rect.X, rect.Bottom - thickness, rect.Width, thickness), color);
                 spriteBatch.Draw(_dotTex, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
                 spriteBatch.Draw(_dotTex, new Rectangle(rect.Right - thickness, rect.Y, thickness, rect.Height), color);
-            }
-
-            public override void MouseOver(UIMouseEvent evt)
-            {
-                base.MouseOver(evt);
             }
         }
 
@@ -910,6 +1040,61 @@ namespace LeagueOfLegendThings.Content.UI
             public override void Update(GameTime gameTime)
             {
                 base.Update(gameTime);
+                if (_dragging && !Main.mouseLeft)
+                {
+                    _dragging = false;
+                }
+                if (_dragging)
+                {
+                    Vector2 mouse = Main.MouseScreen;
+                    Left.Set(mouse.X - _dragOffset.X, 0f);
+                    Top.Set(mouse.Y - _dragOffset.Y, 0f);
+                    Recalculate();
+                }
+            }
+        }
+
+        private class DraggableUITextPanel : UITextPanel<string>
+        {
+            private bool _dragging;
+            private Vector2 _dragOffset;
+
+            public bool DragEnabled { get; set; }
+
+            public DraggableUITextPanel(string text, float textScale = 1f) : base(text, textScale)
+            {
+            }
+
+            public void StopDrag() => _dragging = false;
+
+            public override void LeftMouseDown(UIMouseEvent evt)
+            {
+                base.LeftMouseDown(evt);
+                if (!DragEnabled)
+                    return;
+
+                _dragging = true;
+                Left.Percent = 0f;
+                Top.Percent = 0f;
+                _dragOffset = evt.MousePosition - GetDimensions().Position();
+            }
+
+            public override void LeftMouseUp(UIMouseEvent evt)
+            {
+                base.LeftMouseUp(evt);
+                _dragging = false;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                base.Update(gameTime);
+
+                if (!DragEnabled)
+                {
+                    _dragging = false;
+                    return;
+                }
+
                 if (_dragging && !Main.mouseLeft)
                 {
                     _dragging = false;

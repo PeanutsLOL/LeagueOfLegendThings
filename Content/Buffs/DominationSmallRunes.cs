@@ -162,12 +162,34 @@ namespace LeagueOfLegendThings.Content.Buffs
             if (save.TreasureHunterSelected && hunterStacks > 0)
             {
                 int extraCopper = (int)(target.value * 0.05f * hunterStacks);
-                extraCopper = System.Math.Min(extraCopper, 100000); // cap at 1 gold
+                extraCopper = System.Math.Min(extraCopper, 10000); // cap at 1 gold
                 if (extraCopper > 0)
                 {
-                    Player.QuickSpawnItem(Player.GetSource_OnHit(target), ItemID.CopperCoin, extraCopper);
+                    SpawnCoins(extraCopper, Player.GetSource_OnHit(target));
                 }
             }
+        }
+
+        private void SpawnCoins(int totalCopper, Terraria.DataStructures.IEntitySource source)
+        {
+            if (totalCopper <= 0)
+                return;
+
+            int platinum = totalCopper / 1000000;
+            totalCopper %= 1000000;
+            int gold = totalCopper / 10000;
+            totalCopper %= 10000;
+            int silver = totalCopper / 100;
+            int copper = totalCopper % 100;
+
+            if (platinum > 0)
+                Player.QuickSpawnItem(source, ItemID.PlatinumCoin, platinum);
+            if (gold > 0)
+                Player.QuickSpawnItem(source, ItemID.GoldCoin, gold);
+            if (silver > 0)
+                Player.QuickSpawnItem(source, ItemID.SilverCoin, silver);
+            if (copper > 0)
+                Player.QuickSpawnItem(source, ItemID.CopperCoin, copper);
         }
 
         private static bool HasHunterRuneSelected(RuneSaveSystem save)
