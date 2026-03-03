@@ -312,15 +312,22 @@ Configs: {
 	RuneConfig: {
 		DisplayName: Rune Config
 
-		EnableLethalTempoRune: {
-			Label: Enable Lethal Tempo Rune
-			Tooltip: ""
+		EnableHardMode: {
+			Label: Enable Hard Mode
+			Tooltip: Change nothing for now, but maybe it will do something in the future
 		}
 	}
 }
 
 UI: {
 	Runes: {
+		Label: {
+			MainButton: Runes
+			PanelTitle: Rune Selection
+			ButtonLocked: Locked
+			ButtonUnlocked: Unlocked
+		}
+
 		Path: {
 			Precision: {
 				Name: Precision
@@ -402,7 +409,7 @@ UI: {
 			First_Strike: After triggering: deal bonus damage, 10s cooldown.
 			Hextech_Flashtraption: No Chaos State; Rod of Discord costs 150 mana.
 			Magical_Footwear: After 8 minutes: +10% move speed.
-			Cash_Back: Refund 5% gold on kills (cap 50 silver).
+			Cash_Back: Refund 5% of item cost when buying from shops (cap 50 silver per purchase).
 			Triple_Tonic: After potion: +14% damage for 30 min.
 			Time_Warp_Tonic: Potion grants extra slow heal of same amount.
 			Biscuit_Delivery: Every 20s: heal 10 and restore 10 mana.

@@ -176,7 +176,7 @@ namespace LeagueOfLegendThings.Content.Systems
             var cfg = ModContent.GetInstance<RuneConfig>();
             PrimaryPath = "Precision";
             SecondaryPath = "Domination";
-            PrimaryKeystone = cfg.EnableLethalTempoRune ? "Lethal Tempo" : "Press the Attack";
+            PrimaryKeystone = "Lethal Tempo";
             PrimaryRow1 = "Absorb Life";
             PrimaryRow2 = "Legend: Alacrity";
             PrimaryRow3 = "Coup de Grace";
