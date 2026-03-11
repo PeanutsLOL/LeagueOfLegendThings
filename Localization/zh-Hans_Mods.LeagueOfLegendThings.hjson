@@ -61,7 +61,7 @@ Buffs: {
 
 	SummonAery: {
 		DisplayName: 召唤：艾黎
-		Description: 召唤艾瑞来协助你攻击或防护。
+		Description: 召唤艾黎协助你。
 	}
 
 	GlacialAugment: {
@@ -306,6 +306,7 @@ Projectiles: {
 	AeryProj.DisplayName: 艾黎投射物
 	ArcaneCometProj.DisplayName: 奥术彗星投射物
 	FirstStrikeProj.DisplayName: 先攻投射物
+	// TrueIceBowAsheProjectile.DisplayName: True Ice Bow Ashe Projectile
 }
 
 Configs: {
@@ -315,6 +316,11 @@ Configs: {
 		EnableHardMode: {
 			Label: 启用困难模式
 			Tooltip: 目前不改变任何东西，但也许将来会有用
+		}
+
+		EnableAramMayhemRune: {
+			Label: 启用海克斯大乱斗符文
+			Tooltip: 禁用召唤师峡谷符文，取而代之的是，在每个游戏状态（前期、困难模式等）你将获得一个随机的海克斯大乱斗增幅器。
 		}
 	}
 }
@@ -417,5 +423,14 @@ UI: {
 			Approach_Velocity: 靠近被减益的敌人时增加20%移动速度。
 			Jack_of_All_Trades: 在10秒内触发三种伤害类型可获得短时间大幅伤害增益。10秒冷却。
 		}
+	}
+}
+
+Items: {
+	TrueIceBowAshe: {
+		DisplayName: 臻冰之弓
+		Description: 蕴含冰霜之力的弓，攻击时有几率发射冰霜箭，造成额外伤害并减速敌人。
+		FlavorText: 这把弓曾经属于一位传奇的冰霜射手，她用它在战场上留下了无数传奇的故事。
+		// Tooltip: ""
 	}
 }

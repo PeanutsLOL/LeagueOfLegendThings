@@ -79,7 +79,7 @@ public class SummonAeryPlayer : ModPlayer
 
         pendingPotionHealLife = healValue;
         pendingPotionTimer = 60;
-        DebugAery($"Capture life potion heal={healValue}, quickHeal={quickHeal}, owner={Player.whoAmI}");
+        // DebugAery($"Capture life potion heal={healValue}, quickHeal={quickHeal}, owner={Player.whoAmI}");
     }
 
     public override void GetHealMana(Item item, bool quickHeal, ref int healValue)
@@ -89,7 +89,7 @@ public class SummonAeryPlayer : ModPlayer
 
         pendingPotionHealMana = healValue;
         pendingPotionTimer = 60;
-        DebugAery($"Capture mana potion heal={healValue}, quickHeal={quickHeal}, owner={Player.whoAmI}");
+        // DebugAery($"Capture mana potion heal={healValue}, quickHeal={quickHeal}, owner={Player.whoAmI}");
     }
 
     private void EnsureAeryProjectile()
@@ -126,7 +126,7 @@ public class SummonAeryPlayer : ModPlayer
             return;
 
         if (pendingPotionTimer % 15 == 0)
-            DebugAery("Pending tick");
+            // DebugAery("Pending tick");
 
         // 只在客户端限制拥有者；服务端(myPlayer=255)不应提前清空
         if (Main.netMode == NetmodeID.MultiplayerClient && Main.myPlayer != Player.whoAmI)
@@ -134,7 +134,7 @@ public class SummonAeryPlayer : ModPlayer
             pendingPotionTimer = 0;
             pendingPotionHealLife = 0;
             pendingPotionHealMana = 0;
-            DebugAery($"Skip pending on non-owner client. owner={Player.whoAmI}, myPlayer={Main.myPlayer}");
+            // DebugAery($"Skip pending on non-owner client. owner={Player.whoAmI}, myPlayer={Main.myPlayer}");
             return;
         }
 
@@ -142,7 +142,7 @@ public class SummonAeryPlayer : ModPlayer
         if (pendingPotionHealLife <= 0 && pendingPotionHealMana <= 0)
         {
             pendingPotionTimer = 0;
-            DebugAery("Skip pending: no valid captured potion heal values");
+            // DebugAery("Skip pending: no valid captured potion heal values");
             return;
         }
 
@@ -150,14 +150,14 @@ public class SummonAeryPlayer : ModPlayer
 
         if (!TryGetAeryProjectile(out Projectile proj))
         {
-            DebugAery("Pending wait: Aery projectile not found yet");
+            // DebugAery("Pending wait: Aery projectile not found yet");
             return;
         }
 
         AeryProj aery = proj.ModProjectile as AeryProj;
         if (aery == null || aery.State != AeryProj.Idle)
         {
-            DebugAery($"Pending wait: projectile state busy state={(aery == null ? -1 : aery.State)}");
+            // DebugAery($"Pending wait: projectile state busy state={(aery == null ? -1 : aery.State)}");
             return;
         }
 
@@ -171,25 +171,25 @@ public class SummonAeryPlayer : ModPlayer
 
             if (effectiveLife <= 0 && effectiveMana <= 0)
             {
-                DebugAery($"Potion trigger skipped: teammate already full, rawLife={sendLife}, rawMana={sendMana}, targetLife={targetTeammate.statLife}/{targetTeammate.statLifeMax2}, targetMana={targetTeammate.statMana}/{targetTeammate.statManaMax2}");
+                // DebugAery($"Potion trigger skipped: teammate already full, rawLife={sendLife}, rawMana={sendMana}, targetLife={targetTeammate.statLife}/{targetTeammate.statLifeMax2}, targetMana={targetTeammate.statMana}/{targetTeammate.statManaMax2}");
                 pendingPotionHealLife = 0;
                 pendingPotionHealMana = 0;
                 pendingPotionTimer = 0;
                 return;
             }
 
-            DebugAery($"Potion trigger -> teammate={targetTeammate.whoAmI}, life={pendingPotionHealLife}, mana={pendingPotionHealMana}, effectiveLife={effectiveLife}, effectiveMana={effectiveMana}");
+            // DebugAery($"Potion trigger -> teammate={targetTeammate.whoAmI}, life={pendingPotionHealLife}, mana={pendingPotionHealMana}, effectiveLife={effectiveLife}, effectiveMana={effectiveMana}");
             TriggerAery(null, targetTeammate);
         }
         else
         {
-            DebugAery("Potion trigger aborted: no teammate in range/team");
+            // DebugAery("Potion trigger aborted: no teammate in range/team");
         }
 
         pendingPotionHealLife = 0;
         pendingPotionHealMana = 0;
         pendingPotionTimer = 0;
-        DebugAery("Pending cache cleared after trigger attempt");
+        // DebugAery("Pending cache cleared after trigger attempt");
     }
 
     private bool TryGetAeryProjectile(out Projectile proj)
@@ -226,31 +226,31 @@ public class SummonAeryPlayer : ModPlayer
 
     private void TriggerAery(NPC targetNpc, Player targetPlayer)
     {
-        DebugAery($"Trigger called npc={(targetNpc == null ? -1 : targetNpc.whoAmI)} teammate={(targetPlayer == null ? -1 : targetPlayer.whoAmI)}");
+        // DebugAery($"Trigger called npc={(targetNpc == null ? -1 : targetNpc.whoAmI)} teammate={(targetPlayer == null ? -1 : targetPlayer.whoAmI)}");
 
         if (!TryGetAeryProjectile(out Projectile proj))
         {
-            DebugAery("Trigger failed: Aery projectile not found");
+            // DebugAery("Trigger failed: Aery projectile not found");
             return;
         }
 
         AeryProj aery = proj.ModProjectile as AeryProj;
         if (aery == null || aery.State != AeryProj.Idle)
         {
-            DebugAery($"Trigger blocked: state={(aery == null ? -1 : aery.State)}");
+            // DebugAery($"Trigger blocked: state={(aery == null ? -1 : aery.State)}");
             return;
         }
 
         if (targetNpc != null)
         {
-            DebugAery($"Send to boss npc={targetNpc.whoAmI}");
+            // DebugAery($"Send to boss npc={targetNpc.whoAmI}");
             aery.SendToNpc(targetNpc.whoAmI);
         }
         else if (targetPlayer != null)
         {
             int healLife = (int)MathF.Floor(pendingPotionHealLife * 0.5f);
             int healMana = (int)MathF.Floor(pendingPotionHealMana * 0.5f);
-            DebugAery($"Send to teammate={targetPlayer.whoAmI}, life={healLife}, mana={healMana}");
+            // DebugAery($"Send to teammate={targetPlayer.whoAmI}, life={healLife}, mana={healMana}");
             aery.SendToPlayer(targetPlayer.whoAmI, healLife, healMana);
         }
     }

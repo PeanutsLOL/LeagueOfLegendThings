@@ -8,5 +8,8 @@ namespace LeagueOfLegendThings.Content.Config
         public override ConfigScope Mode => ConfigScope.ClientSide;
         [DefaultValue(false)]
         public bool EnableHardMode { get; set; }
+
+        [DefaultValue(false)]
+        public bool EnableAramMayhemRune { get; set; }
     }
 }

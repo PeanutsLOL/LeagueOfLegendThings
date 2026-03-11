@@ -306,6 +306,7 @@ Projectiles: {
 	AeryProj.DisplayName: Aery Proj
 	ArcaneCometProj.DisplayName: Arcane Comet Proj
 	FirstStrikeProj.DisplayName: First Strike Proj
+	TrueIceBowAsheProjectile.DisplayName: True Ice Bow Ashe Projectile
 }
 
 Configs: {
@@ -315,6 +316,11 @@ Configs: {
 		EnableHardMode: {
 			Label: Enable Hard Mode
 			Tooltip: Change nothing for now, but maybe it will do something in the future
+		}
+
+		EnableAramMayhemRune: {
+			Label: Enable Aram Mayhem Rune
+			Tooltip: Disable Summoner's Rift runes, instead, you will get a random Aram Mayhem Hextech augment at every game states (Pre-Hardmode, Hardmode, etc.).
 		}
 	}
 }
@@ -417,5 +423,14 @@ UI: {
 			Approach_Velocity: Near debuffed enemies: +20% move speed.
 			Jack_of_All_Trades: 3 damage types in 10s: +100% damage for 5s. 10s cooldown.
 		}
+	}
+}
+
+Items: {
+	TrueIceBowAshe: {
+		DisplayName: True Ice Bow
+		Description: A bow imbued with the power of ice. Attacks have a chance to fire an icy arrow that deals extra damage and slows enemies.
+		FlavorText: This bow once belonged to a legendary frost archer, who left countless legendary stories on the battlefield with it.
+		Tooltip: ""
 	}
 }
