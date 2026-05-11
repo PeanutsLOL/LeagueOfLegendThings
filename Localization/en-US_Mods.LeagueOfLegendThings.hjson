@@ -424,13 +424,227 @@ UI: {
 			Jack_of_All_Trades: 3 damage types in 10s: +100% damage for 5s. 10s cooldown.
 		}
 	}
+
+	StatAnvil: {
+		Title: Stat Bonus - Choose a Shard
+		SilverLabel: Silver Shard (random value)
+		GoldLabel: Gold Shard (fixed value)
+		PrismaticLabel: Prismatic Shard (powerful!)
+		Confirm: Confirm
+		Select: Select
+		ShardholderActivated: Shardholder activated! All shard effects x{0}. Mayhem augments removed.
+		FaithDetails: Faith Shard ({0}%): +{1} all damage, +{2} defense
+	}
 }
 
 Items: {
+	StatBonusAnvilItem: {
+		DisplayName: Stat Bonus Anvil
+		Description: Opens a forge selection UI. Pick one of three random stat shards. Prismatic rolls may contain the Shardholder Value Shard.
+		Tooltip: ""
+	}
+
 	TrueIceBowAshe: {
 		DisplayName: True Ice Bow
 		Description: A bow imbued with the power of ice. Attacks have a chance to fire an icy arrow that deals extra damage and slows enemies.
 		FlavorText: This bow once belonged to a legendary frost archer, who left countless legendary stories on the battlefield with it.
 		Tooltip: ""
 	}
+}
+
+MayhemAugments: {
+	Silver: {
+		BluntForce: {
+			DisplayName: Blunt Force
+			Description: All damage +20%
+		}
+
+		Deft: {
+			DisplayName: Deft
+			Description: Attack speed +60%
+		}
+
+		BuffBuddies: {
+			DisplayName: Buff Buddies
+			Description: On-hit burn (3s) + mana restore on hit
+		}
+
+		Erosion: {
+			DisplayName: Erosion
+			Description: Hits reduce target defense by 1.5% per stack (max 20)
+		}
+
+		Adamant: {
+			DisplayName: Adamant
+			Description: Crits grant stacking defense
+		}
+
+		CrackOpenThatEgg: {
+			DisplayName: Crack Open That Egg
+			Description: Shields explode on expiration dealing 100% shield value as damage
+		}
+
+		DiveBomber: {
+			DisplayName: Dive Bomber
+			Description: Explode on death dealing 20% max HP damage
+		}
+
+		DontBlink: {
+			DisplayName: Don't Blink
+			Description: Deal more damage the faster you are relative to target
+		}
+
+		EscAPADe: {
+			DisplayName: EscAPADe
+			Description: Convert 30% magic damage to additional damage
+		}
+
+		Flashbang: {
+			DisplayName: Flashbang
+			Description: Dashes create an explosion
+		}
+
+		GuiltyPleasure: {
+			DisplayName: Guilty Pleasure
+			Description: Crits heal 5 HP (1s cooldown)
+		}
+	}
+
+	Gold: {
+		AllForYou: {
+			DisplayName: All For You
+			Description: Healing effects +30%
+		}
+
+		CelestialBody: {
+			DisplayName: Celestial Body
+			Description: Max life +30%, damage -10%
+		}
+
+		Cerberus: {
+			DisplayName: Cerberus
+			Description: Every 3 hits triggers bonus damage + attack speed burst
+		}
+
+		CriticalRhythm: {
+			DisplayName: Critical Rhythm
+			Description: Crits grant 6% attack speed per stack (max 10)
+		}
+
+		DemonsDance: {
+			DisplayName: Demon's Dance
+			Description: Move speed +8%, 3% lifesteal
+		}
+
+		DoubleTap: {
+			DisplayName: Double Tap
+			Description: Crits deal 30% bonus damage
+		}
+
+		EscapePlan: {
+			DisplayName: Escape Plan
+			Description: Below 35% HP: massive shield + speed burst (75s cooldown)
+		}
+
+		Firebrand: {
+			DisplayName: Firebrand
+			Description: Hits stack a burn (0.5% max HP/s, max 20 stacks)
+		}
+
+		SoulSiphon: {
+			DisplayName: Soul Siphon
+			Description: Crits heal 5% of damage dealt
+		}
+
+		GetExcited: {
+			DisplayName: Get Excited
+			Description: On kill: +60% move speed +15% attack speed for 4s
+		}
+	}
+
+	Prismatic: {
+		Goliath: {
+			DisplayName: Goliath
+			Description: Max life +35%, all damage +15%, size +50%
+		}
+
+		GiantSlayer: {
+			DisplayName: Giant Slayer
+			Description: Size -25%, bonus damage +15%, crit +5%
+		}
+
+		GlassCannon: {
+			DisplayName: Glass Cannon
+			Description: Max HP capped at 50%, deal 30% bonus true damage
+		}
+
+		DualWield: {
+			DisplayName: Dual Wield
+			Description: Attacks fire an extra bolt dealing 40% damage
+		}
+
+		Earthwake: {
+			DisplayName: Earthwake
+			Description: Dashes leave an explosive trail
+		}
+
+		Eureka: {
+			DisplayName: Eureka
+			Description: Every 100 mana grants 1% attack speed
+		}
+
+		CircleOfDeath: {
+			DisplayName: Circle of Death
+			Description: 50% of healing dealt as damage to nearest enemy
+		}
+
+		CantTouchThis: {
+			DisplayName: Can't Touch This
+			Description: Every 45s, gain 1s of invulnerability
+		}
+
+		Dropkick: {
+			DisplayName: Dropkick
+			Description: Execute enemies below 5-15% HP, heal on execute
+		}
+	}
+}
+
+StatShards: {
+	Sil_Melee.DisplayName: Melee Damage
+	Sil_Ranged.DisplayName: Ranged Damage
+	Sil_Magic.DisplayName: Magic Damage
+	Sil_Summon.DisplayName: Summon Damage
+	Sil_Def.DisplayName: Defense
+	Sil_Life.DisplayName: Max Life
+	Sil_AS.DisplayName: Attack Speed
+	Sil_Crit.DisplayName: Crit Chance
+	Sil_Move.DisplayName: Move Speed
+	Sil_LS.DisplayName: Life Steal
+	Sil_Mana.DisplayName: Max Mana
+	Sil_Might.DisplayName: Might (Melee + Ranged)
+	Sil_Unbreak.DisplayName: Unbreakable (Def + HP)
+	Gold_Melee.DisplayName: Melee Damage
+	Gold_Ranged.DisplayName: Ranged Damage
+	Gold_Magic.DisplayName: Magic Damage
+	Gold_Summon.DisplayName: Summon Damage
+	Gold_Def.DisplayName: Defense
+	Gold_Life.DisplayName: Max Life
+	Gold_AS.DisplayName: Attack Speed
+	Gold_Crit.DisplayName: Crit Chance
+	Gold_Move.DisplayName: Move Speed
+	Gold_LS.DisplayName: Life Steal
+	Gold_Mana.DisplayName: Max Mana
+	Gold_Might.DisplayName: Might (Melee + Ranged)
+	Gold_Unbreak.DisplayName: Unbreakable (Def + HP)
+	Gold_Faith.DisplayName: Faith
+	Pris_AllDmg.DisplayName: All Damage
+	Pris_ArmPen.DisplayName: Armor Penetration
+	Pris_CritDmg.DisplayName: Crit Damage
+	Pris_Life.DisplayName: Max Life
+	Pris_Move.DisplayName: Move Speed
+	Pris_LS.DisplayName: Life Steal
+	Pris_Heal.DisplayName: Heal Power
+	Pris_Mana.DisplayName: Max Mana
+	Shardholder.DisplayName: Shardholder
 }

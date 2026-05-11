@@ -20,7 +20,7 @@ namespace LeagueOfLegendThings.Content.Items.Weapons.PreHM.TrueIceBowAshe
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Type] = TrailLength;
-            ProjectileID.Sets.TrailingMode[Type] = 0;
+            ProjectileID.Sets.TrailingMode[Type] = 1; // 模式1同时记录位置和旋转
         }
 
         public override void SetDefaults()
@@ -60,13 +60,21 @@ namespace LeagueOfLegendThings.Content.Items.Weapons.PreHM.TrueIceBowAshe
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle sourceRect = texture.Frame();
             Vector2 origin = sourceRect.Size() * 0.5f;
-            SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             for (int i = Projectile.oldPos.Length - 1; i >= 0; i--)
             {
                 Vector2 oldPos = Projectile.oldPos[i];
                 if (oldPos == Vector2.Zero)
                     continue;
+
+                // i=0 用当前旋转（与箭头完全一致），i>0 用相邻位置差计算朝向
+                float trailRot;
+                if (i == 0)
+                    trailRot = Projectile.rotation;
+                else if (Projectile.oldPos[i - 1] != Vector2.Zero)
+                    trailRot = (Projectile.oldPos[i - 1] - oldPos).ToRotation();
+                else
+                    trailRot = Projectile.rotation;
 
                 float progress = (Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length;
                 Color trailColor = Projectile.GetAlpha(lightColor) * (0.45f * progress);
@@ -77,10 +85,10 @@ namespace LeagueOfLegendThings.Content.Items.Weapons.PreHM.TrueIceBowAshe
                     oldPos + Projectile.Size * 0.5f - Main.screenPosition,
                     sourceRect,
                     trailColor,
-                    Projectile.oldRot[i],
+                    trailRot,
                     origin,
                     Projectile.scale,
-                    effects,
+                    SpriteEffects.None,
                     0
                 );
             }
@@ -93,7 +101,7 @@ namespace LeagueOfLegendThings.Content.Items.Weapons.PreHM.TrueIceBowAshe
                 Projectile.rotation,
                 origin,
                 Projectile.scale,
-                effects,
+                SpriteEffects.None,
                 0
             );
 

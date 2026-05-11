@@ -3,6 +3,7 @@ using Terraria.UI;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework;
+using LeagueOfLegendThings.Content.Config;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.ModLoader;
 using System.Collections.Generic;
@@ -106,7 +107,10 @@ namespace LeagueOfLegendThings.Content.UI
             };
             _mainButton.OnLeftClick += (_, __) => ToggleOpen();
             _mainButton.DragEnabled = !_mainButtonLocked;
-            Append(_mainButton);
+
+            _mayhemActive = ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune;
+            if (!_mayhemActive)
+                Append(_mainButton);
 
             _panel = new DraggableUIPanel
             {
@@ -173,9 +177,29 @@ namespace LeagueOfLegendThings.Content.UI
             _panel.Append(_detailPanel);
         }
 
+        private bool _mayhemActive;
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            bool mayhem = ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune;
+            if (mayhem != _mayhemActive)
+            {
+                _mayhemActive = mayhem;
+                if (mayhem)
+                {
+                    // Mayhem 启用 → 关闭符文面板，隐藏按钮
+                    if (_open) ToggleOpen();
+                    _mainButton?.Remove();
+                }
+                else
+                {
+                    // Mayhem 禁用 → 恢复按钮
+                    if (_mainButton != null && _mainButton.Parent == null)
+                        Append(_mainButton);
+                }
+            }
         }
 
         public override void OnActivate()
@@ -186,6 +210,9 @@ namespace LeagueOfLegendThings.Content.UI
 
         private void ToggleOpen()
         {
+            // Mayhem 模式启用时不打开符文面板
+            if (ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune) return;
+
             _open = !_open;
             if (_open)
             {
