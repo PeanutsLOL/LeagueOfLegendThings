@@ -424,13 +424,227 @@ UI: {
 			Jack_of_All_Trades: 在10秒内触发三种伤害类型可获得短时间大幅伤害增益。10秒冷却。
 		}
 	}
+
+	StatAnvil: {
+		Title: 属性加成 - 选择一个碎片
+		SilverLabel: 白银碎片（随机数值）
+		GoldLabel: 黄金碎片（固定数值）
+		PrismaticLabel: 棱彩碎片（强力！）
+		Confirm: 确认
+		Select: 选择
+		ShardholderActivated: 增幅器激活！所有碎片效果 x{0}。海克斯大乱斗增幅器已移除。
+		FaithDetails: 信仰碎片（{0}%）：+{1} 全部伤害，+{2} 防御
+	}
 }
 
 Items: {
+	StatBonusAnvilItem: {
+		DisplayName: 属性锻造器
+		Description: 打开锻造选择界面。从三个随机属性碎片中选择一个。棱彩轮次可能出现增幅器碎片。
+		// Tooltip: ""
+	}
+
 	TrueIceBowAshe: {
 		DisplayName: 臻冰之弓
 		Description: 蕴含冰霜之力的弓，攻击时有几率发射冰霜箭，造成额外伤害并减速敌人。
 		FlavorText: 这把弓曾经属于一位传奇的冰霜射手，她用它在战场上留下了无数传奇的故事。
 		// Tooltip: ""
 	}
+}
+
+MayhemAugments: {
+	Silver: {
+		BluntForce: {
+			DisplayName: 残暴之力
+			Description: 全伤害 +20%
+		}
+
+		Deft: {
+			DisplayName: 灵巧
+			Description: 攻击速度 +60%
+		}
+
+		BuffBuddies: {
+			DisplayName: 霸符兄弟
+			Description: 命中附加灼烧(3秒) + 恢复法力
+		}
+
+		Erosion: {
+			DisplayName: 侵蚀
+			Description: 命中降低目标防御 1.5%/层 (最多20层)
+		}
+
+		Adamant: {
+			DisplayName: 坚如磐石
+			Description: 暴击时叠加防御
+		}
+
+		CrackOpenThatEgg: {
+			DisplayName: 打开你的蛋
+			Description: 护盾消失时造成100%护盾值的伤害
+		}
+
+		DiveBomber: {
+			DisplayName: 俯冲轰炸
+			Description: 死亡时爆炸, 造成20%最大生命伤害
+		}
+
+		DontBlink: {
+			DisplayName: 唯快不破
+			Description: 比目标移速越快, 伤害越高
+		}
+
+		EscAPADe: {
+			DisplayName: 魔法转物理
+			Description: 转化30%魔法伤害为额外伤害
+		}
+
+		Flashbang: {
+			DisplayName: 闪光弹
+			Description: 突进时产生爆炸
+		}
+
+		GuiltyPleasure: {
+			DisplayName: 恶趣味
+			Description: 暴击恢复5生命 (1秒冷却)
+		}
+	}
+
+	Gold: {
+		AllForYou: {
+			DisplayName: 全心为你
+			Description: 治疗效果 +30%
+		}
+
+		CelestialBody: {
+			DisplayName: 星界躯体
+			Description: 最大生命 +30%, 伤害 -10%
+		}
+
+		Cerberus: {
+			DisplayName: 地狱三头犬
+			Description: 每3次命中触发额外伤害+攻速爆发
+		}
+
+		CriticalRhythm: {
+			DisplayName: 暴击律动
+			Description: 暴击叠加6%攻速/层 (最多10层)
+		}
+
+		DemonsDance: {
+			DisplayName: 魔鬼之舞
+			Description: 移速+8%, 生命偷取3%
+		}
+
+		DoubleTap: {
+			DisplayName: 双发快射
+			Description: 暴击额外造成30%伤害
+		}
+
+		EscapePlan: {
+			DisplayName: 逃跑计划
+			Description: 低血量时获得巨量护盾+加速 (75秒冷却)
+		}
+
+		Firebrand: {
+			DisplayName: 火上浇油
+			Description: 命中叠加灼烧 (0.5%最大生命/秒, 最多20层)
+		}
+
+		SoulSiphon: {
+			DisplayName: 灵魂虹吸
+			Description: 暴击恢复5%伤害值的生命
+		}
+
+		GetExcited: {
+			DisplayName: 罪恶快感
+			Description: 击杀后移速+60%+攻速+15%, 持续4秒
+		}
+	}
+
+	Prismatic: {
+		Goliath: {
+			DisplayName: 歌利亚巨人
+			Description: 最大生命+35%, 全伤害+15%, 体型+50%
+		}
+
+		GiantSlayer: {
+			DisplayName: 巨人杀手
+			Description: 体型-25%, 伤害+15%, 暴击+5%
+		}
+
+		GlassCannon: {
+			DisplayName: 玻璃大炮
+			Description: 生命上限减半, 额外30%真实伤害
+		}
+
+		DualWield: {
+			DisplayName: 双刀流
+			Description: 攻击额外发射一枚40%伤害的弹体
+		}
+
+		Earthwake: {
+			DisplayName: 大地苏醒
+			Description: 突进留下爆炸路径
+		}
+
+		Eureka: {
+			DisplayName: 尤里卡
+			Description: 每100法力获得1%攻速
+		}
+
+		CircleOfDeath: {
+			DisplayName: 死亡之环
+			Description: 50%治疗量对最近敌人造成伤害
+		}
+
+		CantTouchThis: {
+			DisplayName: 神圣干预
+			Description: 每45秒获得1秒无敌
+		}
+
+		Dropkick: {
+			DisplayName: 飞身踢
+			Description: 处决低血量敌人(5-15%HP), 处决回血
+		}
+	}
+}
+
+StatShards: {
+	Sil_Melee.DisplayName: 近战伤害碎片
+	Sil_Ranged.DisplayName: 远程伤害碎片
+	Sil_Magic.DisplayName: 魔法伤害碎片
+	Sil_Summon.DisplayName: 召唤伤害碎片
+	Sil_Def.DisplayName: 防御力碎片
+	Sil_Life.DisplayName: 最大生命碎片
+	Sil_AS.DisplayName: 攻击速度碎片
+	Sil_Crit.DisplayName: 暴击率碎片
+	Sil_Move.DisplayName: 移动速度碎片
+	Sil_LS.DisplayName: 生命偷取碎片
+	Sil_Mana.DisplayName: 最大法力碎片
+	Sil_Might.DisplayName: 力量碎片（近战+远程）
+	Sil_Unbreak.DisplayName: 坚不可摧碎片（防御+生命）
+	Gold_Melee.DisplayName: 近战伤害碎片
+	Gold_Ranged.DisplayName: 远程伤害碎片
+	Gold_Magic.DisplayName: 魔法伤害碎片
+	Gold_Summon.DisplayName: 召唤伤害碎片
+	Gold_Def.DisplayName: 防御力碎片
+	Gold_Life.DisplayName: 最大生命碎片
+	Gold_AS.DisplayName: 攻击速度碎片
+	Gold_Crit.DisplayName: 暴击率碎片
+	Gold_Move.DisplayName: 移动速度碎片
+	Gold_LS.DisplayName: 生命偷取碎片
+	Gold_Mana.DisplayName: 最大法力碎片
+	Gold_Might.DisplayName: 力量碎片（近战+远程）
+	Gold_Unbreak.DisplayName: 坚不可摧碎片（防御+生命）
+	Gold_Faith.DisplayName: 两个随机碎片
+	Pris_AllDmg.DisplayName: 全伤害加成碎片
+	Pris_ArmPen.DisplayName: 护甲穿透碎片
+	Pris_CritDmg.DisplayName: 暴击伤害碎片
+	Pris_Life.DisplayName: 最大生命碎片
+	Pris_Move.DisplayName: 移动速度碎片
+	Pris_LS.DisplayName: 生命偷取碎片
+	Pris_Heal.DisplayName: 治疗强度碎片
+	Pris_Mana.DisplayName: 最大法力碎片
+	Shardholder.DisplayName: 碎片增幅器
 }
