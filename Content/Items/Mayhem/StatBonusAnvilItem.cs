@@ -25,8 +25,9 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
             Item.value = Item.buyPrice(10, 0, 0, 0); // 10 铂金
             Item.rare = ItemRarityID.Expert;
             Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item4;
             Item.consumable = true;
         }
