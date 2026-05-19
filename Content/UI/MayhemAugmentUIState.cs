@@ -81,7 +81,7 @@ namespace LeagueOfLegendThings.Content.UI
             _panel.Top.Set(Main.screenHeight / 2f - panelH / 2f, 0f);
 
             // 标题
-            _title = new UIText("Choose Your Augment", 1.35f);
+            _title = new UIText(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.ChooseTitle", "Choose Your Augment"), 1.35f);
             _title.HAlign = 0.5f;
             _title.Top.Set(10, 0f);
             _panel.Append(_title);
@@ -181,9 +181,9 @@ namespace LeagueOfLegendThings.Content.UI
 
         private static string GetTierDisplayName(string tier) => tier switch
         {
-            "Silver" => "Silver Augment — Pre-Hardmode",
-            "Gold" => "Gold Augment — Hardmode",
-            "Prismatic" => "Prismatic Augment — All Mech Bosses",
+            "Silver" => Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.SilverLabel", "Silver Augment — Pre-Hardmode"),
+            "Gold" => Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.GoldLabel", "Gold Augment — Hardmode"),
+            "Prismatic" => Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.PrismaticLabel", "Prismatic Augment — All Mech Bosses"),
             _ => ""
         };
 
@@ -344,7 +344,8 @@ namespace LeagueOfLegendThings.Content.UI
 
                 // 名称
                 float nameTop = iconTop + iconSize + pad;
-                var nameText = new UIText(_augmentName ?? "", 1.0f);
+                string locNameKey = $"Mods.LeagueOfLegendThings.MayhemAugments.{_tier}.{_augmentName}.DisplayName";
+                var nameText = new UIText(Language.GetTextValue(locNameKey, _augmentName ?? ""), 1.0f);
                 nameText.HAlign = 0.5f;
                 nameText.Top.Set(nameTop, 0f);
                 nameText.Width.Set(w - pad * 2, 0f);
@@ -369,7 +370,8 @@ namespace LeagueOfLegendThings.Content.UI
                 float btnX = pad * 2;
                 float btnBottom = h - pad * 2;
 
-                var selectBtn = new UITextPanel<string>("Select", 0.85f);
+                string selectText = Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.Select", "Select");
+                var selectBtn = new UITextPanel<string>(selectText, 0.85f);
                 selectBtn.Width.Set(btnW, 0f);
                 selectBtn.Height.Set(btnH, 0f);
                 selectBtn.Left.Set(btnX, 0f);
@@ -381,7 +383,10 @@ namespace LeagueOfLegendThings.Content.UI
                 bg.Append(selectBtn);
 
                 // 刷新按钮
-                var rerollBtn = new UITextPanel<string>(_rerolled ? "↻ Rerolled" : "↻ Reroll", 0.78f);
+                string rerollText = _rerolled
+                    ? Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.Rerolled", "↻ Rerolled")
+                    : Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemAugments.UI.Reroll", "↻ Reroll");
+                var rerollBtn = new UITextPanel<string>(rerollText, 0.78f);
                 rerollBtn.Width.Set(btnW, 0f);
                 rerollBtn.Height.Set(btnH, 0f);
                 rerollBtn.Left.Set(btnX, 0f);
@@ -416,40 +421,15 @@ namespace LeagueOfLegendThings.Content.UI
 
             // ============ 描述 ============
 
-            private static string GetDesc(string name) => name switch
+            private string GetDesc(string name)
             {
-                "BluntForce" => "All damage\n+20%",
-                "Deft" => "Attack speed\n+60%",
-                "BuffBuddies" => "On-hit burn\n+ mana restore",
-                "Erosion" => "Hits reduce\ntarget defense",
-                "Adamant" => "Crits grant\nstacking defense",
-                "CrackOpenThatEgg" => "Shields explode\non expiration",
-                "DiveBomber" => "Explode on\ndeath",
-                "DontBlink" => "More damage\nwhen faster",
-                "EscAPADe" => "Convert magic\nto bonus damage",
-                "Flashbang" => "Dashes create\nan explosion",
-                "GuiltyPleasure" => "Crits heal\n5 HP",
-                "AllForYou" => "Healing\neffects +30%",
-                "CelestialBody" => "Max life +30%\nDamage -10%",
-                "Cerberus" => "3-hit combo:\nbonus dmg + AS",
-                "CriticalRhythm" => "Crits stack\nattack speed",
-                "DemonsDance" => "Move speed +8%\n3% lifesteal",
-                "DoubleTap" => "Crits deal\nbonus 30% dmg",
-                "EscapePlan" => "Low HP:\nmassive shield",
-                "Firebrand" => "Hits stack\na burn DoT",
-                "SoulSiphon" => "Crits heal\n5% of damage",
-                "GetExcited" => "On kill:\n+60% MS +15% AS",
-                "Goliath" => "+35% HP\n+15% dmg +size",
-                "GiantSlayer" => "-25% size\n+15% damage",
-                "GlassCannon" => "HP halved\n30% true dmg",
-                "DualWield" => "Extra attack\nbolt (40%)",
-                "Earthwake" => "Dashes leave\nexplosive trail",
-                "Eureka" => "Mana grants\nattack speed",
-                "CircleOfDeath" => "Healing damages\nnearby enemies",
-                "CantTouchThis" => "Every 45s:\n1s invulnerable",
-                "Dropkick" => "Execute low\nHP enemies",
-                _ => name
-            };
+                if (string.IsNullOrEmpty(name)) return name;
+                string descKey = $"Mods.LeagueOfLegendThings.MayhemAugments.{_tier}.{name}.Description";
+                string localized = Language.GetTextValue(descKey);
+                // 如果本地化值等于 key（即未找到本地化），返回 internal name
+                if (localized == descKey) return name;
+                return localized;
+            }
         }
 
         // ============ 可拖拽面板 ============

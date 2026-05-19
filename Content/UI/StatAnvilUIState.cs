@@ -356,7 +356,7 @@ namespace LeagueOfLegendThings.Content.UI
                 float descTop = iconTop + iconSize + 12;
                 string desc;
                 if (_isShardholder)
-                    desc = $"Shardholder\nAll effects ×{_shard?.StatValue ?? 0:P0}\nOne-time choice";
+                    desc = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ShardholderDesc", _shard?.StatValue ?? 0f);
                 else
                     desc = $"{_shard?.GetDisplayName() ?? "???"}\n+{FormatShardValue(_shard)}";
 
