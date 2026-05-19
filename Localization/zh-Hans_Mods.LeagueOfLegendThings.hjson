@@ -433,6 +433,7 @@ UI: {
 		Confirm: 确认
 		Select: 选择
 		ShardholderActivated: 增幅器激活！所有碎片效果 x{0}。海克斯大乱斗增幅器已移除。
+		ShardholderDesc: 碎片增幅器\n所有效果 ×{0:P0}\n一次性选择
 		FaithDetails: 信仰碎片（{0}%）：+{1} 全部伤害，+{2} 防御
 	}
 }
@@ -607,6 +608,16 @@ MayhemAugments: {
 			DisplayName: 飞身踢
 			Description: 处决低血量敌人(5-15%HP), 处决回血
 		}
+	}
+
+	UI: {
+		ChooseTitle: 选择一个增幅器
+		SilverLabel: 白银增幅器 — 困难模式前
+		GoldLabel: 黄金增幅器 — 困难模式
+		PrismaticLabel: 棱彩增幅器 — 击败全部机械Boss
+		Select: 选择
+		Reroll: ↻ 重随
+		Rerolled: ↻ 已重随
 	}
 }
 

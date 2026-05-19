@@ -433,6 +433,7 @@ UI: {
 		Confirm: Confirm
 		Select: Select
 		ShardholderActivated: Shardholder activated! All shard effects x{0}. Mayhem augments removed.
+		ShardholderDesc: Shardholder\nAll effects ×{0:P0}\nOne-time choice
 		FaithDetails: Faith Shard ({0}%): +{1} all damage, +{2} defense
 	}
 }
@@ -607,6 +608,16 @@ MayhemAugments: {
 			DisplayName: Dropkick
 			Description: Execute enemies below 5-15% HP, heal on execute
 		}
+	}
+
+	UI: {
+		ChooseTitle: Choose Your Augment
+		SilverLabel: Silver Augment — Pre-Hardmode
+		GoldLabel: Gold Augment — Hardmode
+		PrismaticLabel: Prismatic Augment — All Mech Bosses
+		Select: Select
+		Reroll: ↻ Reroll
+		Rerolled: ↻ Rerolled
 	}
 }
 
