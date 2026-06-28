@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.Audio;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Press the Attack
     public class PressTheAttackPlayer : ModPlayer

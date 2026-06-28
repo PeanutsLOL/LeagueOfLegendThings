@@ -4,7 +4,7 @@ using Terraria.Audio;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.ID;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class GuardianPlayer : ModPlayer
     {

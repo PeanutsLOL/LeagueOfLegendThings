@@ -4,7 +4,7 @@ using LeagueOfLegendThings.Content.Systems;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Glacial Augment
     public class GlacialAugmentPlayer : ModPlayer

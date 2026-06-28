@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 using LeagueOfLegendThings.Content.Projectiles;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class ArcaneCometPlayer : ModPlayer
     {
@@ -26,7 +26,7 @@ namespace LeagueOfLegendThings.Content.Buffs
                 if (runeSave.ArcaneCometSelected)
                 {
                     // 生成环绕彗星（预备状态），伤害先传0，发射时再更新
-                    var sfx0 = new SoundStyle("LeagueOfLegendThings/Content/Projectiles/Arcane_Comet_SFX_0")
+                    var sfx0 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Arcane_Comet_SFX_0")
                     {
                         Volume = 0.75f,
                         PitchVariance = 0.2f
@@ -77,7 +77,7 @@ namespace LeagueOfLegendThings.Content.Buffs
             proj.velocity = Vector2.Zero;
             proj.netUpdate = true;
 
-            var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/Projectiles/Arcane_Comet_SFX_1")
+            var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Arcane_Comet_SFX_1")
             {
                 Volume = 0.75f,
                 PitchVariance = 0.2f

@@ -7,7 +7,7 @@ using LeagueOfLegendThings;
 using System;
 using Microsoft.Xna.Framework;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Electrocute
     public class ElectrocutePlayer : ModPlayer

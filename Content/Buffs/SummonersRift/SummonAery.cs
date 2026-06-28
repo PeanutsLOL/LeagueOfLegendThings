@@ -8,6 +8,8 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift;
+
 public class SummonAery : ModBuff
 {
     public override string Texture => "LeagueOfLegendThings/Content/Icon/SummonAeryBuff";

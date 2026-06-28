@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Sudden Impact
     public class SuddenImpactPlayer : ModPlayer

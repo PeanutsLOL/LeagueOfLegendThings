@@ -6,7 +6,7 @@ using System;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.ModLoader.IO;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
 	// Grasp of the Undying
 	public class GraspOfUndyingPlayer : ModPlayer

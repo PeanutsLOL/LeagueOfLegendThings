@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LegendHaste : ModBuff
     {

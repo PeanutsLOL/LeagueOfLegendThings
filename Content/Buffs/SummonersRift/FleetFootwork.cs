@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.Audio;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class FleetFootwork : ModBuff
     {

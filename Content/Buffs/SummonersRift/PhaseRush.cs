@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Systems;
 using Microsoft.Xna.Framework;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Phase Rush
     public class PhaseRushPlayer : ModPlayer

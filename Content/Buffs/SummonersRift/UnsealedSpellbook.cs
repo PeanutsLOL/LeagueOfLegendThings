@@ -10,7 +10,7 @@ using Terraria.DataStructures;
 /// Link: https://github.com/abluescarab/tModLoader-WingSlot
 /// </summary>
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // UnsealedSpellbook
     public class UnsealedSpellbookPlayer : ModPlayer

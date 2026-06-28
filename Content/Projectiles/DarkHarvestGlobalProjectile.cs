@@ -7,6 +7,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Buffs;
+using LeagueOfLegendThings.Content.Buffs.SummonersRift;
 using LeagueOfLegendThings;
 
 namespace LeagueOfLegendThings.Content.Systems
