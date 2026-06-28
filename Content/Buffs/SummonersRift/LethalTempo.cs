@@ -10,7 +10,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LethalTempo : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/LethalTempo";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Lethal_Tempo";
         // 最大叠加层数
         public const int MaxStacks = 6;
         // 每层近战攻击速度加成
