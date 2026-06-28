@@ -1,18 +1,35 @@
+# IDE
 .vs/
 .vscode/
-bin/
-obj/
 *.user
 *.suo
 *.userprefs
-*.log
+*.ide
+
+# Build output
+bin/
+obj/
+
+# tModLoader dev tools
+.inspect/
+
+# Graphify knowledge graph
+graphify-out/
+
+# OS junk
 .DS_Store
+*.log
+
+# ReSharper
 *.ncb
 *.sdf
 TestResults/
 _ReSharper*/
 packages/
-*.ide
+
+# Misc
 .history/
 .fake
+
+# Claude Code (local settings only)
 .claude/settings.local.json

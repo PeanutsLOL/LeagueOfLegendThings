@@ -5,7 +5,7 @@ using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Sorcery small runes
     public class SorcerySmallRunesPlayer : ModPlayer

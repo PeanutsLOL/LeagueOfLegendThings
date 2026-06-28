@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class Triumph : ModBuff
     {

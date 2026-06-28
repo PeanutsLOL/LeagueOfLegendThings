@@ -6,7 +6,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // First Strike
     public class FirstStrikePlayer : ModPlayer

@@ -5,11 +5,8 @@
 
 	<!-- General -->
 	<PropertyGroup>
-		
+
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Content\Config\LethalTempoConfig.cs" />
-	</ItemGroup>
 
 	<!-- References -->
 	<ItemGroup>

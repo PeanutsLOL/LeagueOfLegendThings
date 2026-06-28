@@ -135,7 +135,7 @@ namespace LeagueOfLegendThings.Content.Items.Weapons.PreHM
                 RefreshRapidFireDuration();
                 
                 // 播放激活音效
-                var activateSound = new SoundStyle("LeagueOfLegendThings/Content/Items/Weapons/PreHM/TrueIceBowAshe/RMBATKActavate");
+                var activateSound = new SoundStyle("LeagueOfLegendThings/Content/Items/Weapons/PreHM/TrueIceBowAshe/RMBATKActivate");
                 SoundEngine.PlaySound(activateSound, Player.Center);
             }
         }

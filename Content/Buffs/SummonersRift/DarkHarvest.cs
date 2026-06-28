@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Systems;
 using LeagueOfLegendThings;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Dark Harvest
     public class DarkHarvestPlayer : ModPlayer

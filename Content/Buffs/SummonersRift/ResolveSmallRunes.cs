@@ -5,7 +5,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Resolve small runes
     public class ResolveSmallRunesPlayer : ModPlayer

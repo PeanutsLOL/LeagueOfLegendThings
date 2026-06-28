@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class PresenceOfMind : ModBuff
     {

@@ -151,7 +151,7 @@ namespace LeagueOfLegendThings.Content.Projectiles
                 }
 
                 // 播放爆炸音效
-                var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/Projectiles/Arcane_Comet_SFX_2")
+                var sfx2 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Arcane_Comet_SFX_2")
                 {
                     Volume = 0.75f,
                     PitchVariance = 0.2f

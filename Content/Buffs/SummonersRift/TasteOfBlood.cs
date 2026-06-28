@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     // Taste of Blood
     public class TasteOfBloodPlayer : ModPlayer

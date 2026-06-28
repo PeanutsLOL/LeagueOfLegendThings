@@ -6,7 +6,7 @@ using LeagueOfLegendThings.Content.Projectiles;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.Audio;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LethalTempo : ModBuff
     {

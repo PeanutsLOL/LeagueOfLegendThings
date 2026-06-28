@@ -7,7 +7,7 @@ using System;
 using LeagueOfLegendThings.Content.Buffs;
 using LeagueOfLegendThings.Content.Systems;
 
-namespace LeagueOfLegendThings.Content.Buffs
+namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
 	public class AftershockPlayer : ModPlayer
 	{
