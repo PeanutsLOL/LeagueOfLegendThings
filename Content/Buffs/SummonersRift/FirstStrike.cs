@@ -266,7 +266,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 if (target is NPC npc && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int sum = (int)Projectile.localAI[0];
-                    int dmg = (int)(sum * 0.15f + npc.defense * 5);
+                    float classBonus = RuneDamageHelper.GetHighestClassBonus(owner);
+                    int weaponDmg = RuneDamageHelper.GetHeldWeaponDamage(owner);
+                    int dmg = (int)(sum * 0.15f * (1f + classBonus) + npc.defense * 5 + weaponDmg * 1.5f);
                     if (dmg < 1) dmg = 1;
                     npc.SimpleStrikeNPC(dmg, owner.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
                 }

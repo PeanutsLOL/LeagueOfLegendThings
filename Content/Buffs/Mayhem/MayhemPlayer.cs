@@ -30,6 +30,10 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
         public List<string> TakenShardIds = new();
         /// <summary>已选择碎片的数值列表（与 IDs 一一对应）</summary>
         public List<float> TakenShardValues = new();
+        /// <summary>Faith 碎片生成的子碎片 ID（每 2 个对应一个 Faith 选择）</summary>
+        public List<string> FaithSubShardIds = new();
+        /// <summary>Faith 碎片生成的子碎片数值（与 FaithSubShardIds 一一对应）</summary>
+        public List<float> FaithSubShardValues = new();
         /// <summary>已购买铁砧总次数</summary>
         public int TotalShardsTaken;
 
@@ -143,7 +147,7 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             if (_cachedLifeSteal > 0f)
             {
                 float stolen = damageDone * _cachedLifeSteal;
-                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().Fill(stolen);
+                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().TryConsume(stolen);
             }
 
             if (HasShardholder) return; // Shardholder 激活时无增幅器效果
@@ -166,7 +170,7 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             if (_cachedLifeSteal > 0f)
             {
                 float stolen = damageDone * _cachedLifeSteal;
-                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().Fill(stolen);
+                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().TryConsume(stolen);
             }
 
             if (HasShardholder) return;
@@ -229,6 +233,8 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             tag[nameof(HasShardholder)] = HasShardholder;
             tag[nameof(TakenShardIds)] = TakenShardIds;
             tag[nameof(TakenShardValues)] = TakenShardValues;
+            tag[nameof(FaithSubShardIds)] = FaithSubShardIds;
+            tag[nameof(FaithSubShardValues)] = FaithSubShardValues;
             tag[nameof(TotalShardsTaken)] = TotalShardsTaken;
         }
 
@@ -251,6 +257,44 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                 var valList = tag.GetList<float>(nameof(TakenShardValues));
                 TakenShardValues = new List<float>(valList);
             }
+            if (tag.ContainsKey(nameof(FaithSubShardIds)))
+            {
+                var idList = tag.GetList<string>(nameof(FaithSubShardIds));
+                FaithSubShardIds = new List<string>(idList);
+            }
+            if (tag.ContainsKey(nameof(FaithSubShardValues)))
+            {
+                var valList = tag.GetList<float>(nameof(FaithSubShardValues));
+                FaithSubShardValues = new List<float>(valList);
+            }
+
+            // 迁移：旧存档的 Faith 没有子碎片数据，为其补全
+            MigrateFaithSubShards();
+        }
+
+        /// <summary>为旧存档中缺少子碎片的 Faith 补全随机数据</summary>
+        private void MigrateFaithSubShards()
+        {
+            int faithCount = 0;
+            foreach (var id in TakenShardIds)
+                if (id.Contains("_Faith")) faithCount++;
+
+            while (FaithSubShardIds.Count < faithCount * 2)
+            {
+                var (sub1, sub2) = StatShardSystem.GenerateFaithSubShards();
+                FaithSubShardIds.Add(sub1.Id);
+                FaithSubShardValues.Add(sub1.StatValue);
+                FaithSubShardIds.Add(sub2.Id);
+                FaithSubShardValues.Add(sub2.StatValue);
+            }
+
+            // 清理多余数据（玩家可能通过某种方式删除了 Faith 碎片）
+            while (FaithSubShardIds.Count > faithCount * 2)
+            {
+                int last = FaithSubShardIds.Count - 1;
+                FaithSubShardIds.RemoveAt(last);
+                FaithSubShardValues.RemoveAt(last);
+            }
         }
 
         /// <summary>重置所有属性锻造器数据（调试用）</summary>
@@ -258,6 +302,8 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
         {
             TakenShardIds.Clear();
             TakenShardValues.Clear();
+            FaithSubShardIds.Clear();
+            FaithSubShardValues.Clear();
             TotalShardsTaken = 0;
             HasShardholder = false;
             ShardholderMultiplier = 1.0f;
@@ -329,67 +375,96 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             _cachedMeleeDmg = _cachedRangedDmg = _cachedMagicDmg = _cachedSummonDmg = _cachedAllDmg = 0f;
             _cachedAtkSpd = _cachedCritChance = _cachedMoveSpd = _cachedLifeSteal = 0f;
 
-            float mult = HasShardholder ? ShardholderMultiplier : 1.0f;
+            float shMult = HasShardholder ? ShardholderMultiplier : 1.0f;
+            int faithIdx = 0;
 
             for (int i = 0; i < TakenShardIds.Count && i < TakenShardValues.Count; i++)
             {
                 string id = TakenShardIds[i];
                 float val = TakenShardValues[i];
 
-                // Shardholder 本身不产生属性，只影响倍率（已在 mult 中体现）
+                // Shardholder 本身不产生属性，只影响倍率
                 if (id == StatShardSystem.SHARDHOLDER_ID) continue;
 
-                val *= mult;
-
                 // 根据 ID 前缀判断归属
-                if (id.StartsWith("Sil_") || id.StartsWith("Gold_") || id.StartsWith("Pris_"))
-                {
-                    string suffix = id.Substring(id.IndexOf('_') + 1);
+                if (!id.StartsWith("Sil_") && !id.StartsWith("Gold_") && !id.StartsWith("Pris_"))
+                    continue;
 
-                    switch (suffix)
+                string suffix = id.Substring(id.IndexOf('_') + 1);
+
+                // Faith 碎片：从子碎片数据中读取随机生成的 2 个黄金碎片
+                if (suffix == "Faith")
+                {
+                    int subIdx = faithIdx * 2;
+                    faithIdx++;
+
+                    if (subIdx + 1 < FaithSubShardIds.Count)
                     {
-                        case "Melee":  _cachedMeleeDmg  += val; break;
-                        case "Ranged": _cachedRangedDmg += val; break;
-                        case "Magic":  _cachedMagicDmg  += val; break;
-                        case "Summon": _cachedSummonDmg += val; break;
-                        case "Def":    _cachedDefense   += (int)val; break;
-                        case "Life":
-                            if (id.StartsWith("Pris_"))
-                                _cachedMaxLifePct += val;  // 棱彩百分比
-                            else
-                                _cachedMaxLife += (int)val; // 固定值
-                            break;
-                        case "Mana":   _cachedMaxMana   += (int)val; break;
-                        case "AS":     _cachedAtkSpd    += val; break;
-                        case "Crit":   _cachedCritChance += val; break;
-                        case "Move":   _cachedMoveSpd   += val; break;
-                        case "LS":     _cachedLifeSteal += val; break;
-                        case "AllDmg": _cachedAllDmg    += val; break;
-                        case "ArmPen": /* ArmorPen 不在此处处理 */ break;
-                        case "CritDmg": /* CritDmg 在 ModifyHitNPC 中处理 */ break;
-                        case "Heal":   break;
-                        case "Might":
-                            _cachedMeleeDmg  += val;
-                            _cachedRangedDmg += val;
-                            break;
-                        case "Unbreak":
-                            _cachedDefense += (int)val;
-                            _cachedMaxLife += (int)(val * 2);
-                            break;
-                        case "Precision":
-                            _cachedCritChance += val;
-                            _cachedAtkSpd    += val;
-                            break;
-                        case "Vitality":
-                            _cachedMaxLife += (int)val;
-                            _cachedMaxMana += (int)val;
-                            break;
-                        case "Faith":
-                            _cachedAllDmg  += val * 0.03f * mult;
-                            _cachedDefense += (int)(val * 3f * mult);
-                            break;
+                        // 新行为：应用随机子碎片（val 已乘 shMult，子碎片效果 = 子碎片基础值 × Faith倍率 × Shardholder倍率）
+                        for (int s = 0; s < 2; s++)
+                        {
+                            string subId = FaithSubShardIds[subIdx + s];
+                            float subVal = FaithSubShardValues[subIdx + s] * val; // val = FaithStatValue * shMult
+                            ApplyShardStat(subId, subVal);
+                        }
                     }
+                    else
+                    {
+                        // 旧存档兼容：固定全伤+防御
+                        float faithVal = val * shMult;
+                        _cachedAllDmg  += faithVal * 0.03f;
+                        _cachedDefense += (int)(faithVal * 3f);
+                    }
+                    continue;
                 }
+
+                val *= shMult;
+                ApplyShardStat(id, val);
+            }
+        }
+
+        /// <summary>根据碎片 ID 和后缀，将值累加到对应缓存字段</summary>
+        private void ApplyShardStat(string id, float val)
+        {
+            if (!id.Contains('_')) return;
+            string suffix = id.Substring(id.IndexOf('_') + 1);
+
+            switch (suffix)
+            {
+                case "Melee":  _cachedMeleeDmg  += val; break;
+                case "Ranged": _cachedRangedDmg += val; break;
+                case "Magic":  _cachedMagicDmg  += val; break;
+                case "Summon": _cachedSummonDmg += val; break;
+                case "Def":    _cachedDefense   += (int)val; break;
+                case "Life":
+                    if (id.StartsWith("Pris_"))
+                        _cachedMaxLifePct += val;
+                    else
+                        _cachedMaxLife += (int)val;
+                    break;
+                case "Mana":   _cachedMaxMana   += (int)val; break;
+                case "AS":     _cachedAtkSpd    += val; break;
+                case "Crit":   _cachedCritChance += val; break;
+                case "Move":   _cachedMoveSpd   += val; break;
+                case "LS":     _cachedLifeSteal += val; break;
+                case "AllDmg": _cachedAllDmg    += val; break;
+                case "ArmPen": case "CritDmg": case "Heal": break;
+                case "Might":
+                    _cachedMeleeDmg  += val;
+                    _cachedRangedDmg += val;
+                    break;
+                case "Unbreak":
+                    _cachedDefense += (int)val;
+                    _cachedMaxLife += (int)(val * 2);
+                    break;
+                case "Precision":
+                    _cachedCritChance += val;
+                    _cachedAtkSpd    += val;
+                    break;
+                case "Vitality":
+                    _cachedMaxLife += (int)val;
+                    _cachedMaxMana += (int)val;
+                    break;
             }
         }
 
@@ -431,14 +506,24 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             TotalShardsTaken++;
             RecalcCachedStats();
 
-            // Faith Shard 在聊天栏告知具体属性
+            // Faith Shard：随机抽取 2 个黄金碎片效果
             if (shard.Id.Contains("_Faith"))
             {
+                var (sub1, sub2) = StatShardSystem.GenerateFaithSubShards();
+                FaithSubShardIds.Add(sub1.Id);
+                FaithSubShardValues.Add(sub1.StatValue);
+                FaithSubShardIds.Add(sub2.Id);
+                FaithSubShardValues.Add(sub2.StatValue);
+
+                // 重新计算属性（子碎片数据已加入）
+                RecalcCachedStats();
+
                 float faithPct = shard.StatValue * 100f;
-                float dmg = shard.StatValue * 0.03f * (HasShardholder ? ShardholderMultiplier : 1f);
-                int def = (int)(shard.StatValue * 3f * (HasShardholder ? ShardholderMultiplier : 1f));
+                float shMult = HasShardholder ? ShardholderMultiplier : 1f;
+                string desc1 = StatShardSystem.FormatSubShardText(sub1, shard.StatValue * shMult);
+                string desc2 = StatShardSystem.FormatSubShardText(sub2, shard.StatValue * shMult);
                 string faithMsg = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.FaithDetails");
-                Main.NewText(string.Format(faithMsg, $"{faithPct:F0}", $"{dmg:P0}", $"{def}"), 200, 220, 255);
+                Main.NewText(string.Format(faithMsg, $"{faithPct:F0}", desc1, desc2), 200, 220, 255);
             }
         }
 

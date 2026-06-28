@@ -371,6 +371,9 @@ namespace LeagueOfLegendThings.Content.UI
                 string desc;
                 if (_isShardholder)
                     desc = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ShardholderDesc", _shard?.StatValue ?? 0f);
+                else if (_shard?.StatKey == "Faith")
+                    desc = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.FaithCardDesc",
+                        _shard.GetDisplayName(), _shard.StatValue);
                 else if (_shard?.IsDualStat == true)
                     desc = FormatDualStatDesc(_shard);
                 else
@@ -391,8 +394,8 @@ namespace LeagueOfLegendThings.Content.UI
                     bg.Append(descLine);
                 }
 
-                // 层标签
-                var tierBadge = new UIText(_tier.ToString(), 0.72f);
+                // 层标签（使用本地化）
+                var tierBadge = new UIText(TierLabel(_tier), 0.72f);
                 tierBadge.HAlign = 0.5f;
                 tierBadge.Top.Set(h - 22, 0f);
                 tierBadge.Left.Set(10, 0f);
@@ -404,7 +407,8 @@ namespace LeagueOfLegendThings.Content.UI
                 if (_isShardholder && _warned)
                 {
                     float btnW = w * 0.6f, btnH = 30;
-                    var btn = new UITextPanel<string>("Confirm", 0.85f);
+                    string confirmText = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.Confirm", "Confirm");
+                    var btn = new UITextPanel<string>(confirmText, 0.85f);
                     btn.Width.Set(btnW, 0f); btn.Height.Set(btnH, 0f);
                     btn.Left.Set((w - btnW) / 2f, 0f); btn.Top.Set(h - btnH - 36, 0f);
                     btn.SetPadding(4);
@@ -464,7 +468,7 @@ namespace LeagueOfLegendThings.Content.UI
                 _ => Color.White
             };
 
-            /// <summary>双属性碎片描述 — 同时展示两个受影响的属性</summary>
+            /// <summary>双属性碎片描述 — 同时展示两个受影响的属性（使用本地化名称）</summary>
             private static string FormatDualStatDesc(StatShardSystem.Shard shard)
             {
                 if (shard == null) return "";
@@ -472,14 +476,28 @@ namespace LeagueOfLegendThings.Content.UI
                 string name = shard.GetDisplayName();
                 string suffix = shard.Id.Contains('_') ? shard.Id.Substring(shard.Id.IndexOf('_') + 1) : "";
 
+                string melee  = StatName("MeleeDmg",  "Melee Damage");
+                string ranged = StatName("RangedDmg", "Ranged Damage");
+                string def    = StatName("Defense",   "Defense");
+                string hp     = StatName("MaxLife",   "Max Life");
+                string crit   = StatName("CritChance","Crit Chance");
+                string atkspd = StatName("AttackSpeed","Attack Speed");
+                string mana   = StatName("MaxMana",   "Max Mana");
+
                 return suffix switch
                 {
-                    "Might" => $"{name}\n+{v:P0} Melee Damage\n+{v:P0} Ranged Damage",
-                    "Unbreak" => $"{name}\n+{(int)v} Defense\n+{(int)(v * 2)} Max Life",
-                    "Precision" => $"{name}\n+{v:P0} Crit Chance\n+{v:P0} Attack Speed",
-                    "Vitality" => $"{name}\n+{(int)v} Max Life\n+{(int)v} Max Mana",
+                    "Might" => $"{name}\n+{v:P0} {melee}\n+{v:P0} {ranged}",
+                    "Unbreak" => $"{name}\n+{(int)v} {def}\n+{(int)(v * 2)} {hp}",
+                    "Precision" => $"{name}\n+{v:P0} {crit}\n+{v:P0} {atkspd}",
+                    "Vitality" => $"{name}\n+{(int)v} {hp}\n+{(int)v} {mana}",
                     _ => $"{name}\n+{FormatShardValue(shard)}"
                 };
+            }
+
+            private static string StatName(string key, string fallback)
+            {
+                string loc = Language.GetTextValue($"Mods.LeagueOfLegendThings.MayhemPlayer.Stats.{key}");
+                return (string.IsNullOrEmpty(loc) || loc.EndsWith(key)) ? fallback : loc;
             }
         }
 

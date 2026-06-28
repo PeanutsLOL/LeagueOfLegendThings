@@ -85,7 +85,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             {
                 int denom = Player.statLifeMax2 + Player.statManaMax2;
                 float scale = denom > 0 ? (accumulatedDamage * 0.45f) * (denom / 700f) : 0f;
-                int bonusDamage = Math.Max(1, (int)MathF.Round(100f + scale));
+                float classBonus = RuneDamageHelper.GetHighestClassBonus(Player);
+                int weaponDmg = RuneDamageHelper.GetHeldWeaponDamage(Player);
+                int bonusDamage = Math.Max(1, (int)MathF.Round((100f + scale) * (1f + classBonus) + weaponDmg));
 
                 target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
                 CombatText.NewText(Player.Hitbox, Color.Aqua, $"Dealt {bonusDamage} DMG");

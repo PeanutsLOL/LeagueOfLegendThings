@@ -67,18 +67,13 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         int bonusDamage = (int)(2 * (300f + 1100f * scalingFactor));
 
                         target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: true, knockBack: 0f, damageType: DamageClass.Generic);
-                        CombatText.NewText(Player.Hitbox, Color.DarkRed, $"Dealt {bonusDamage} DMG");
+                        CombatText.NewText(Player.Hitbox, Color.DarkRed, $"Dealt {bonusDamage * 2} DMG");
 
                         GetLightningPath(target, out Vector2 startPos, out Vector2 endPos);
-                        if (Main.netMode == NetmodeID.SinglePlayer)
-                        {
-                            SpawnLightningEffect(target);
-                            PlayElectrocuteSfx(target.Center);
-                        }
-                        else if (Main.netMode == NetmodeID.Server)
-                        {
+                        if (Main.netMode == NetmodeID.Server)
                             BroadcastElectrocuteFx(startPos, endPos);
-                        }
+                        SpawnLightningEffect(target);
+                        PlayElectrocuteSfx(target.Center);
 
                         if (Main.netMode != NetmodeID.SinglePlayer)
                         {
@@ -121,26 +116,29 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             if (hitCount >= 3)
             {
-                // 指数级别伤害缩放：在620属性时达到50%增长
+                // 基础伤害：随HP+Mana缩放
                 float healthMana = Player.statLifeMax2 + Player.statManaMax2;
                 float ratio = (float)System.Math.Sqrt(healthMana / 2480f);
-                float scalingFactor = System.Math.Min(ratio, 20f);  // 上限20倍
-                int bonusDamage = (int)(300f + 1100f * scalingFactor);
+                float scalingFactor = System.Math.Min(ratio, 20f);
+                int baseDmg = (int)(300f + 1100f * scalingFactor);
+
+                // 增强：最高职业加成 + 武器面板 + 1%目标HP
+                float classBonus = RuneDamageHelper.GetHighestClassBonus(Player);
+                int weaponDmg = RuneDamageHelper.GetHeldWeaponDamage(Player);
+                int hpDmg = RuneDamageHelper.GetPercentHPDamage(target, 0.01f);
+                int bonusDamage = (int)(baseDmg * (1f + classBonus)) + weaponDmg + hpDmg;
 
                 target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: true, knockBack: 0f, damageType: DamageClass.Generic);
-                CombatText.NewText(Player.Hitbox, Color.Red, $"Dealt {bonusDamage} DMG");
+                CombatText.NewText(Player.Hitbox, Color.Red, $"Dealt {bonusDamage * 2} DMG");
 
-                // 生成红色闪电特效
+                // 特效：单人/客户端本地播放，服务器广播
                 GetLightningPath(target, out Vector2 startPos, out Vector2 endPos);
-                if (Main.netMode == NetmodeID.SinglePlayer)
-                {
-                    SpawnLightningEffect(target);
-                    PlayElectrocuteSfx(target.Center);
-                }
-                else if (Main.netMode == NetmodeID.Server)
+                if (Main.netMode == NetmodeID.Server)
                 {
                     BroadcastElectrocuteFx(startPos, endPos);
                 }
+                SpawnLightningEffect(target);
+                PlayElectrocuteSfx(target.Center);
 
                 if (Main.netMode != NetmodeID.SinglePlayer)
                 {

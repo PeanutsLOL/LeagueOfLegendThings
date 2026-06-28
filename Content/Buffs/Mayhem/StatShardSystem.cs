@@ -52,16 +52,33 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             public string GetDescription()
             {
                 if (Id == "Shardholder") return $"Shardholder: ALL shard effects +{StatValue:P0}";
-                return FormatStat(GetDisplayName(), StatValue);
+                return FormatStat();
             }
 
-            private static string FormatStat(string name, float val)
+            /// <summary>根据 StatKey/Id 后缀判断格式，而不是依赖可被汉化的 DisplayName</summary>
+            private string FormatStat()
             {
-                if (name.Contains("%") || name.Contains("Crit") || name.Contains("Steal")
-                    || name.Contains("Speed") || name.Contains("Damage") || name.Contains("Power"))
+                string name = GetDisplayName();
+                float val = StatValue;
+
+                // 百分比类
+                if (StatKey is "MeleeDmg" or "RangedDmg" or "MagicDmg" or "SummonDmg" or "AllDmg"
+                    or "AtkSpeed" or "CritChance" or "CritDmg" or "MoveSpeed" or "LifeSteal" or "HealPower")
                     return $"{name}\n+{val:P0}";
-                if (name.Contains("Life") || name.Contains("Mana") || name.Contains("Defense"))
+
+                // 双属性百分比类
+                if (StatKey is "Might" or "Precision")
+                    return $"{name}\n+{val:P0}";
+
+                // 绝对值类
+                if (StatKey is "Defense" or "MaxLife" or "MaxMana" or "ArmorPen"
+                    or "Unbreakable" or "Vitality")
                     return $"{name}\n+{val:F0}";
+
+                // 棱彩百分比生命
+                if (Id.StartsWith("Pris_") && StatKey == "MaxLife")
+                    return $"{name}\n+{val:P0}";
+
                 return $"{name}\n+{val:F1}";
             }
         }
@@ -243,6 +260,64 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             return result;
         }
 
+        // ==================== Faith 子碎片生成 ====================
+
+        /// <summary>
+        /// 为 Faith 碎片随机生成 2 个不重复的黄金碎片（排除 Faith 自身）。
+        /// 返回的碎片 StatValue 已在 [Base, Max] 范围内随机取值。
+        /// </summary>
+        public static (Shard sub1, Shard sub2) GenerateFaithSubShards()
+        {
+            var available = new List<Shard>(GoldShardsPool);
+            // 排除 Faith 自身，避免无限递归
+            available.RemoveAll(s => s.StatKey == "Faith");
+
+            // Fisher-Yates shuffle
+            int n = available.Count;
+            while (n > 1) { n--; int k = Main.rand.Next(n + 1); (available[k], available[n]) = (available[n], available[k]); }
+
+            var sub1 = CloneWithRandomValue(available[0]);
+            var sub2 = CloneWithRandomValue(available[1]);
+
+            return (sub1, sub2);
+        }
+
+        private static Shard CloneWithRandomValue(Shard template)
+        {
+            float val = template.MaxValue > template.BaseValue
+                ? template.BaseValue + (float)Main.rand.NextDouble() * (template.MaxValue - template.BaseValue)
+                : template.BaseValue;
+
+            return new Shard
+            {
+                Id = template.Id,
+                DisplayName = template.DisplayName,
+                StatKey = template.StatKey,
+                StatValue = val,
+                BaseValue = template.BaseValue,
+                MaxValue = template.MaxValue,
+                Tier = template.Tier,
+                IsDualStat = template.IsDualStat,
+            };
+        }
+
+        /// <summary>将子碎片的值格式化为可读字符串（如 "+6% Melee Damage" 或 "+5 Defense"）</summary>
+        public static string FormatSubShardText(Shard shard, float multiplier)
+        {
+            float v = shard.StatValue * multiplier;
+            string name = shard.GetDisplayName();
+
+            // 判断是否为百分比类属性
+            string suffix = shard.Id.Contains('_') ? shard.Id.Substring(shard.Id.IndexOf('_') + 1) : "";
+            bool isPercent = suffix is "Melee" or "Ranged" or "Magic" or "Summon" or "AllDmg" or "Might"
+                or "AS" or "Crit" or "Move" or "LS" or "CritDmg" or "Precision";
+
+            if (isPercent)
+                return $"+{v:P0} {name}";
+            else
+                return $"+{(int)v} {name}";
+        }
+
         // ==================== 属性计算 ====================
 
         /// <summary>
@@ -278,9 +353,8 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                         AddStat(stats, KEY_MAX_MANA, val);
                         break;
                     case "Faith":
-                        // Faith: 额外抽取 2 个随机黄金碎片（简化版：直接给两个通用属性）
-                        AddStat(stats, KEY_ALL_DMG, 0.05f * shardholderMultiplier);
-                        AddStat(stats, KEY_DEFENSE, 5f * shardholderMultiplier);
+                        // Faith: 额外抽取 2 个随机黄金碎片（见 GenerateFaithSubShards）
+                        // 具体属性在 MayhemPlayer.RecalcCachedStats 中通过子碎片数据计算
                         break;
                     default:
                         AddStat(stats, shard.StatKey, val);

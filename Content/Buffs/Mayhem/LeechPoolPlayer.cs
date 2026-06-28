@@ -1,13 +1,15 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using LeagueOfLegendThings.Content.Config;
+using LeagueOfLegendThings.Content.Systems;
 
 namespace LeagueOfLegendThings.Content.Buffs.Mayhem
 {
     /// <summary>
-    /// 吸血池 —— 所有生命偷取填入池子，再按规则回血。
+    /// 吸血池 —— 所有生命偷取消耗池子余额，立即回血。
     /// 池上限 = 50 + 吸血% × 250 / (吸血% + 30)，极限 ~300。
-    /// 每秒恢复 8%，满血不消耗，池空不触发。
+    /// 每秒恢复上限的 8%，池空时吸血无效果。
     /// </summary>
     public class LeechPoolPlayer : ModPlayer
     {
@@ -17,12 +19,14 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
         private const float RegenRatePerSec = 0.08f;
 
         public float PoolCurrent { get; private set; }
-        private float _regenBuffer;
+        private float _fractionBuffer; // 小数缓存：攒够 1 点就回血
+        private int _tickTimer;
 
         public override void Initialize()
         {
             PoolCurrent = 0f;
-            _regenBuffer = 0f;
+            _fractionBuffer = 0f;
+            _tickTimer = 0;
         }
 
         public override void SaveData(TagCompound tag)
@@ -36,51 +40,67 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                 PoolCurrent = tag.GetFloat("leechPool");
         }
 
-        /// <summary>计算当前吸血%对应的池上限</summary>
+        /// <summary>计算当前吸血%对应的池上限。无偷取时返回 0。</summary>
         public float PoolMax()
         {
             var leech = Player.GetModPlayer<LeechPoolCollector>();
             float pct = leech.TotalLeechPercent;
-            if (pct <= 0f) return PoolBase;
+            if (pct <= 0f) return 0f;
             return PoolBase + pct * PoolA / (pct + PoolB);
         }
 
         public override void PostUpdateMiscEffects()
         {
+            // 每帧裁剪池上限（响应模式/符文切换）
             float max = PoolMax();
             if (PoolCurrent > max) PoolCurrent = max;
             if (PoolCurrent < 0f) PoolCurrent = 0f;
 
-            // 池子每秒恢复
+            // 每秒恢复一次
+            _tickTimer++;
+            if (_tickTimer < 60) return;
+            _tickTimer = 0;
+
             if (PoolCurrent < max)
             {
-                _regenBuffer += max * RegenRatePerSec / 60f;
-                int regen = (int)_regenBuffer;
-                if (regen > 0)
-                {
-                    PoolCurrent = System.Math.Min(PoolCurrent + regen, max);
-                    _regenBuffer -= regen;
-                }
-            }
-
-            // 自动回血：玩家不满血时从池子消耗
-            int missing = Player.statLifeMax2 - Player.statLife;
-            if (missing > 0 && PoolCurrent > 0)
-            {
-                int heal = (int)System.Math.Min(missing, PoolCurrent);
-                Player.statLife += heal;
-                PoolCurrent -= heal;
-                Player.HealEffect(heal, false);
+                PoolCurrent = System.Math.Min(PoolCurrent + max * RegenRatePerSec, max);
             }
         }
 
-        /// <summary>向池子填入生命偷取量</summary>
-        public void Fill(float amount)
+        /// <summary>
+        /// 从池子消费吸血量，立即回血。
+        /// 小额吸血会累积在缓冲区，攒够 1 点才真正回血扣池。
+        /// 池空时不产生任何治疗。
+        /// </summary>
+        /// <summary>
+        /// 消耗池子回血。amount = 伤害 × 生命偷取率。
+        /// 整数部分即时治疗；小数部分累积，攒够 1 点后一起治疗。
+        /// </summary>
+        public void TryConsume(float amount)
         {
-            if (amount <= 0f) return;
-            float max = PoolMax();
-            if (PoolCurrent >= max) return;
-            PoolCurrent = System.Math.Min(PoolCurrent + amount, max);
+            if (amount <= 0f || PoolCurrent < 1f) return;
+
+            int missing = Player.statLifeMax2 - Player.statLife;
+            if (missing <= 0) return;
+
+            // 整数部分即时回血，小数部分存入缓冲
+            int integerPart = (int)amount;
+            _fractionBuffer += amount - integerPart;
+
+            // 缓冲攒够 1 点就加到治疗里
+            int fromBuffer = (int)_fractionBuffer;
+            int heal = integerPart + fromBuffer;
+
+            if (heal <= 0) return;
+
+            _fractionBuffer -= fromBuffer;
+            if (heal > (int)PoolCurrent) heal = (int)PoolCurrent;
+            if (heal > missing) heal = missing;
+            if (heal <= 0) return;
+
+            Player.statLife += heal;
+            PoolCurrent -= heal;
+            Player.HealEffect(heal, false);
         }
     }
 
@@ -95,8 +115,24 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             get
             {
                 float total = 0f;
-                var mp = Player.GetModPlayer<MayhemPlayer>();
-                total += mp.CachedLifeSteal * 100f;
+                var cfg = ModContent.GetInstance<RuneConfig>();
+
+                // Mayhem 碎片偷取（StatShards）
+                if (cfg.EnableAramMayhemRune)
+                {
+                    var mp = Player.GetModPlayer<MayhemPlayer>();
+                    total += mp.CachedLifeSteal * 100f;
+                }
+
+                // 普通符文偷取（预估最大可能值，用于池上限）
+                if (!cfg.EnableAramMayhemRune)
+                {
+                    var rs = ModContent.GetInstance<RuneSaveSystem>();
+                    if (rs.ConquerorSelected) total += 0.5f;
+                    if (rs.LegendBloodlineSelected) total += 4.5f; // 满层 15×0.3%
+                    if (rs.RavenousHunterSelected) total += 0.25f;  // 满层 5×0.05%
+                }
+
                 return total;
             }
         }

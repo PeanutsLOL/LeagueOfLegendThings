@@ -134,7 +134,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
 			int finalDamage = baseDamage + extraFromGrasp;
 
-			// Apply to nearby hostile NPCs
+			// Apply to nearby hostile NPCs（每目标 3% HP 附加伤害）
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
@@ -143,7 +143,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 				float dist = Vector2.Distance(npc.Center, Player.Center);
 				if (dist <= RangePixels)
 				{
-					npc.SimpleStrikeNPC(finalDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Magic);
+					int hpDmg = RuneDamageHelper.GetPercentHPDamage(npc, 0.03f);
+					npc.SimpleStrikeNPC(finalDamage + hpDmg, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Magic);
 				}
 			}
 		}
