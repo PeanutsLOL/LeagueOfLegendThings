@@ -235,9 +235,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                     float extraAttackSpeed = Player.GetTotalAttackSpeed(damageClass) - 1f;
                     float finalDamage = baseDamage * (1f + extraAttackSpeed);
 
-                    // ai0：0/1 轮流决定 L/R，ai1：-1 上抛，+1 下抛
+                    // ai[0]：0=L/1=R 轮流；ai[1]：OnSpawn 中设为飞行方向角，此处占位即可
                     float side = nextNoteSide;
-                    float arcSign = side == 0 ? -1f : 1f;
 
                     Projectile.NewProjectile(
                         new EntitySource_OnHit(Player, target),
@@ -248,7 +247,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         0f,
                         Player.whoAmI,
                         side,
-                        arcSign
+                        0f
                     );
 
                     nextNoteSide ^= 1; // 轮流切换

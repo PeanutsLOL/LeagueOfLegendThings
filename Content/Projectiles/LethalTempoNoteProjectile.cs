@@ -18,8 +18,8 @@ namespace LeagueOfLegendThings.Content.Projectiles
     {
         // 使用 L 贴图作为默认贴图，避免缺少默认资源导致加载失败
         public override string Texture => "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
-        // ai[0]：0 = L 贴图，1 = R 贴图（同时决定上下交替）
-        // ai[1]：起始抛物线方向符号，-1 = 向上拋，+1 = 向下拋
+        // ai[0]：0 = L 贴图（向上弧），1 = R 贴图（向下弧）
+        // ai[1]：飞行基准方向角（弧度），在 OnSpawn 中设置，用于对称弧线
         // localAI[0]：阶段，0 = 抛物线，1 = 追踪
         // localAI[1]：抛物线计时器
 
@@ -57,11 +57,20 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override void OnSpawn(IEntitySource source)
         {
+            // 飞行基准方向：从玩家指向目标
             Vector2 dir = Projectile.velocity.SafeNormalize(Vector2.UnitX);
-            float arcSign = Projectile.ai[1] >= 0 ? 1f : -1f; // -1 上抛，+1 下抛
+            // 垂直方向：dir 逆时针旋转 90° = (-dir.y, dir.x)
+            Vector2 perp = new Vector2(-dir.Y, dir.X);
 
-            // 初速度：前向 + 垂直（正负号对称）
-            Projectile.velocity = dir * ForwardSpeed + new Vector2(0f, ArcLift * arcSign);
+            // 弧线方向符号：L(ai[0]=0) 沿 +perp 抛出，R(ai[0]=1) 沿 -perp 抛出
+            float arcSign = Projectile.ai[0] == 0f ? 1f : -1f;
+
+            // 初速度：前向分量 + 垂直弧线分量（相对飞行方向对称）
+            Projectile.velocity = dir * ForwardSpeed + perp * ArcLift * arcSign;
+
+            // 存储飞行方向角，供后续弧线阶段使用
+            Projectile.ai[1] = dir.ToRotation();
+
             Projectile.localAI[0] = 0f; // 阶段：抛物线
             Projectile.localAI[1] = 0f; // 计时（抛物线阶段计时）
         }
@@ -80,9 +89,9 @@ namespace LeagueOfLegendThings.Content.Projectiles
             // 贴图默认朝上：统一按速度方向 +90° 旋转，避免朝向左右时翻转问题
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
-            if (Projectile.ai[1] > 0)
+            if (Projectile.ai[0] == 1f)
             {
-                // 下半贴图再旋转 180 度
+                // R 贴图再旋转 180 度（下半弧音符朝下）
                 Projectile.rotation += MathHelper.Pi;
             }
 
@@ -127,15 +136,28 @@ namespace LeagueOfLegendThings.Content.Projectiles
         {
             Projectile.localAI[1]++;
 
-            // 水平速度稍作阻尼，确保前半段更慢
-            Projectile.velocity.X *= 0.9f;
+            // 从存储的角度恢复飞行方向与垂直方向
+            float baseAngle = Projectile.ai[1];
+            Vector2 dir = new Vector2((float)Math.Cos(baseAngle), (float)Math.Sin(baseAngle));
+            Vector2 perp = new Vector2(-dir.Y, dir.X); // 逆时针 90°
 
-            // 对称重力：上抛使用 +Gravity，下抛使用 -Gravity，使轨迹镜像
-            float gravityDir = Projectile.ai[1] >= 0 ? -0.8f : 0.8f;
-            Projectile.velocity.Y += Gravity * gravityDir;
+            // 弧线符号：L(ai[0]=0) 沿 +perp，R(ai[0]=1) 沿 -perp
+            float arcSign = Projectile.ai[0] == 0f ? 1f : -1f;
 
-            bool passedApex = (Projectile.ai[1] < 0 && Projectile.velocity.Y >= 0f) // 上抛：由上到下
-                               || (Projectile.ai[1] > 0 && Projectile.velocity.Y <= 0f); // 下抛：由下到上
+            // 沿飞行方向的速度阻尼
+            float forwardSpeed = Vector2.Dot(Projectile.velocity, dir);
+            forwardSpeed *= 0.92f;
+            // 垂直分量：减速（拉回飞行轴线），实现镜像对称的弧线
+            float perpSpeed = Vector2.Dot(Projectile.velocity, perp);
+            perpSpeed -= Gravity * arcSign; // 向飞行轴线拉回
+
+            Projectile.velocity = dir * forwardSpeed + perp * perpSpeed;
+
+            // 顶点判断：垂直分量过零即到弧顶
+            float newPerpSpeed = Vector2.Dot(Projectile.velocity, perp);
+            bool passedApex = (arcSign > 0f && newPerpSpeed <= 0f)  // +perp 抛 → perp 降为 ≤0
+                           || (arcSign < 0f && newPerpSpeed >= 0f); // -perp 抛 → perp 升为 ≥0
+
             bool timeout = Projectile.localAI[1] >= ArcTimeLimit;
             if ((passedApex && Projectile.localAI[1] >= ArcMinTime) || timeout)
             {
@@ -189,9 +211,9 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            // 根据上下弧线选择贴图：上弧用 R，下弧用 L
-            bool useRight = Projectile.ai[1] < 0; // 上抛（ai1<0）用 R，下抛用 L
-            string texPath = useRight
+            // L(ai[0]=0) 弧线朝上 → 用 R 贴图（音符朝上），R(ai[0]=1) 弧线朝下 → 用 L 贴图（音符朝下）
+            bool isUpArc = Projectile.ai[0] == 0f;
+            string texPath = isUpArc
                 ? "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_R"
                 : "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
 
