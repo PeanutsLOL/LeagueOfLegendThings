@@ -31,8 +31,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         private const float MaxStacks = 15f;
         private const int MaxLifeBonus = 85;
 
-        private float healBuffer;
-
         public override void ResetEffects()
         {
             HasLegendBloodline = false;
@@ -91,20 +89,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 return;
 
             float lifestealRate = stacks * LifestealPerStack;
-            float healAmount = damageDone * lifestealRate;
-
-            int intHeal = (int)healAmount;
-            if (intHeal > 0)
-            {
-                Player.Heal(intHeal);
-            }
-
-            healBuffer += healAmount - intHeal;
-            if (healBuffer >= 1f)
-            {
-                Player.Heal(1);
-                healBuffer -= 1f;
-            }
+            float stolen = damageDone * lifestealRate;
+            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
         }
 
         private float CalculateStacks()
@@ -116,7 +102,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         public override void UpdateDead()
         {
             HasLegendBloodline = false;
-            healBuffer = 0f;
         }
 
     }

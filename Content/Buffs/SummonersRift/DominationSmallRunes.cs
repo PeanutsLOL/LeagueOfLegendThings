@@ -21,7 +21,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         private int eyeballStacks;
         private int hunterStacks;
         private int outOfCombatTimer;
-        private float healBuffer;
         private float pendingPotionReduction;
 
         public override void SaveData(TagCompound tag)
@@ -96,7 +95,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         public override void UpdateDead()
         {
             outOfCombatTimer = 0;
-            healBuffer = 0f;
             pendingPotionReduction = 0f;
         }
 
@@ -126,19 +124,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (damageDone <= 0)
                 return;
 
-            float healAmount = damageDone * (RavenousLifeStealPerStack * hunterStacks);
-            healBuffer += healAmount;
-            if (healBuffer >= 1f)
-            {
-                int healInt = (int)healBuffer;
-                healBuffer -= healInt;
-                int heal = System.Math.Min(healInt, Player.statLifeMax2 - Player.statLife);
-                if (heal > 0)
-                {
-                    Player.statLife += heal;
-                    Player.HealEffect(heal, broadcast: true);
-                }
-            }
+            float stolen = damageDone * (RavenousLifeStealPerStack * hunterStacks);
+            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
         }
 
         private void HandleKillStacks(RuneSaveSystem save, NPC target)
