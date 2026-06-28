@@ -102,11 +102,14 @@ namespace LeagueOfLegendThings.Content.UI
             var tl = (UIText)_header.Children.ElementAtOrDefault(1);
             if (tl != null) { tl.TextColor = TierColor(_tier); tl.SetText(TierLabel(_tier)); }
 
-            // --- 三张卡片（取整避免子像素渲染差异）---
-            int cardW = (int)(sw / 3f * CARD_RATIO);
-            int cardH = (int)(sh * CARD_RATIO);
-            int[] cx = { (int)(sw / 6f), (int)(sw / 2f), (int)(5f * sw / 6f) };
-            int cardTop = (int)(sh * 0.14f);
+            // --- 三张卡片 ---
+            float colW = sw / 3f;
+            float cardW = colW * CARD_RATIO;       // 列宽的 66%
+            float cardH = sh * CARD_RATIO;  // 高度也按比例
+
+            // 列中心: sw/6, sw/2, 5*sw/6
+            float[] cx = { sw / 6f, sw / 2f, 5f * sw / 6f };
+            float cardTop = sh * 0.14f;
 
             for (int i = 0; i < 3; i++)
             {
@@ -118,7 +121,7 @@ namespace LeagueOfLegendThings.Content.UI
 
                 _cards[i].Width.Set(cardW, 0f);
                 _cards[i].Height.Set(cardH, 0f);
-                _cards[i].Left.Set(cx[i] - cardW / 2, 0f);
+                _cards[i].Left.Set(cx[i] - cardW / 2f, 0f);
                 _cards[i].Top.Set(cardTop, 0f);
             }
 
@@ -292,7 +295,7 @@ namespace LeagueOfLegendThings.Content.UI
                 Append(bg);
 
                 // 层级色条
-                int stripH = (int)(Main.screenHeight * 0.0042f); // ~6px @1440p
+                float stripH = Main.screenHeight * 0.0042f; // ~6px @1440p
                 var strip = new UIPanel();
                 strip.Width.Set(w - 2, 0f); strip.Height.Set(stripH, 0f);
                 strip.Left.Set(1, 0f); strip.Top.Set(1, 0f); strip.SetPadding(0);
@@ -315,11 +318,11 @@ namespace LeagueOfLegendThings.Content.UI
                 }
 
                 // 图标区
-                int iconTop = (_isShardholder && _warned) ? 48 : 20;
-                int iconSize = (int)(w * 0.55f);
+                float iconTop = (_isShardholder && _warned) ? 48 : 20;
+                float iconSize = w * 0.55f;
                 var iconFrame = new UIPanel();
                 iconFrame.Width.Set(iconSize, 0f); iconFrame.Height.Set(iconSize, 0f);
-                iconFrame.Left.Set((w - iconSize) / 2, 0f); iconFrame.Top.Set(iconTop, 0f);
+                iconFrame.Left.Set((w - iconSize) / 2f, 0f); iconFrame.Top.Set(iconTop, 0f);
                 iconFrame.SetPadding(0);
                 iconFrame.BackgroundColor = TierColor(_tier) * 0.15f;
                 iconFrame.BorderColor = TierBorder(_tier) * 0.5f;
@@ -330,10 +333,10 @@ namespace LeagueOfLegendThings.Content.UI
                 if (iconTex != null)
                 {
                     var img = new NonPremultipliedUIImage(iconTex);
-                    int imgSize = (int)(iconSize * 0.82f);
+                    float imgSize = iconSize * 0.82f;
                     img.Width.Set(imgSize, 0f); img.Height.Set(imgSize, 0f);
-                    img.Left.Set((iconSize - imgSize) / 2, 0f);
-                    img.Top.Set((iconSize - imgSize) / 2, 0f);
+                    img.Left.Set((iconSize - imgSize) / 2f, 0f);
+                    img.Top.Set((iconSize - imgSize) / 2f, 0f);
                     iconFrame.Append(img);
                 }
                 else
