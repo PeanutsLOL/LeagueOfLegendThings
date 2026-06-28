@@ -107,6 +107,12 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         private bool lethalTempoProcPlayed;
 
+        // 近战投射物叠层减半：每 2 次命中叠 1 层
+        private int _meleeProjHitCounter;
+
+        // 满层后每 4 次命中发射一个投射物
+        private int _maxStackNoteCounter;
+
         public override void OnHitNPCWithItem(Item item,
                                               NPC target,
                                               NPC.HitInfo hit,
@@ -147,20 +153,11 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 }
                 LethalTempoStacks = 0;
                 lethalTempoProcPlayed = false;
+                _meleeProjHitCounter = 0;
+                _maxStackNoteCounter = 0;
             }
 
-            if (LethalTempoStacks > 0 && lethalTempoTimer > 0)
-            {
-                // 根据持握武器类型施加攻速加成
-                if (Player.HeldItem?.DamageType == DamageClass.Melee)
-                {
-                    Player.GetAttackSpeed(DamageClass.Melee) += LethalTempo.MeleeAttackSpeedBonusPerStack * LethalTempoStacks;
-                }
-                else if (Player.HeldItem?.DamageType == DamageClass.Ranged)
-                {
-                    Player.GetAttackSpeed(DamageClass.Ranged) += LethalTempo.RangedAttackSpeedBonusPerStack * LethalTempoStacks;
-                }
-            }
+            // 攻速加成由 LethalTempo.Update() 统一施加，此处仅处理计时与层数清零
         }
 
         public override void UpdateDead()
@@ -168,42 +165,77 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             LethalTempoStacks = 0;
             lethalTempoTimer = 0;
             lethalTempoProcPlayed = false;
+            _meleeProjHitCounter = 0;
+            _maxStackNoteCounter = 0;
         }
 
         private void HandleLethalTempo(object source, NPC target, int damageDone)
         {
-            // 未选择符文基石则不触发
             if (!ModContent.GetInstance<RuneSaveSystem>().LethalTempoSelected)
                 return;
 
-            if (target.lifeMax > 5 && target.friendly == false)
+            if (target.lifeMax <= 5 || target.friendly)
+                return;
+
+            // ── 叠层：真近战满层，近战投射物减半，远程正常 ──
+            bool gainedStack = false;
+            if (LethalTempoStacks < LethalTempo.MaxStacks)
             {
-                if (LethalTempoStacks < LethalTempo.MaxStacks)
+                if (source is Item)
                 {
+                    // 真近战 → 每击 1 层
                     LethalTempoStacks++;
+                    gainedStack = true;
                 }
-
-                // 启动/刷新计时，不使用 Buff 栏
-                lethalTempoTimer = LethalTempo.BuffDuration;
-
-                if (LethalTempoStacks >= LethalTempo.MaxStacks && !lethalTempoProcPlayed)
+                else if (source is Projectile proj)
                 {
-                    var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Lethal_Tempo_SFX_3")
+                    if (proj.DamageType == DamageClass.Melee)
                     {
-                        Volume = 0.67f,
-                        PitchVariance = 0f
-                    };
-                    SoundEngine.PlaySound(sfx1, Player.Center);
-                    lethalTempoProcPlayed = true;
+                        // 近战投射物 → 每 2 击叠 1 层
+                        _meleeProjHitCounter++;
+                        if (_meleeProjHitCounter >= 2)
+                        {
+                            _meleeProjHitCounter = 0;
+                            LethalTempoStacks++;
+                            gainedStack = true;
+                        }
+                    }
+                    else if (proj.DamageType == DamageClass.Ranged)
+                    {
+                        // 远程投射物 → 正常叠层
+                        LethalTempoStacks++;
+                        gainedStack = true;
+                    }
+                    // 其他伤害类型不叠层
                 }
+            }
 
-                if (LethalTempoStacks >= LethalTempo.MaxStacks)
+            // 每次命中都刷新计时
+            lethalTempoTimer = LethalTempo.BuffDuration;
+
+            // ── 满层音效 ──
+            if (LethalTempoStacks >= LethalTempo.MaxStacks && !lethalTempoProcPlayed)
+            {
+                var sfx1 = new SoundStyle("LeagueOfLegendThings/Content/SFX/Lethal_Tempo_SFX_3")
                 {
-                    float baseDamage = 0f;
-                    DamageClass damageClass;
+                    Volume = 0.67f,
+                    PitchVariance = 0f
+                };
+                SoundEngine.PlaySound(sfx1, Player.Center);
+                lethalTempoProcPlayed = true;
+            }
 
-                    // 主手面板伤害（未受致命节奏加成前的武器面板）
-                    int panelDamage = Player.HeldItem != null ? Player.HeldItem.damage : 0;
+            // ── 满层投射物：每次命中计数，每 4 次发射 1 个，伤害 ×2 ──
+            if (LethalTempoStacks >= LethalTempo.MaxStacks)
+            {
+                _maxStackNoteCounter++;
+
+                if (_maxStackNoteCounter >= 4)
+                {
+                    _maxStackNoteCounter = 0;
+
+                    DamageClass damageClass;
+                    int panelDamage = Player.HeldItem?.damage ?? 0;
 
                     if (source is Item item)
                     {
@@ -219,25 +251,18 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         return;
                     }
 
+                    float baseDamage;
                     if (damageClass == DamageClass.Melee)
-                    {
-                        baseDamage = panelDamage * 0.30f;
-                    }
+                        baseDamage = panelDamage * 0.60f; // 原 0.30 × 2
                     else if (damageClass == DamageClass.Ranged)
-                    {
-                        baseDamage = panelDamage * 0.70f;
-                    }
+                        baseDamage = panelDamage * 1.40f; // 原 0.70 × 2
                     else
-                    {
-                        return; // 非近战/远程不触发
-                    }
+                        return;
 
                     float extraAttackSpeed = Player.GetTotalAttackSpeed(damageClass) - 1f;
                     float finalDamage = baseDamage * (1f + extraAttackSpeed);
 
-                    // ai[0]：0=L/1=R 轮流；ai[1]：OnSpawn 中设为飞行方向角，此处占位即可
                     float side = nextNoteSide;
-
                     Projectile.NewProjectile(
                         new EntitySource_OnHit(Player, target),
                         Player.Center,
@@ -250,7 +275,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         0f
                     );
 
-                    nextNoteSide ^= 1; // 轮流切换
+                    nextNoteSide ^= 1;
                 }
             }
         }
