@@ -38,6 +38,7 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
         private float _cachedMaxLifePct; // 棱彩百分比生命值
         private float _cachedMeleeDmg, _cachedRangedDmg, _cachedMagicDmg, _cachedSummonDmg, _cachedAllDmg;
         private float _cachedAtkSpd, _cachedCritChance, _cachedMoveSpd, _cachedLifeSteal;
+        internal float CachedLifeSteal => _cachedLifeSteal; // LeechPoolCollector 读取
 
         // ==================== 运行时状态 ====================
         private int erosionStacks;
@@ -138,11 +139,11 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             if (!ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune) return;
             if (target.lifeMax <= 5 || target.friendly) return;
 
-            // 碎片生命偷取（Shardholder 激活时也生效）
+            // 碎片生命偷取 → 填入吸血池
             if (_cachedLifeSteal > 0f)
             {
-                int heal = (int)(damageDone * _cachedLifeSteal);
-                if (heal > 0) { Player.statLife += heal; Player.HealEffect(heal); }
+                float stolen = damageDone * _cachedLifeSteal;
+                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().Fill(stolen);
             }
 
             if (HasShardholder) return; // Shardholder 激活时无增幅器效果
@@ -161,11 +162,11 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             if (!ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune) return;
             if (target.lifeMax <= 5 || target.friendly) return;
 
-            // 碎片生命偷取
+            // 碎片生命偷取 → 填入吸血池
             if (_cachedLifeSteal > 0f)
             {
-                int heal = (int)(damageDone * _cachedLifeSteal);
-                if (heal > 0) { Player.statLife += heal; Player.HealEffect(heal); }
+                float stolen = damageDone * _cachedLifeSteal;
+                if (stolen > 0f) Player.GetModPlayer<LeechPoolPlayer>().Fill(stolen);
             }
 
             if (HasShardholder) return;

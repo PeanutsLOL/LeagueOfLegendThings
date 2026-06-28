@@ -15,7 +15,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         // 每层伤害加成（自适应之力）
         public const float DamageBonusPerStack = 0.02f; // 2% per stack, 24% at max
         // 满层时的生命吸取比例
-        public const float FullStacksLifesteal = 0.002f; // 0.2% lifesteal at max stacks
+        public const float FullStacksLifesteal = 0.005f; // 0.5% lifesteal at max stacks
         // 持续时间（以帧为单位，60帧 = 1秒）
         public const int BuffDuration = 5 * 60; // 5秒
 
@@ -95,15 +95,12 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         private bool conquerorProcPlayed;
         // 首次叠层音效是否已播放
         private bool conquerorFirstStackPlayed;
-        // 生命吸取缓冲（用于累积小于1的回血量）
-        private float healBuffer;
 
         public void ResetStacks()
         {
             _conquerorStacksFloat = 0f;
             conquerorProcPlayed = false;
             conquerorFirstStackPlayed = false;
-            healBuffer = 0f;
         }
 
         public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
@@ -161,7 +158,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             conquerorTimer = 0;
             conquerorProcPlayed = false;
             conquerorFirstStackPlayed = false;
-            healBuffer = 0f;
         }
 
         public override void OnHitAnything(float x, float y, Entity victim)
@@ -261,42 +257,17 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                     conquerorProcPlayed = true;
                 }
 
-                // 满层时的生命吸取效果
+                // 满层时的生命吸取 → 填入吸血池
                 if (ConquerorStacks >= Conqueror.MaxStacks)
                 {
-                    float healAmount = damageDone * Conqueror.FullStacksLifesteal;
-                    
-                    // 整数部分直接回血
-                    int intHeal = (int)healAmount;
-                    if (intHeal > 0)
-                    {
-                        Player.Heal(intHeal);
-                    }
-                    
-                    // 小数部分加入缓冲
-                    healBuffer += healAmount - intHeal;
-                    
-                    // 缓冲满1时回1点血
-                    if (healBuffer >= 1f)
-                    {
-                        Player.Heal(1);
-                        healBuffer -= 1f;
-                    }
-                        
-                    // 治疗视觉效果
-                    if ((intHeal > 0 || healBuffer >= 0.5f) && Main.rand.NextBool(3))
+                    float stolen = damageDone * Conqueror.FullStacksLifesteal;
+                    Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
+
+                    if (Main.rand.NextBool(3))
                     {
                         Dust dust = Dust.NewDustDirect(
-                            Player.Center,
-                            0,
-                            0,
-                            DustID.LifeDrain,
-                            0f,
-                            -2f,
-                            0,
-                            default,
-                            1f
-                        );
+                            Player.Center, 0, 0, DustID.LifeDrain,
+                            0f, -2f, 0, default, 1f);
                         dust.noGravity = true;
                     }
                 }
