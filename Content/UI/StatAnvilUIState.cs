@@ -396,12 +396,11 @@ namespace LeagueOfLegendThings.Content.UI
                 }
             }
 
-            // 悬浮效果 + 点击
+            // 点击 — 全部委托给 OnCardClick，由其处理 Shardholder 两段确认逻辑
             public override void LeftClick(UIMouseEvent evt)
             {
                 base.LeftClick(evt);
-                if (!_isShardholder || _warned) // 非 SH 直接选，SH 确认后可点
-                    _onClick(_index);
+                _onClick(_index);
             }
 
             public override void MouseOver(UIMouseEvent evt)
