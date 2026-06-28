@@ -26,6 +26,7 @@ namespace LeagueOfLegendThings.Content.UI
         private int _warningCard = -1;
         private int _openCooldown; // 打开后短暂禁用点击，防止误触
 
+        public bool IsVisible { get; private set; }
         public bool SelectionMade { get; set; }
         public StatShardSystem.Shard ChosenShard { get; private set; }
 
@@ -68,6 +69,7 @@ namespace LeagueOfLegendThings.Content.UI
             for (int i = 0; i < 3; i++)
                 if (_cards[i]?.Parent == null) Append(_cards[i]);
 
+            IsVisible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
         }
 
@@ -79,6 +81,7 @@ namespace LeagueOfLegendThings.Content.UI
 
         public void Close()
         {
+            IsVisible = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
             _backdrop?.Remove();
             _header?.Remove();
