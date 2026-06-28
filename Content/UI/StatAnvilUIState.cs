@@ -294,13 +294,11 @@ namespace LeagueOfLegendThings.Content.UI
                 bg.BorderColor = _warned ? new Color(255, 60, 60) : TierBorder(_tier);
                 Append(bg);
 
-                // 层级色条
-                float stripH = Main.screenHeight * 0.0042f; // ~6px @1440p
-                var strip = new UIPanel();
-                strip.Width.Set(w - 2, 0f); strip.Height.Set(stripH, 0f);
-                strip.Left.Set(1, 0f); strip.Top.Set(1, 0f); strip.SetPadding(0);
-                strip.BackgroundColor = TierColor(_tier);
-                strip.BorderColor = TierBorder(_tier);
+                // 层级色条 — 纯色矩形，圆角由 bg 面板边框提供
+                int stripH = (int)(Main.screenHeight * 0.0042f);
+                var strip = new FilledRect(TierColor(_tier));
+                strip.Width.Set(w - 4, 0f); strip.Height.Set(stripH, 0f);
+                strip.Left.Set(2, 0f); strip.Top.Set(2, 0f);
                 bg.Append(strip);
 
                 // Shardholder 提示横幅
@@ -461,6 +459,22 @@ namespace LeagueOfLegendThings.Content.UI
                     "Vitality" => $"{name}\n+{(int)v} Max Life\n+{(int)v} Max Mana",
                     _ => $"{name}\n+{FormatShardValue(shard)}"
                 };
+            }
+        }
+
+        // ============ 纯色填充矩形（无边框，避免 UIPanel 9-slice 渲染差异）============
+
+        private class FilledRect : UIElement
+        {
+            private readonly Color _color;
+            public FilledRect(Color color) { _color = color; IgnoresMouseInteraction = true; }
+
+            protected override void DrawSelf(SpriteBatch spriteBatch)
+            {
+                var dim = GetDimensions();
+                spriteBatch.Draw(Terraria.GameContent.TextureAssets.MagicPixel.Value,
+                    new Rectangle((int)dim.X, (int)dim.Y, (int)dim.Width, (int)dim.Height),
+                    _color);
             }
         }
 
