@@ -117,7 +117,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 for (int i = 0; i < 6; i++)
                 {
                     Vector2 pos = Vector2.Lerp(Player.Center, nearestAlly.Center, (float)i / 6f);
-                    Dust d = Dust.NewDustPerfect(pos, DustID.BlueTorch, Vector2.Zero, 100, default, 1.2f);
+                    Dust d = Dust.NewDustPerfect(pos, DustID.GreenTorch, Vector2.Zero, 100, default, 1.2f);
                     d.noGravity = true;
                 }
             }
@@ -147,7 +147,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             for (int i = 0; i < 12; i++)
             {
                 Vector2 offset = Main.rand.NextVector2Circular(40f, 40f);
-                Dust d = Dust.NewDustPerfect(center + offset, DustID.BlueTorch,
+                Dust d = Dust.NewDustPerfect(center + offset, DustID.GreenTorch,
                     offset.SafeNormalize(Vector2.UnitY) * 3f, 100, default, 1.8f);
                 d.noGravity = true;
             }
