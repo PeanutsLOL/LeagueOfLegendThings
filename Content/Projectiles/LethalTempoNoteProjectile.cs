@@ -201,7 +201,7 @@ namespace LeagueOfLegendThings.Content.Projectiles
                 if (!npc.CanBeChasedBy()) continue;
 
                 float dist = Vector2.Distance(Projectile.Center, npc.Center);
-                if (dist < bestDist && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height))
+                if (dist < bestDist)
                 {
                     bestDist = dist;
                     best = npc;
