@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class AbsorbLife : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/AbsorbLife";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Absorb_Life";
         public override void SetStaticDefaults()
         {
             // 表明这个Buff不是减益效果
