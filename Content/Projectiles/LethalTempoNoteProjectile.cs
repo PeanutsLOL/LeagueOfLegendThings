@@ -22,11 +22,11 @@ namespace LeagueOfLegendThings.Content.Projectiles
         // localAI[0]：阶段，0 = 抛物线，1 = 追踪
         // localAI[1]：抛物线计时器
 
-        private static float ForwardSpeed = 8f;       // 抛物线前向初速度（减慢前半段）
-        private static float ArcLift = 4.5f;          // 抛物线初始垂直速度幅度（配合减速）
-        private static float Gravity = 0.35f;         // 抛物线重力
-        private static int ArcTimeLimit = 26;         // 抛物线最长持续帧数，防止一直不转阶段
-        private static int ArcMinTime = 6;            // 至少跑这么多帧再允许进入追踪
+        private static float ForwardSpeed = 5f;        // 抛物线前向速度
+        private static float ArcLift = 7.0f;          // 抛物线初始垂直速度幅度
+        private static float Gravity = 0.14f;         // 抛物线重力（越小曲线越长）
+        private static int ArcTimeLimit = 70;         // 抛物线最长持续帧数
+        private static int ArcMinTime = 15;           // 至少跑这么多帧再允许进入追踪
         private static float HomingRange = 1920f;      // 追踪范围
         private static float HomingSpeedStart = 10f;  // 追踪初速度（开始较慢）
         private static float HomingSpeedMax = 66f;    // 追踪最大速度（后半段很快）
