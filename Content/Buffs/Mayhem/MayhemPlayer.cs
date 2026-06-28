@@ -375,6 +375,14 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                             _cachedDefense += (int)val;
                             _cachedMaxLife += (int)(val * 2);
                             break;
+                        case "Precision":
+                            _cachedCritChance += val;
+                            _cachedAtkSpd    += val;
+                            break;
+                        case "Vitality":
+                            _cachedMaxLife += (int)val;
+                            _cachedMaxMana += (int)val;
+                            break;
                         case "Faith":
                             _cachedAllDmg  += val * 0.03f * mult;
                             _cachedDefense += (int)(val * 3f * mult);

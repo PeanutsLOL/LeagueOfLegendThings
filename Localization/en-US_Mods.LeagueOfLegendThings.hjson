@@ -655,6 +655,8 @@ StatShards: {
 	Sil_Mana.DisplayName: Max Mana
 	Sil_Might.DisplayName: Might (Melee + Ranged)
 	Sil_Unbreak.DisplayName: Unbreakable (Def + HP)
+	Sil_Precision.DisplayName: Precision (Crit + AS)
+	Sil_Vitality.DisplayName: Vitality (HP + Mana)
 	Gold_Melee.DisplayName: Melee Damage
 	Gold_Ranged.DisplayName: Ranged Damage
 	Gold_Magic.DisplayName: Magic Damage
@@ -668,6 +670,8 @@ StatShards: {
 	Gold_Mana.DisplayName: Max Mana
 	Gold_Might.DisplayName: Might (Melee + Ranged)
 	Gold_Unbreak.DisplayName: Unbreakable (Def + HP)
+	Gold_Precision.DisplayName: Precision (Crit + AS)
+	Gold_Vitality.DisplayName: Vitality (HP + Mana)
 	Gold_Faith.DisplayName: Faith
 	Pris_AllDmg.DisplayName: All Damage
 	Pris_ArmPen.DisplayName: Armor Penetration
