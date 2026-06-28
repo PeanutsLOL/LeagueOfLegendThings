@@ -585,7 +585,7 @@ public class AeryProj : ModProjectile
         {
             NetMessage.SendData(MessageID.SyncPlayer, -1, -1, null, targetPlayer.whoAmI);
             var modPacket = ModContent.GetInstance<global::LeagueOfLegendThings.LeagueOfLegendThings>().GetPacket();
-            modPacket.Write((byte)LeagueOfLegendThings.LeaguePacketType.SyncPlayerVitals);
+            modPacket.Write((byte)global::LeagueOfLegendThings.LeaguePacketType.SyncPlayerVitals);
             modPacket.Write(targetPlayer.whoAmI);
             modPacket.Write(targetPlayer.statLife);
             modPacket.Write(targetPlayer.statMana);
