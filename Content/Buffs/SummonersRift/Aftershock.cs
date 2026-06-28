@@ -12,7 +12,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 	public class AftershockPlayer : ModPlayer
 	{
 		private const int DurationTicks = (int)(2.2f * 60f); // 2.0 seconds (shortened)
-		private const int CooldownTicks = 20 * 60; // 20 seconds
+		private const int CooldownTicks = 12 * 60; // 12 seconds
 		private const int RangePixels = 16 * 5; // 16*5 px
 
 		private int aftershockDuration = 0;
@@ -88,7 +88,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 			int baseRes = 35 + (int)(0.8f * Player.statDefense);
 
 			// Cap based on max health: cap = clamp(maxHealth/5, 80, 240)
-			int cap = Math.Clamp(Player.statLifeMax2 / 5, 80, 240);
+			int cap = Math.Clamp(Player.statLifeMax2 / 5, 100, 300);
 			int finalRes = Math.Min(baseRes, cap);
 
 			// Apply
@@ -114,8 +114,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 			};
 			SoundEngine.PlaySound(sfx2, Player.position);
 			// Damage calculation: base 25 - 120 based on player maxHP, clamp
-			int baseDamage = 25 + (int)(Player.statLifeMax2 / 20f); // e.g. 2000hp -> +100
-			baseDamage = Math.Clamp(baseDamage, 25, 120);
+			int baseDamage = 50 + (int)(Player.statLifeMax2 / 15f);
+			baseDamage = Math.Clamp(baseDamage, 50, 200);
 
 			// Add 8% of bonus max health from GraspOfUndying if present
 			int extraFromGrasp = 0;

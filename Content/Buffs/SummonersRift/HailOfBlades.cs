@@ -11,8 +11,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
     public class HailOfBladesPlayer : ModPlayer
     {
         private const int MaxStrikes = 3;
-        private const int ProcCooldown = 10 * 60;
-        private const float AttackSpeedBonus = 1.6f; // +160%
+        private const int ProcCooldown = 7 * 60;
+        private const float AttackSpeedBonus = 2.0f; // +200%
 
         private int remainingStrikes;
         private int cooldownTimer;

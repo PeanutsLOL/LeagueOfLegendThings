@@ -49,7 +49,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (cooldownTimer > 0 && Player.statLife < lastRecordedLife)
             {
                 // re-enter cooldown
-                cooldownTimer = 600;
+                cooldownTimer = 420;
                 tookDamageDuringCooldown = true;
                 var sfxReady = new SoundStyle("LeagueOfLegendThings/Content/SFX/First_Strike_SFX")
                 {
@@ -136,7 +136,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             }
 
             // start cooldown
-            cooldownTimer = 600;
+            cooldownTimer = 420;
             tookDamageDuringCooldown = false;
             ResetTracking();
         }
@@ -266,7 +266,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 if (target is NPC npc && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int sum = (int)Projectile.localAI[0];
-                    int dmg = (int)(sum * 0.07f + npc.defense * 2);
+                    int dmg = (int)(sum * 0.15f + npc.defense * 5);
                     if (dmg < 1) dmg = 1;
                     npc.SimpleStrikeNPC(dmg, owner.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
                 }
@@ -314,7 +314,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 int sum = (int)Projectile.localAI[0];
-                int dmg = (int)(sum * 0.07f + target.defense * 2);
+                int dmg = (int)(sum * 0.15f + target.defense * 5);
                 if (dmg < 1) dmg = 1;
                 target.SimpleStrikeNPC(dmg, Projectile.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
             }

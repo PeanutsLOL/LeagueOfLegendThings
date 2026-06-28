@@ -13,8 +13,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
     // Dark Harvest
     public class DarkHarvestPlayer : ModPlayer
     {
-        private const int MinTargetLifeMax = 2000;
-        private const int ProcCooldown = 35 * 60;
+        private const int MinTargetLifeMax = 500;
+        private const int ProcCooldown = 15 * 60;
 
         private int soulCount;
         private int cooldownTimer;
@@ -65,7 +65,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 return;
 
             int heldItemDamage = Player.HeldItem?.damage ?? 0;
-            float rawDamage = 30f + 11f * soulCount + heldItemDamage * 0.1f;
+            float rawDamage = 60f + 30f * soulCount + heldItemDamage * 0.25f;
             int bonusDamage = Math.Max(1, (int)MathF.Round(rawDamage));
 
             target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);

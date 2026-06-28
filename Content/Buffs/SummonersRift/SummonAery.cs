@@ -434,7 +434,7 @@ public class AeryProj : ModProjectile
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                npc.SimpleStrikeNPC(40, owner.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
+                npc.SimpleStrikeNPC(120, owner.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
                 DebugAery($"Hit boss npc={npc.whoAmI}, damage=40, owner={owner.whoAmI}");
             }
             PlayAerySound(new int[] { 1, 4, 6, 9, 12 }, npc.Center);
@@ -482,7 +482,7 @@ public class AeryProj : ModProjectile
 
         if (speed <= 2f)
         {
-            float a = 40f;
+            float a = 120f;
             float b = 22f;
             float x = a * MathF.Sin(t * 1.2f);
             float y = b * MathF.Sin(t * 1.2f) * MathF.Cos(t * 1.2f);

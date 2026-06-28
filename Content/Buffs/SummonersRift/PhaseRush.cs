@@ -10,7 +10,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
     // Phase Rush
     public class PhaseRushPlayer : ModPlayer
     {
-        private const int ProcCooldown = 10 * 60;
+        private const int ProcCooldown = 7 * 60;
         private const float MovementSpeedBonus = 1.0f; // +100%
         private int remainingDuration;
         private int cooldownTimer;
@@ -75,7 +75,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 hitCount++;
                 if (hitCount >= 3)
                 {
-                    remainingDuration = 4 * 60; // 4秒
+                    remainingDuration = 5 * 60; // 5秒
                     hitCount = 0;
                     var procSfx = new SoundStyle("LeagueOfLegendThings/Content/SFX/Phase_Rush_SFX")
                     {
