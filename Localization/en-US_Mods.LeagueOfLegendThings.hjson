@@ -433,7 +433,7 @@ UI: {
 		Confirm: Confirm
 		Select: Select
 		ShardholderActivated: Shardholder activated! All shard effects x{0}. Mayhem augments removed.
-		ShardholderDesc: Shardholder\nAll effects ×{0:P0}\nOne-time choice
+		ShardholderDesc: "Shardholder\nAll effects ×{0:P0}\nOne-time choice"
 			ShardholderWarning: "!!! WARNING !!! Shardholder ({0:F0}% boost) will REMOVE all Mayhem augments. Only stat bonuses remain. Click [Confirm] to proceed."
 			ClickAgain: "Click again to confirm"
 		FaithDetails: Faith Shard ({0}%): +{1} all damage, +{2} defense
