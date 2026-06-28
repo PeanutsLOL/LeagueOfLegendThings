@@ -43,13 +43,15 @@ namespace LeagueOfLegendThings.Content.UI
 
         public override void UpdateUI(GameTime gameTime)
         {
+            _interface?.Update(gameTime);
+
             if (StatAnvilUI is { IsVisible: true })
             {
                 Main.LocalPlayer.mouseInterface = true;
-                Main.blockMouse = true; // 阻止背包/物品栏交互
+                // 吞掉 UI 已处理的鼠标点击，防止背包/商店等后续逻辑再响应
+                Main.mouseLeft = false;
+                Main.mouseRight = false;
             }
-
-            _interface?.Update(gameTime);
 
             // 检测玩家是否完成了选择（仅触发一次）
             if (StatAnvilUI != null && StatAnvilUI.SelectionMade)
