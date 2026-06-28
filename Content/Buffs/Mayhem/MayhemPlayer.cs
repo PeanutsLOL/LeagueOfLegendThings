@@ -279,18 +279,18 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                 else lines.Add($"{label}: +{val:P0}{suffix}");
             }
 
-            Add("Defense",      _cachedDefense,   "", true);
-            Add("Max Life",     _cachedMaxLife,   $"({_cachedMaxLifePct:P0})", true);
-            Add("Max Mana",     _cachedMaxMana,   "", true);
-            Add("Melee Dmg",    _cachedMeleeDmg,  "", false);
-            Add("Ranged Dmg",   _cachedRangedDmg, "", false);
-            Add("Magic Dmg",    _cachedMagicDmg,  "", false);
-            Add("Summon Dmg",   _cachedSummonDmg, "", false);
-            Add("All Dmg",      _cachedAllDmg,    "", false);
-            Add("Attack Speed", _cachedAtkSpd,    "", false);
-            Add("Crit Chance",  _cachedCritChance,"", false);
-            Add("Move Speed",   _cachedMoveSpd,   "", false);
-            Add("Life Steal",   _cachedLifeSteal, "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.Defense"),      _cachedDefense,   "", true);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.MaxLife"),     _cachedMaxLife,   $"({_cachedMaxLifePct:P0})", true);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.MaxMana"),     _cachedMaxMana,   "", true);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.MeleeDmg"),    _cachedMeleeDmg,  "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.RangedDmg"),   _cachedRangedDmg, "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.MagicDmg"),    _cachedMagicDmg,  "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.SummonDmg"),   _cachedSummonDmg, "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.AllDmg"),      _cachedAllDmg,    "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.AttackSpeed"), _cachedAtkSpd,    "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.CritChance"),  _cachedCritChance,"", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.MoveSpeed"),   _cachedMoveSpd,   "", false);
+            Add(Language.GetTextValue("Mods.LeagueOfLegendThings.MayhemPlayer.Stats.LifeSteal"),   _cachedLifeSteal, "", false);
 
             return lines;
         }

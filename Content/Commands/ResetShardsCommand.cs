@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Buffs.Mayhem;
 
@@ -16,14 +17,14 @@ namespace LeagueOfLegendThings.Content.Commands
 
         public override string Usage => "/resetshards";
 
-        public override string Description => "Reset all stat shard bonuses and cached values.";
+        public override string Description => Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Command.ResetDescription");
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
             var mp = caller.Player.GetModPlayer<MayhemPlayer>();
             mp.ResetAllShards();
 
-            Main.NewText("[Mayhem] All stat shard bonuses have been reset.", 255, 215, 0);
+            Main.NewText(Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Command.ResetDone"), 255, 215, 0);
         }
     }
 }

@@ -155,7 +155,7 @@ namespace LeagueOfLegendThings.Content.UI
                 _shardholderWarning = true;
                 float pct = shard.StatValue * 100f;
                 Main.NewText(
-                    $"!!! WARNING !!! Shardholder ({pct:F0}% boost) will REMOVE all Mayhem augments. Only stat bonuses remain. Click [Confirm] to proceed.",
+                    Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ShardholderWarning", pct),
                     255, 80, 80);
                 RefreshCards();
                 return;
@@ -312,7 +312,7 @@ namespace LeagueOfLegendThings.Content.UI
                     warnBar.Left.Set(6, 0f); warnBar.Top.Set(10, 0f); warnBar.SetPadding(4);
                     warnBar.BackgroundColor = new Color(120, 25, 25) * 0.85f;
                     warnBar.BorderColor = new Color(255, 80, 80);
-                    var wt = new UIText("Click again to confirm", 0.75f);
+                    var wt = new UIText(Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ClickAgain"), 0.75f);
                     wt.HAlign = 0.5f; wt.VAlign = 0.5f; wt.TextColor = new Color(255, 180, 180);
                     warnBar.Append(wt);
                     bg.Append(warnBar);
@@ -346,7 +346,7 @@ namespace LeagueOfLegendThings.Content.UI
                 }
                 else
                 {
-                    var iconLabel = new UIText(_shard?.GetDisplayName() ?? "???", 0.9f);
+                    var iconLabel = new UIText(_shard?.GetDisplayName() ?? Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Unknown"), 0.9f);
                     iconLabel.HAlign = 0.5f; iconLabel.VAlign = 0.5f;
                     iconLabel.TextColor = _isShardholder ? Color.Gold : Color.White;
                     iconFrame.Append(iconLabel);
@@ -358,7 +358,7 @@ namespace LeagueOfLegendThings.Content.UI
                 if (_isShardholder)
                     desc = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ShardholderDesc", _shard?.StatValue ?? 0f);
                 else
-                    desc = $"{_shard?.GetDisplayName() ?? "???"}\n+{FormatShardValue(_shard)}";
+                    desc = $"{_shard?.GetDisplayName() ?? Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Unknown")}\n+{FormatShardValue(_shard)}";
 
                 var descText = new UIText(desc, 0.9f);
                 descText.HAlign = 0.5f;

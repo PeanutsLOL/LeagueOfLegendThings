@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using LeagueOfLegendThings.Content.Buffs.Mayhem;
 using LeagueOfLegendThings.Content.Config;
@@ -38,8 +39,8 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
             int count = mp.TotalShardsTaken;
 
             string line = count >= StatShardSystem.SHARDHOLDER_GUARANTEED_AT
-                ? $"Forged: {count} times (Shardholder guaranteed!)"
-                : $"Forged: {count} times (Shardholder at {StatShardSystem.SHARDHOLDER_GUARANTEED_AT})";
+                ? Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.ForgedCount", count)
+                : Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.ForgedCountNotYet", count, StatShardSystem.SHARDHOLDER_GUARANTEED_AT);
             tooltips.Add(new TooltipLine(Mod, "ForgeCount", line)
             {
                 OverrideColor = count >= StatShardSystem.SHARDHOLDER_GUARANTEED_AT
@@ -53,7 +54,7 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
             {
                 if (count == 0)
                 {
-                    tooltips.Add(new TooltipLine(Mod, "NoStats", "No stat shards forged yet.")
+                    tooltips.Add(new TooltipLine(Mod, "NoStats", Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.NoStats"))
                         { OverrideColor = new Microsoft.Xna.Framework.Color(150, 150, 150) });
                 }
                 else
@@ -62,8 +63,8 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
                     bool hasSH = mp.HasShardholder;
 
                     tooltips.Add(new TooltipLine(Mod, "StatsHeader", hasSH
-                        ? $"--- Shard Stats (Shardholder ×{mp.ShardholderMultiplier:F1}) ---"
-                        : "--- Shard Stats ---")
+                        ? Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.StatsHeaderSH", mp.ShardholderMultiplier)
+                        : Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.StatsHeader"))
                         { OverrideColor = hasSH
                             ? new Microsoft.Xna.Framework.Color(255, 215, 0)
                             : new Microsoft.Xna.Framework.Color(200, 200, 200) });
@@ -75,13 +76,13 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
                             { OverrideColor = new Microsoft.Xna.Framework.Color(180, 220, 180) });
                     }
 
-                    tooltips.Add(new TooltipLine(Mod, "StatsHint", "[Shift for details]")
+                    tooltips.Add(new TooltipLine(Mod, "StatsHint", Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.ShiftLabel"))
                         { OverrideColor = new Microsoft.Xna.Framework.Color(120, 120, 120) });
                 }
             }
             else if (count > 0)
             {
-                tooltips.Add(new TooltipLine(Mod, "ShiftHint", "Hold Shift to view forged stats")
+                tooltips.Add(new TooltipLine(Mod, "ShiftHint", Language.GetTextValue("Mods.LeagueOfLegendThings.Items.StatBonusAnvilItem.ShiftHint"))
                     { OverrideColor = new Microsoft.Xna.Framework.Color(130, 130, 130) });
             }
         }

@@ -434,6 +434,8 @@ UI: {
 		Select: Select
 		ShardholderActivated: Shardholder activated! All shard effects x{0}. Mayhem augments removed.
 		ShardholderDesc: Shardholder\nAll effects ×{0:P0}\nOne-time choice
+t		ShardholderWarning: "!!! WARNING !!! Shardholder ({0:F0}% boost) will REMOVE all Mayhem augments. Only stat bonuses remain. Click [Confirm] to proceed."
+			ClickAgain: "Click again to confirm"
 		FaithDetails: Faith Shard ({0}%): +{1} all damage, +{2} defense
 	}
 }
@@ -444,6 +446,13 @@ Items: {
 		Description: Opens a forge selection UI. Pick one of three random stat shards. Prismatic rolls may contain the Shardholder Value Shard.
 		Tooltip: ""
 	}
+t		ForgedCount: "Forged: {0} times (Shardholder guaranteed!)"
+			ForgedCountNotYet: "Forged: {0} times (Shardholder at {1})"
+			NoStats: "No stat shards forged yet."
+			StatsHeader: "--- Shard Stats ---"
+			StatsHeaderSH: "--- Shard Stats (Shardholder ×{0:F1}) ---"
+			ShiftHint: "Hold Shift to view forged stats"
+			ShiftLabel: "[Shift for details]"
 
 	TrueIceBowAshe: {
 		DisplayName: True Ice Bow
@@ -622,6 +631,10 @@ MayhemAugments: {
 }
 
 StatShards: {
+t	Shardholder.Description: "ALL shard effects ×{0:P0}"
+		Command.ResetDescription: "Reset all stat shard bonuses and cached values."
+		Command.ResetDone: "[Mayhem] All stat shard bonuses have been reset."
+		Unknown: "???"
 	Sil_Melee.DisplayName: Melee Damage
 	Sil_Ranged.DisplayName: Ranged Damage
 	Sil_Magic.DisplayName: Magic Damage
@@ -658,4 +671,21 @@ StatShards: {
 	Pris_Heal.DisplayName: Heal Power
 	Pris_Mana.DisplayName: Max Mana
 	Shardholder.DisplayName: Shardholder
+}
+
+MayhemPlayer: {
+	Stats: {
+		Defense: "Defense"
+		MaxLife: "Max Life"
+		MaxMana: "Max Mana"
+		MeleeDmg: "Melee Dmg"
+		RangedDmg: "Ranged Dmg"
+		MagicDmg: "Magic Dmg"
+		SummonDmg: "Summon Dmg"
+		AllDmg: "All Dmg"
+		AttackSpeed: "Attack Speed"
+		CritChance: "Crit Chance"
+		MoveSpeed: "Move Speed"
+		LifeSteal: "Life Steal"
+	}
 }

@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using LeagueOfLegendThings.Content.Buffs.SummonersRift;
 
 /// <summary>
 /// Huge thanks to abluescarab's tModLoader-WingSlot
@@ -18,7 +19,7 @@ namespace LeagueOfLegendThings.Content.AccessorySlots
         {
             base.UpdateEquips();
 
-            var spellbookPlayer = Player.GetModPlayer<Buffs.UnsealedSpellbookPlayer>();
+            var spellbookPlayer = Player.GetModPlayer<UnsealedSpellbookPlayer>();
             if (spellbookPlayer == null) return;
 
             var func = spellbookPlayer.UnsealedSpellbookFunctionalItem;
