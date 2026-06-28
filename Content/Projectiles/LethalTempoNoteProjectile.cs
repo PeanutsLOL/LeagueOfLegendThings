@@ -16,9 +16,8 @@ namespace LeagueOfLegendThings.Content.Projectiles
 {
     public class LethalTempoNoteProjectile : ModProjectile
     {
-        // 使用 L 贴图作为默认贴图，避免缺少默认资源导致加载失败
-        public override string Texture => "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
-        // ai[0]：0 = L 贴图（向上弧），1 = R 贴图（向下弧）
+        public override string Texture => "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile";
+        // ai[0]：0 = 向上弧，1 = 向下弧
         // ai[1]：飞行基准方向角（弧度），在 OnSpawn 中设置，用于对称弧线
         // localAI[0]：阶段，0 = 抛物线，1 = 追踪
         // localAI[1]：抛物线计时器
@@ -36,10 +35,10 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override void SetDefaults()
         {
-            // 碰撞盒 24x24，贴图 512x512，渲染缩放 24/512 = 0.046875
-            Projectile.width = 24;
-            Projectile.height = 24;
-            Projectile.scale = 0.046875f;
+            // 贴图 32×32，碰撞盒匹配
+            Projectile.width = 32;
+            Projectile.height = 32;
+            Projectile.scale = 1.0f;
 
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
@@ -62,7 +61,7 @@ namespace LeagueOfLegendThings.Content.Projectiles
             // 垂直方向：dir 逆时针旋转 90° = (-dir.y, dir.x)
             Vector2 perp = new Vector2(-dir.Y, dir.X);
 
-            // 弧线方向符号：L(ai[0]=0) 沿 +perp 抛出，R(ai[0]=1) 沿 -perp 抛出
+            // 弧线方向：ai[0]=0 沿 +perp（上弧），ai[0]=1 沿 -perp（下弧）
             float arcSign = Projectile.ai[0] == 0f ? 1f : -1f;
 
             // 初速度：前向分量 + 垂直弧线分量（相对飞行方向对称）
@@ -86,14 +85,8 @@ namespace LeagueOfLegendThings.Content.Projectiles
                 RunHomingPhase();
             }
 
-            // 贴图默认朝上：统一按速度方向 +90° 旋转，避免朝向左右时翻转问题
+            // 贴图箭头朝上：旋转使箭头沿速度方向
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-
-            if (Projectile.ai[0] == 1f)
-            {
-                // R 贴图再旋转 180 度（下半弧音符朝下）
-                Projectile.rotation += MathHelper.Pi;
-            }
 
             if (Main.rand.NextBool(2))
             {
@@ -211,18 +204,9 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            // L(ai[0]=0) 弧线朝上 → 用 R 贴图（音符朝上），R(ai[0]=1) 弧线朝下 → 用 L 贴图（音符朝下）
-            bool isUpArc = Projectile.ai[0] == 0f;
-            string texPath = isUpArc
-                ? "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_R"
-                : "LeagueOfLegendThings/Content/Projectiles/LethalTempoNoteProjectile_L";
-
-            Texture2D tex = ModContent.Request<Texture2D>(texPath, AssetRequestMode.ImmediateLoad).Value;
+            Texture2D tex = ModContent.Request<Texture2D>(Texture, AssetRequestMode.ImmediateLoad).Value;
             Vector2 origin = tex.Size() * 0.5f;
             Vector2 drawPos = Projectile.Center - Main.screenPosition;
-
-            // 不再垂直翻转下弧，恢复原样
-            SpriteEffects fx = SpriteEffects.None;
 
             Main.EntitySpriteDraw(
                 tex,
@@ -232,10 +216,10 @@ namespace LeagueOfLegendThings.Content.Projectiles
                 Projectile.rotation,
                 origin,
                 Projectile.scale,
-                fx,
+                SpriteEffects.None,
                 0
             );
-            return false; // 自绘
+            return false;
         }
 
         public override void OnKill(int timeLeft)
