@@ -99,8 +99,10 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             new() { Id="Sil_Move",   DisplayName="Move Speed",      StatKey=KEY_MOVE_SPEED,  BaseValue=0.03f, MaxValue=0.05f, Tier=ShardTier.Silver },
             new() { Id="Sil_LS",     DisplayName="Life Steal",      StatKey=KEY_LIFE_STEAL,  BaseValue=0.005f,MaxValue=0.010f,Tier=ShardTier.Silver },
             new() { Id="Sil_Mana",   DisplayName="Max Mana",        StatKey=KEY_MAX_MANA,    BaseValue=10f,   MaxValue=20f,   Tier=ShardTier.Silver },
-            new() { Id="Sil_Might",  DisplayName="Might",           StatKey="Might",          BaseValue=0.02f, MaxValue=0.03f, Tier=ShardTier.Silver, IsDualStat=true },
-            new() { Id="Sil_Unbreak",DisplayName="Unbreakable",     StatKey="Unbreakable",    BaseValue=2f,    MaxValue=3f,    Tier=ShardTier.Silver, IsDualStat=true },
+            new() { Id="Sil_Might",     DisplayName="Might",           StatKey="Might",          BaseValue=0.02f, MaxValue=0.03f, Tier=ShardTier.Silver, IsDualStat=true },
+            new() { Id="Sil_Unbreak",   DisplayName="Unbreakable",     StatKey="Unbreakable",    BaseValue=2f,    MaxValue=3f,    Tier=ShardTier.Silver, IsDualStat=true },
+            new() { Id="Sil_Precision", DisplayName="Precision",       StatKey="Precision",      BaseValue=0.015f,MaxValue=0.02f, Tier=ShardTier.Silver, IsDualStat=true },
+            new() { Id="Sil_Vitality",  DisplayName="Vitality",        StatKey="Vitality",       BaseValue=6f,    MaxValue=12f,   Tier=ShardTier.Silver, IsDualStat=true },
         };
 
         /// <summary>黄金碎片（固定值，约为白银的 2 倍）</summary>
@@ -117,9 +119,11 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
             new() { Id="Gold_Move",   DisplayName="Move Speed",      StatKey=KEY_MOVE_SPEED,  BaseValue=0.06f, MaxValue=0.06f, Tier=ShardTier.Gold },
             new() { Id="Gold_LS",     DisplayName="Life Steal",      StatKey=KEY_LIFE_STEAL,  BaseValue=0.015f,MaxValue=0.015f,Tier=ShardTier.Gold },
             new() { Id="Gold_Mana",   DisplayName="Max Mana",        StatKey=KEY_MAX_MANA,    BaseValue=25f,   MaxValue=25f,   Tier=ShardTier.Gold },
-            new() { Id="Gold_Might",  DisplayName="Might",           StatKey="Might",          BaseValue=0.03f, MaxValue=0.03f, Tier=ShardTier.Gold, IsDualStat=true },
-            new() { Id="Gold_Unbreak",DisplayName="Unbreakable",     StatKey="Unbreakable",    BaseValue=3f,    MaxValue=3f,    Tier=ShardTier.Gold, IsDualStat=true },
-            new() { Id="Gold_Faith",  DisplayName="Faith",           StatKey="Faith",          BaseValue=1.50f, MaxValue=3.00f, Tier=ShardTier.Gold },
+            new() { Id="Gold_Might",     DisplayName="Might",           StatKey="Might",          BaseValue=0.03f, MaxValue=0.03f, Tier=ShardTier.Gold, IsDualStat=true },
+            new() { Id="Gold_Unbreak",   DisplayName="Unbreakable",     StatKey="Unbreakable",    BaseValue=3f,    MaxValue=3f,    Tier=ShardTier.Gold, IsDualStat=true },
+            new() { Id="Gold_Precision", DisplayName="Precision",       StatKey="Precision",      BaseValue=0.025f,MaxValue=0.025f,Tier=ShardTier.Gold, IsDualStat=true },
+            new() { Id="Gold_Vitality",  DisplayName="Vitality",        StatKey="Vitality",       BaseValue=15f,   MaxValue=15f,   Tier=ShardTier.Gold, IsDualStat=true },
+            new() { Id="Gold_Faith",     DisplayName="Faith",           StatKey="Faith",          BaseValue=1.50f, MaxValue=3.00f, Tier=ShardTier.Gold },
         };
 
         /// <summary>棱彩碎片（强力固定值）</summary>
@@ -264,6 +268,14 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                     case "Unbreakable":
                         AddStat(stats, KEY_DEFENSE, val);
                         AddStat(stats, KEY_MAX_LIFE, val * 2); // HP 部分
+                        break;
+                    case "Precision":
+                        AddStat(stats, KEY_CRIT_CHANCE, val);
+                        AddStat(stats, KEY_ATK_SPEED, val);
+                        break;
+                    case "Vitality":
+                        AddStat(stats, KEY_MAX_LIFE, val);
+                        AddStat(stats, KEY_MAX_MANA, val);
                         break;
                     case "Faith":
                         // Faith: 额外抽取 2 个随机黄金碎片（简化版：直接给两个通用属性）

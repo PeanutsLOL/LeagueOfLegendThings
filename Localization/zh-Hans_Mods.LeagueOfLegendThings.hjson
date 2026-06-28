@@ -655,6 +655,8 @@ StatShards: {
 	Sil_Mana.DisplayName: 最大法力碎片
 	Sil_Might.DisplayName: 力量碎片（近战+远程）
 	Sil_Unbreak.DisplayName: 坚不可摧碎片（防御+生命）
+	Sil_Precision.DisplayName: 精准碎片（暴击+攻速）
+	Sil_Vitality.DisplayName: 活力碎片（生命+魔力）
 	Gold_Melee.DisplayName: 近战伤害碎片
 	Gold_Ranged.DisplayName: 远程伤害碎片
 	Gold_Magic.DisplayName: 魔法伤害碎片
@@ -668,6 +670,8 @@ StatShards: {
 	Gold_Mana.DisplayName: 最大法力碎片
 	Gold_Might.DisplayName: 力量碎片（近战+远程）
 	Gold_Unbreak.DisplayName: 坚不可摧碎片（防御+生命）
+	Gold_Precision.DisplayName: 精准碎片（暴击+攻速）
+	Gold_Vitality.DisplayName: 活力碎片（生命+魔力）
 	Gold_Faith.DisplayName: 两个随机碎片
 	Pris_AllDmg.DisplayName: 全伤害加成碎片
 	Pris_ArmPen.DisplayName: 护甲穿透碎片

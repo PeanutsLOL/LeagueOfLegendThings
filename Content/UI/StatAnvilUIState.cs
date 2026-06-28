@@ -221,6 +221,8 @@ namespace LeagueOfLegendThings.Content.UI
                 "Faith"       => "LeagueOfLegendThings/Content/Icon/Shard_CDR",
                 "CritDmg"     => "LeagueOfLegendThings/Content/Icon/Shard_CritDmg",
                 "Move"        => "LeagueOfLegendThings/Content/Icon/Shard_Move",
+                "Precision"  => "LeagueOfLegendThings/Content/Icon/Shard_Crit",
+                "Vitality"   => "LeagueOfLegendThings/Content/Icon/Shard_Health",
                 "Shardholder" => "LeagueOfLegendThings/Content/Icon/Shard_CritDmg",
                 _ => null
             };
@@ -349,6 +351,8 @@ namespace LeagueOfLegendThings.Content.UI
                 string desc;
                 if (_isShardholder)
                     desc = Language.GetTextValue("Mods.LeagueOfLegendThings.UI.StatAnvil.ShardholderDesc", _shard?.StatValue ?? 0f);
+                else if (_shard?.IsDualStat == true)
+                    desc = FormatDualStatDesc(_shard);
                 else
                     desc = $"{_shard?.GetDisplayName() ?? Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Unknown")}\n+{FormatShardValue(_shard)}";
 
@@ -433,6 +437,24 @@ namespace LeagueOfLegendThings.Content.UI
                 StatShardSystem.ShardTier.Prismatic => new Color(220, 90, 240),
                 _ => Color.White
             };
+
+            /// <summary>双属性碎片描述 — 同时展示两个受影响的属性</summary>
+            private static string FormatDualStatDesc(StatShardSystem.Shard shard)
+            {
+                if (shard == null) return "";
+                float v = shard.StatValue;
+                string name = shard.GetDisplayName();
+                string suffix = shard.Id.Contains('_') ? shard.Id.Substring(shard.Id.IndexOf('_') + 1) : "";
+
+                return suffix switch
+                {
+                    "Might" => $"{name}\n+{v:P0} Melee Damage\n+{v:P0} Ranged Damage",
+                    "Unbreak" => $"{name}\n+{(int)v} Defense\n+{(int)(v * 2)} Max Life",
+                    "Precision" => $"{name}\n+{v:P0} Crit Chance\n+{v:P0} Attack Speed",
+                    "Vitality" => $"{name}\n+{(int)v} Max Life\n+{(int)v} Max Mana",
+                    _ => $"{name}\n+{FormatShardValue(shard)}"
+                };
+            }
         }
 
         // ============ 透明 PNG 无溢色绘制 ============
