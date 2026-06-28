@@ -36,7 +36,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (buffTimer > 0)
             {
                 buffTimer--;
-                Player.GetDamage(DamageClass.Generic) += 0.08f;
+                Player.GetDamage(DamageClass.Generic) += 0.15f;
             }
 
             if (cooldownTimer > 0)
@@ -84,8 +84,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (hitCount >= 3)
             {
                 int denom = Player.statLifeMax2 + Player.statManaMax2;
-                float scale = denom > 0 ? (accumulatedDamage * 0.33f) * (denom / 700f) : 0f;
-                int bonusDamage = Math.Max(1, (int)MathF.Round(40f + scale));
+                float scale = denom > 0 ? (accumulatedDamage * 0.45f) * (denom / 700f) : 0f;
+                int bonusDamage = Math.Max(1, (int)MathF.Round(100f + scale));
 
                 target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);
                 CombatText.NewText(Player.Hitbox, Color.Aqua, $"Dealt {bonusDamage} DMG");

@@ -58,7 +58,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         private int speedTimer;
         
         // 移速buff持续时间
-        private const int SpeedBuffDuration = 60; // 1秒
+        private const int SpeedBuffDuration = 180; // 3秒
 
         public override void Initialize()
         {
@@ -224,13 +224,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             }
             
             float totalHeal = (baseHeal + trueMeleeBonus) * healMultiplier;
-            
-            // 非Boss单位只能获得15%回复
-            if (!target.boss)
-            {
-                totalHeal *= 0.15f;
-            }
-            
+
             // 执行回血
             int healAmount = (int)totalHeal;
             if (healAmount > 0)

@@ -65,7 +65,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             // 计算实时伤害
             float manaRatio = Player.statManaMax2 > 0 ? (float)Player.statMana / Player.statManaMax2 : 0f;
-            int finalDamage = (int)(30 + 270 * manaRatio);
+            int finalDamage = (int)(50 + 400 * manaRatio);
 
             // 转换为发射态
             proj.damage = (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(finalDamage);
@@ -86,8 +86,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             // 进入冷却
             readyCometIndex = -1;
-            int maxCD = 1200;
-            int minCD = 480;
+            int maxCD = 720;
+            int minCD = 300;
             float reductionFactor = MathHelper.Clamp(Player.statManaMax2 / 220f, 0f, 1f);
             cometCooldownTimer = (int)MathHelper.Lerp(maxCD, minCD, reductionFactor);
         }

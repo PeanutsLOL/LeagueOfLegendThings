@@ -13,11 +13,11 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         // 最大叠加层数
         public const int MaxStacks = 12;
         // 每层伤害加成（自适应之力）
-        public const float DamageBonusPerStack = 0.015f; // 1.5% per stack, 18% at max
+        public const float DamageBonusPerStack = 0.02f; // 2% per stack, 24% at max
         // 满层时的生命吸取比例
-        public const float FullStacksLifesteal = 0.0008f; // 0.08% lifesteal at max stacks
+        public const float FullStacksLifesteal = 0.002f; // 0.2% lifesteal at max stacks
         // 持续时间（以帧为单位，60帧 = 1秒）
-        public const int BuffDuration = 4 * 60; // 4秒
+        public const int BuffDuration = 5 * 60; // 5秒
 
         public override void SetStaticDefaults()
         {
@@ -207,7 +207,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         }
                         else if (damageType == DamageClass.Ranged)
                         {
-                            stacksToAdd = 0.5f; // 远程叠0.25层
+                            stacksToAdd = 0.75f; // 远程叠0.75层
                         }
                         else if (damageType == DamageClass.Magic)
                         {

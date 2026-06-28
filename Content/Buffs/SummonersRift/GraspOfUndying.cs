@@ -152,15 +152,15 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
 			if (damageType == DamageClass.Melee)
 			{
-				bonusDmg = maxHp * 0.035f;
-				heal = maxHp * 0.013f;
-				bonusHealth = 0.25f;
+				bonusDmg = maxHp * 0.06f;
+				heal = maxHp * 0.025f;
+				bonusHealth = 0.5f;
 			}
 			else if (damageType == DamageClass.Ranged)
 			{
-				bonusDmg = maxHp * 0.014f;
-				heal = maxHp * 0.0052f;
-				bonusHealth = 0.1f;
+				bonusDmg = maxHp * 0.04f;
+				heal = maxHp * 0.018f;
+				bonusHealth = 0.25f;
 			}
 			else
 			{

@@ -8,7 +8,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class GuardianPlayer : ModPlayer
     {
-        private const int GuardianCooldownTicks = 50 * 60; // 50 seconds
+        private const int GuardianCooldownTicks = 25 * 60; // 25 seconds
 
         private int guardianCooldown = 0;
         private bool guardianTriggeredForCurrentShield = false;
@@ -37,8 +37,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 };
                 SoundEngine.PlaySound(sfx, Player.position);
 
-                Player.statLife += 120;
-                Player.HealEffect(120, true);
+                Player.statLife += 250;
+                Player.HealEffect(250, true);
             }
 
             // If shield is absent, allow future triggers

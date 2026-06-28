@@ -12,7 +12,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
     // Electrocute
     public class ElectrocutePlayer : ModPlayer
     {
-        private const int ProcCooldown = 30 * 60;
+        private const int ProcCooldown = 15 * 60;
 
         private int hitCount;
         private int lastTargetId = -1;
@@ -64,7 +64,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         float healthMana = Player.statLifeMax2 + Player.statManaMax2;
                         float ratio = (float)System.Math.Sqrt(healthMana / 2480f);
                         float scalingFactor = System.Math.Min(ratio, 20f);  // 上限20倍
-                        int bonusDamage = (int)(2 * (240f + 960f * scalingFactor));
+                        int bonusDamage = (int)(2 * (300f + 1100f * scalingFactor));
 
                         target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: true, knockBack: 0f, damageType: DamageClass.Generic);
                         CombatText.NewText(Player.Hitbox, Color.DarkRed, $"Dealt {bonusDamage} DMG");
@@ -125,7 +125,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 float healthMana = Player.statLifeMax2 + Player.statManaMax2;
                 float ratio = (float)System.Math.Sqrt(healthMana / 2480f);
                 float scalingFactor = System.Math.Min(ratio, 20f);  // 上限20倍
-                int bonusDamage = (int)(240f + 960f * scalingFactor);
+                int bonusDamage = (int)(300f + 1100f * scalingFactor);
 
                 target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: true, knockBack: 0f, damageType: DamageClass.Generic);
                 CombatText.NewText(Player.Hitbox, Color.Red, $"Dealt {bonusDamage} DMG");
