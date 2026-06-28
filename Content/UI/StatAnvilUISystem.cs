@@ -24,6 +24,9 @@ namespace LeagueOfLegendThings.Content.UI
         /// <summary>选中的碎片</summary>
         public StatShardSystem.Shard SelectedShard { get; private set; }
 
+        // 保存原始鼠标状态，在 PreUpdatePlayers 吞掉后在 UpdateUI 恢复给 UI
+        private bool _savedMouseLeft, _savedMouseRight;
+
         public override void Load()
         {
             if (!Main.dedServ)
@@ -41,16 +44,37 @@ namespace LeagueOfLegendThings.Content.UI
             StatAnvilUI = null;
         }
 
+        public override void PreUpdatePlayers()
+        {
+            if (StatAnvilUI is { IsVisible: true })
+            {
+                // 保存真实鼠标状态，供 UpdateUI 恢复
+                _savedMouseLeft = Main.mouseLeft;
+                _savedMouseRight = Main.mouseRight;
+                // 立刻吞掉，阻止后续背包/玩家逻辑获取点击
+                Main.mouseLeft = false;
+                Main.mouseRight = false;
+                Main.LocalPlayer.mouseInterface = true;
+            }
+        }
+
         public override void UpdateUI(GameTime gameTime)
         {
+            if (StatAnvilUI is { IsVisible: true })
+            {
+                // 临时恢复鼠标让 UI 能响应点击
+                Main.mouseLeft = _savedMouseLeft;
+                Main.mouseRight = _savedMouseRight;
+            }
+
             _interface?.Update(gameTime);
 
             if (StatAnvilUI is { IsVisible: true })
             {
-                Main.LocalPlayer.mouseInterface = true;
-                // 吞掉 UI 已处理的鼠标点击，防止背包/商店等后续逻辑再响应
+                // UI 处理完后再次吞掉
                 Main.mouseLeft = false;
                 Main.mouseRight = false;
+                Main.LocalPlayer.mouseInterface = true;
             }
 
             // 检测玩家是否完成了选择（仅触发一次）
