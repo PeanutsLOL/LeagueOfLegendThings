@@ -102,7 +102,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         // 计时器（帧），大于 0 时递减，到 0 清空层数
         private int lethalTempoTimer;
 
-        // 轮流发射 L / R（0 = L 上抛，1 = R 下抛）
+        // 轮流发射上弧/下弧（0 = 上弧，1 = 下弧）
         private int nextNoteSide = 0;
 
         private bool lethalTempoProcPlayed;
