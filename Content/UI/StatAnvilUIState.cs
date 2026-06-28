@@ -295,10 +295,10 @@ namespace LeagueOfLegendThings.Content.UI
                 Append(bg);
 
                 // 层级色条 — 纯色矩形，圆角由 bg 面板边框提供
-                int stripH = (int)(Main.screenHeight * 0.0042f);
+                int stripH = (int)(Main.screenHeight * 0.0056f); // ~8px @1440p
                 var strip = new FilledRect(TierColor(_tier));
-                strip.Width.Set(w - 4, 0f); strip.Height.Set(stripH, 0f);
-                strip.Left.Set(2, 0f); strip.Top.Set(2, 0f);
+                strip.Width.Set(w - 2, 0f); strip.Height.Set(stripH, 0f);
+                strip.Left.Set(1, 0f); strip.Top.Set(1, 0f);
                 bg.Append(strip);
 
                 // Shardholder 提示横幅
