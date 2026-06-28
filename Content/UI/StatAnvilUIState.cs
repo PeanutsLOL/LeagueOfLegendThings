@@ -294,13 +294,6 @@ namespace LeagueOfLegendThings.Content.UI
                 bg.BorderColor = _warned ? new Color(255, 60, 60) : TierBorder(_tier);
                 Append(bg);
 
-                // 层级色条 — 纯色矩形，圆角由 bg 面板边框提供
-                int stripH = (int)(Main.screenHeight * 0.0056f); // ~8px @1440p
-                var strip = new FilledRect(TierColor(_tier));
-                strip.Width.Set(w - 2, 0f); strip.Height.Set(stripH, 0f);
-                strip.Left.Set(1, 0f); strip.Top.Set(1, 0f);
-                bg.Append(strip);
-
                 // Shardholder 提示横幅
                 if (_isShardholder && _warned)
                 {
