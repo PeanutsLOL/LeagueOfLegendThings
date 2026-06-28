@@ -16,6 +16,7 @@ namespace LeagueOfLegendThings.Content.UI
 {
     public class StatAnvilUIState : UIState
     {
+        private UIPanel _backdrop;        // 全屏半透明遮罩，防止点击穿透
         private UIPanel _header;          // 仅覆盖标题的窄面板
         private UIText _title;
         private ShardCard[] _cards = new ShardCard[3];
@@ -46,6 +47,20 @@ namespace LeagueOfLegendThings.Content.UI
                 if (options[i].Id == StatShardSystem.SHARDHOLDER_ID)
                     _warningCard = i;
 
+            // 全屏半透明遮罩（最先添加，最底层，拦截点击穿透）
+            if (_backdrop == null)
+            {
+                _backdrop = new UIPanel();
+                _backdrop.SetPadding(0);
+                _backdrop.BackgroundColor = new Color(18, 18, 24) * 0.7f;
+                _backdrop.BorderColor = Color.Transparent;
+            }
+            _backdrop.Width.Set(Main.screenWidth, 0f);
+            _backdrop.Height.Set(Main.screenHeight, 0f);
+            _backdrop.Left.Set(0, 0f);
+            _backdrop.Top.Set(0, 0f);
+            if (_backdrop.Parent == null) Append(_backdrop);
+
             // 每次打开重新布局，适配当前窗口分辨率
             LayoutAll();
 
@@ -65,6 +80,7 @@ namespace LeagueOfLegendThings.Content.UI
         public void Close()
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
+            _backdrop?.Remove();
             _header?.Remove();
             foreach (var c in _cards) c?.Remove();
         }
