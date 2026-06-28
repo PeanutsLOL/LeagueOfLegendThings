@@ -125,7 +125,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 return;
 
             float stolen = damageDone * (RavenousLifeStealPerStack * hunterStacks);
-            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
+            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().TryConsume(stolen);
         }
 
         private void HandleKillStacks(RuneSaveSystem save, NPC target)

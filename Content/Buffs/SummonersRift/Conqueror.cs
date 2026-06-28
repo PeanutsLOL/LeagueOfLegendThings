@@ -261,7 +261,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 if (ConquerorStacks >= Conqueror.MaxStacks)
                 {
                     float stolen = damageDone * Conqueror.FullStacksLifesteal;
-                    Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
+                    Player.GetModPlayer<Mayhem.LeechPoolPlayer>().TryConsume(stolen);
 
                     if (Main.rand.NextBool(3))
                     {

@@ -29,6 +29,7 @@ namespace LeagueOfLegendThings.Content.UI
         private ConnectorElement _primaryConnector;
         private ConnectorElement _secondaryConnector;
         private bool _open;
+        private bool _textsRefreshed; // 延迟到首个 Update 刷新文本（本地化就绪）
 
         private UIPanel _detailPanel;
         private UIText _detailTitle;
@@ -87,7 +88,7 @@ namespace LeagueOfLegendThings.Content.UI
 
         private string GetUILabel(string key, string fallback)
         {
-            string fullKey = $"Mods.LeagueOfLegendThings.UI.Runes.Label.{key}";
+            string fullKey = $"Mods.LeagueOfLegendThings.UI.Runes.Labels.{key}";
             string value = Language.GetTextValue(fullKey);
             if (string.IsNullOrEmpty(value) || value == fullKey)
                 return fallback;
@@ -182,6 +183,15 @@ namespace LeagueOfLegendThings.Content.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            // 首次 Update 时刷新所有文本（本地化此时已就绪）
+            if (!_textsRefreshed && Main.screenWidth > 0)
+            {
+                _textsRefreshed = true;
+                _mainButton?.SetText(GetUILabel("MainButton", "Runes"));
+                // 面板标题在 Refresh() 中重建，首次打开时自然会拿正确文本
+                UpdateMainButtonLockVisual();
+            }
 
             bool mayhem = ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune;
             if (mayhem != _mayhemActive)

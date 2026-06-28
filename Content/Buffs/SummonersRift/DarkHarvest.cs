@@ -64,8 +64,10 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
             if (cooldownTimer > 0)
                 return;
 
-            int heldItemDamage = Player.HeldItem?.damage ?? 0;
-            float rawDamage = 60f + 30f * soulCount + heldItemDamage * 0.25f;
+            int heldItemDamage = RuneDamageHelper.GetHeldWeaponDamage(Player);
+            float classBonus = RuneDamageHelper.GetHighestClassBonus(Player);
+            int hpDmg = RuneDamageHelper.GetPercentHPDamage(target, 0.02f);
+            float rawDamage = (60f + 30f * soulCount + heldItemDamage * 0.25f) * (1f + classBonus) + hpDmg;
             int bonusDamage = Math.Max(1, (int)MathF.Round(rawDamage));
 
             target.SimpleStrikeNPC(bonusDamage, Player.direction, crit: false, knockBack: 0f, damageType: DamageClass.Generic);

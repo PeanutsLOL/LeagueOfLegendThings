@@ -176,60 +176,12 @@ namespace LeagueOfLegendThings.Content.Systems
 
         public override void OnWorldLoad()
         {
-            var cfg = ModContent.GetInstance<RuneConfig>();
-
-            if (cfg.EnableAramMayhemRune)
-            {
-                // Mayhem 模式启用时清空所有召唤师峡谷符文选择
-                PrimaryPath = "";
-                SecondaryPath = "";
-                PrimaryKeystone = "";
-                PrimaryRow1 = "";
-                PrimaryRow2 = "";
-                PrimaryRow3 = "";
-            }
-            else
-            {
-                PrimaryPath = "Precision";
-                SecondaryPath = "Domination";
-                PrimaryKeystone = "Lethal Tempo";
-                PrimaryRow1 = "Absorb Life";
-                PrimaryRow2 = "Legend: Alacrity";
-                PrimaryRow3 = "Coup de Grace";
-            }
-            SecondaryPick1 = "";
-            SecondaryPick2 = "";
-            SecondaryPick1Row = -1;
-            SecondaryPick2Row = -1;
+            // 符文选择由 RunePlayer.LoadData 负责，此处仅清世界级数据
             DefeatedBosses = new HashSet<int>();
         }
 
         public override void OnWorldUnload()
         {
-            var cfg = ModContent.GetInstance<RuneConfig>();
-
-            if (cfg.EnableAramMayhemRune)
-            {
-                PrimaryPath = "";
-                SecondaryPath = "";
-                PrimaryKeystone = "";
-                PrimaryRow1 = "";
-                PrimaryRow2 = "";
-                PrimaryRow3 = "";
-            }
-            else
-            {
-                PrimaryPath = "Precision";
-                SecondaryPath = "Domination";
-                PrimaryKeystone = "Lethal Tempo";
-                PrimaryRow1 = "Absorb Life";
-                PrimaryRow2 = "Legend: Alacrity";
-                PrimaryRow3 = "Coup de Grace";
-            }
-            SecondaryPick1 = "";
-            SecondaryPick2 = "";
-            SecondaryPick1Row = -1;
-            SecondaryPick2Row = -1;
             DefeatedBosses = new HashSet<int>();
         }
 

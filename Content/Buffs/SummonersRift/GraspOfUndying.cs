@@ -168,8 +168,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 				return;
 			}
 
-			// 造成魔法伤害
-			int intBonusDmg = (int)MathF.Max(1, bonusDmg);
+			// 造成魔法伤害（附加武器面板）
+			int weaponDmg = RuneDamageHelper.GetHeldWeaponDamage(Player);
+			int intBonusDmg = (int)MathF.Max(1, bonusDmg) + weaponDmg;
 			target.StrikeNPC(new NPC.HitInfo()
 			{
 				Damage = intBonusDmg,

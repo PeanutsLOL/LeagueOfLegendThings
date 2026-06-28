@@ -322,17 +322,35 @@ Configs: {
 			Label: 启用海克斯大乱斗符文
 			Tooltip: 禁用召唤师峡谷符文，取而代之的是，在每个游戏状态（前期、困难模式等）你将获得一个随机的海克斯大乱斗增幅器。
 		}
+
+		LeechPoolBarLocked: {
+			Label: 锁定吸血池条位置
+			Tooltip: 禁止拖动吸血池状态条。
+		}
+
+		LeechPoolBarX: {
+			// Label: Leech Pool Bar X
+			// Tooltip: ""
+		}
+
+		LeechPoolBarY: {
+			// Label: Leech Pool Bar Y
+			// Tooltip: ""
+		}
 	}
 }
 
 UI: {
 	Runes: {
-		Label: {
+		Labels: {
 			MainButton: 符文
 			PanelTitle: 符文选择
 			ButtonLocked: 锁定
 			ButtonUnlocked: 解锁
 		}
+
+		HintNoRunes: 尚未选择符文！点击设置按钮上方的 [符文] 按钮选择你的符文路线和基石。
+		HintMayhemToggle: 提示：可以在 设置 → 符文配置 → 启用海克斯大乱斗符文 中切换至大乱斗模式。
 
 		Path: {
 			Precision: {
@@ -436,7 +454,18 @@ UI: {
 		ShardholderDesc: 碎片增幅器\n所有效果 ×{0:P0}\n一次性选择
 		ShardholderWarning: !!! 警告 !!! 增幅器（{0:F0}% 加成）将移除所有海克斯大乱斗增幅器。仅保留属性加成。点击[确认]继续。
 		ClickAgain: 再次点击确认
-		FaithDetails: 信仰碎片（{0}%）：+{1} 全部伤害，+{2} 防御
+		FaithDetails: 信仰碎片（{0}%）：获得 {1} 和 {2}
+		FaithCardDesc:
+			'''
+			{0}
+			效果强度：+{1:P0}
+			随机获得 2 个黄金碎片效果
+			'''
+	}
+
+	LeechPool: {
+		Tooltip: 吸血池: {0}/{1}
+		TooltipRegen: 恢复: +{0}/秒
 	}
 }
 

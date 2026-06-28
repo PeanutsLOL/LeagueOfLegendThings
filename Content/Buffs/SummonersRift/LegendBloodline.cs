@@ -90,7 +90,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             float lifestealRate = stacks * LifestealPerStack;
             float stolen = damageDone * lifestealRate;
-            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().Fill(stolen);
+            Player.GetModPlayer<Mayhem.LeechPoolPlayer>().TryConsume(stolen);
         }
 
         private float CalculateStacks()

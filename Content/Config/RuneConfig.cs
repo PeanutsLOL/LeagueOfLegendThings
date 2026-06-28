@@ -11,5 +11,14 @@ namespace LeagueOfLegendThings.Content.Config
 
         [DefaultValue(false)]
         public bool EnableAramMayhemRune { get; set; }
+
+        [DefaultValue(false)]
+        public bool LeechPoolBarLocked { get; set; }
+
+        [DefaultValue(0f)]
+        public float LeechPoolBarX { get; set; }
+
+        [DefaultValue(0f)]
+        public float LeechPoolBarY { get; set; }
     }
 }

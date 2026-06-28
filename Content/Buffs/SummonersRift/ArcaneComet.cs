@@ -63,11 +63,12 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 return;
             }
 
-            // 计算实时伤害
+            // 计算实时伤害：基础 + 武器面板
             float manaRatio = Player.statManaMax2 > 0 ? (float)Player.statMana / Player.statManaMax2 : 0f;
-            int finalDamage = (int)(50 + 400 * manaRatio);
+            int baseDmg = (int)(50 + 400 * manaRatio);
+            int finalDamage = baseDmg + RuneDamageHelper.GetHeldWeaponDamage(Player);
 
-            // 转换为发射态
+            // 施加魔法伤害加成
             proj.damage = (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(finalDamage);
             proj.ai[0] = 1; // ai[0]=1 表示发射态
             proj.ai[1] = lastHitPosition.X;

@@ -322,17 +322,35 @@ Configs: {
 			Label: Enable Aram Mayhem Rune
 			Tooltip: Disable Summoner's Rift runes, instead, you will get a random Aram Mayhem Hextech augment at every game states (Pre-Hardmode, Hardmode, etc.).
 		}
+
+		LeechPoolBarLocked: {
+			Label: Lock Leech Pool Bar
+			Tooltip: Prevent dragging the leech pool bar from its position.
+		}
+
+		LeechPoolBarX: {
+			Label: Leech Pool Bar X
+			Tooltip: ""
+		}
+
+		LeechPoolBarY: {
+			Label: Leech Pool Bar Y
+			Tooltip: ""
+		}
 	}
 }
 
 UI: {
 	Runes: {
-		Label: {
+		Labels: {
 			MainButton: Runes
 			PanelTitle: Rune Selection
 			ButtonLocked: Locked
 			ButtonUnlocked: Unlocked
 		}
+
+		HintNoRunes: No runes selected! Click the [Runes] button (above the Settings button) to choose your rune path and keystone.
+		HintMayhemToggle: Tip: switch to Mayhem mode in Settings → Rune Config → Enable Aram Mayhem Rune.
 
 		Path: {
 			Precision: {
@@ -436,7 +454,18 @@ UI: {
 		ShardholderDesc: Shardholder\nAll effects ×{0:P0}\nOne-time choice
 		ShardholderWarning: !!! WARNING !!! Shardholder ({0:F0}% boost) will REMOVE all Mayhem augments. Only stat bonuses remain. Click [Confirm] to proceed.
 		ClickAgain: Click again to confirm
-		FaithDetails: Faith Shard ({0}%): +{1} all damage, +{2} defense
+		FaithDetails: Faith Shard ({0}%): {1}, {2}
+		FaithCardDesc:
+			'''
+			{0}
+			Effect Strength: +{1:P0}
+			Grants 2 random Gold shard effects
+			'''
+	}
+
+	LeechPool: {
+		Tooltip: Leech Pool: {0}/{1}
+		TooltipRegen: Regen: +{0}/sec
 	}
 }
 
