@@ -434,7 +434,7 @@ UI: {
 		Select: 选择
 		ShardholderActivated: 增幅器激活！所有碎片效果 x{0}。海克斯大乱斗增幅器已移除。
 		ShardholderDesc: 碎片增幅器\n所有效果 ×{0:P0}\n一次性选择
-t		ShardholderWarning: "!!! 警告 !!! 增幅器（{0:F0}% 加成）将移除所有海克斯大乱斗增幅器。仅保留属性加成。点击[确认]继续。"
+			ShardholderWarning: "!!! 警告 !!! 增幅器（{0:F0}% 加成）将移除所有海克斯大乱斗增幅器。仅保留属性加成。点击[确认]继续。"
 			ClickAgain: "再次点击确认"
 		FaithDetails: 信仰碎片（{0}%）：+{1} 全部伤害，+{2} 防御
 	}
@@ -442,17 +442,17 @@ t		ShardholderWarning: "!!! 警告 !!! 增幅器（{0:F0}% 加成）将移除所
 
 Items: {
 	StatBonusAnvilItem: {
-		DisplayName: 属性锻造器
-		Description: 打开锻造选择界面。从三个随机属性碎片中选择一个。棱彩轮次可能出现增幅器碎片。
-		// Tooltip: ""
-t		ForgedCount: "已锻造：{0} 次（已必定获得增幅器！）"
-			ForgedCountNotYet: "已锻造：{0} 次（{1}次后必定获得增幅器）"
-			NoStats: "尚未锻造任何碎片。"
-			StatsHeader: "--- 碎片属性 ---"
-			StatsHeaderSH: "--- 碎片属性（增幅器 ×{0:F1}）---"
-			ShiftHint: "按住Shift查看已锻造属性"
-			ShiftLabel: "[Shift查看详情]"
-	}
+			DisplayName: ?????
+			Description: ??????????????????????????????????????
+			// Tooltip: ""
+			ForgedCount: "????{0} ????????????"
+			ForgedCountNotYet: "????{0} ??{1}??????????"
+			NoStats: "?????????"
+			StatsHeader: "--- ???? ---"
+			StatsHeaderSH: "--- ???????? ?{0:F1}?---"
+			ShiftHint: "??Shift???????"
+			ShiftLabel: "[Shift????]"
+		}
 
 	TrueIceBowAshe: {
 		DisplayName: 臻冰之弓
@@ -631,7 +631,7 @@ MayhemAugments: {
 }
 
 StatShards: {
-t	Shardholder.Description: "所有碎片效果 ×{0:P0}"
+		Shardholder.Description: "所有碎片效果 ×{0:P0}"
 		Command.ResetDescription: "重置所有碎片属性加成及缓存数据。"
 		Command.ResetDone: "[海克斯大乱斗] 所有碎片属性加成已重置。"
 		Unknown: "???"
