@@ -261,7 +261,7 @@ namespace LeagueOfLegendThings.Content.UI
         {
             private readonly int _index;
             private readonly System.Action<int> _onClick;
-            private readonly bool _isShardholder;
+            private bool _isShardholder;
 
             private StatShardSystem.Shard _shard;
             private StatShardSystem.ShardTier _tier;
