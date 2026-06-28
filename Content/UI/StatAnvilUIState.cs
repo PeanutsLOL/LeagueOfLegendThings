@@ -294,6 +294,15 @@ namespace LeagueOfLegendThings.Content.UI
                 bg.BorderColor = _warned ? new Color(255, 60, 60) : TierBorder(_tier);
                 Append(bg);
 
+                // 层级色条 — 足够高度让 UIPanel 9-slice 边框稳定渲染
+                int stripH = (int)(Main.screenHeight * 0.01f); // ~14px @1440p
+                var strip = new UIPanel();
+                strip.Width.Set(w, 0f); strip.Height.Set(stripH, 0f);
+                strip.Left.Set(0, 0f); strip.Top.Set(0, 0f); strip.SetPadding(0);
+                strip.BackgroundColor = TierColor(_tier);
+                strip.BorderColor = TierBorder(_tier);
+                Append(strip);
+
                 // Shardholder 提示横幅
                 if (_isShardholder && _warned)
                 {
