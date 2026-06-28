@@ -294,10 +294,12 @@ namespace LeagueOfLegendThings.Content.UI
                 bg.BorderColor = _warned ? new Color(255, 60, 60) : TierBorder(_tier);
                 Append(bg);
 
-                // 层级色条 — 纯色矩形，无边框
-                var strip = new ColorBar(TierColor(_tier));
-                strip.Width.Set(w - 2, 0f); strip.Height.Set(3, 0f);
-                strip.Left.Set(1, 0f); strip.Top.Set(1, 0f);
+                // 层级色条 — 圆角，边框与底色同色系
+                var strip = new UIPanel();
+                strip.Width.Set(w - 2, 0f); strip.Height.Set(4, 0f);
+                strip.Left.Set(1, 0f); strip.Top.Set(1, 0f); strip.SetPadding(0);
+                strip.BackgroundColor = TierColor(_tier);
+                strip.BorderColor = TierBorder(_tier);
                 bg.Append(strip);
 
                 // Shardholder 提示横幅
@@ -344,7 +346,7 @@ namespace LeagueOfLegendThings.Content.UI
                     iconFrame.Append(iconLabel);
                 }
 
-                // 描述 — 按换行拆分为多行 UIText（UIText 不支持 \n）
+                // 描述 — HJSON 未加引号时 \n 是字面量，先转为真实换行再拆分
                 float descTop = iconTop + iconSize + 12;
                 string desc;
                 if (_isShardholder)
@@ -354,6 +356,7 @@ namespace LeagueOfLegendThings.Content.UI
                 else
                     desc = $"{_shard?.GetDisplayName() ?? Language.GetTextValue("Mods.LeagueOfLegendThings.StatShards.Unknown")}\n+{FormatShardValue(_shard)}";
 
+                desc = desc.Replace("\\n", "\n");
                 string[] descLines = desc.Split('\n');
                 float lineHeight = 22f;
                 Color descColor = _isShardholder ? Color.Gold : new Color(220, 220, 235);
@@ -488,21 +491,5 @@ namespace LeagueOfLegendThings.Content.UI
             }
         }
 
-        // ============ 纯色条（无边框，用于卡片顶部色条）============
-
-        private class ColorBar : UIElement
-        {
-            private readonly Color _color;
-            public ColorBar(Color color) { _color = color; IgnoresMouseInteraction = true; }
-
-            protected override void DrawSelf(SpriteBatch spriteBatch)
-            {
-                var dim = GetDimensions();
-                // 绘制纯色填充矩形，无边框
-                spriteBatch.Draw(Terraria.GameContent.TextureAssets.MagicPixel.Value,
-                    new Rectangle((int)dim.X, (int)dim.Y, (int)dim.Width, (int)dim.Height),
-                    _color);
-            }
-        }
     }
 }
