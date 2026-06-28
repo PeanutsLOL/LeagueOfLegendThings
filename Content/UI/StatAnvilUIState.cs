@@ -274,7 +274,7 @@ namespace LeagueOfLegendThings.Content.UI
             public void SetShard(StatShardSystem.Shard shard, StatShardSystem.ShardTier tier,
                 bool isSH, bool warned)
             {
-                _shard = shard; _tier = tier; _warned = warned;
+                _shard = shard; _tier = tier; _isShardholder = isSH; _warned = warned;
                 Build();
             }
 
@@ -289,18 +289,14 @@ namespace LeagueOfLegendThings.Content.UI
                 var bg = new UIPanel();
                 bg.Width.Set(w, 0f); bg.Height.Set(h, 0f); bg.SetPadding(0);
                 bg.BackgroundColor = new Color(28, 28, 42) * 0.96f;
-                bg.BorderColor = _isShardholder
-                    ? (_warned ? new Color(255, 60, 60) : Color.Gold)
-                    : TierBorder(_tier);
+                bg.BorderColor = _warned ? new Color(255, 60, 60) : TierBorder(_tier);
                 Append(bg);
 
                 // 层级色条
                 var strip = new UIPanel();
                 strip.Width.Set(w - 2, 0f); strip.Height.Set(3, 0f);
                 strip.Left.Set(1, 0f); strip.Top.Set(1, 0f); strip.SetPadding(0);
-                strip.BackgroundColor = _isShardholder
-                    ? Color.Gold
-                    : TierColor(_tier) * 0.6f;
+                strip.BackgroundColor = TierColor(_tier) * 0.6f;
                 strip.BorderColor = Color.Transparent;
                 bg.Append(strip);
 
@@ -325,12 +321,8 @@ namespace LeagueOfLegendThings.Content.UI
                 iconFrame.Width.Set(iconSize, 0f); iconFrame.Height.Set(iconSize, 0f);
                 iconFrame.Left.Set((w - iconSize) / 2f, 0f); iconFrame.Top.Set(iconTop, 0f);
                 iconFrame.SetPadding(0);
-                iconFrame.BackgroundColor = _isShardholder
-                    ? new Color(80, 25, 80) * 0.7f
-                    : TierColor(_tier) * 0.15f;
-                iconFrame.BorderColor = _isShardholder
-                    ? Color.Gold
-                    : TierBorder(_tier) * 0.5f;
+                iconFrame.BackgroundColor = TierColor(_tier) * 0.15f;
+                iconFrame.BorderColor = TierBorder(_tier) * 0.5f;
                 bg.Append(iconFrame);
 
                 // 图标 — 使用 NonPremultiplied 修复透明边缘溢色
