@@ -23,10 +23,10 @@ namespace LeagueOfLegendThings.Content.Projectiles
         // localAI[1]：抛物线计时器
 
         private static float ForwardSpeed = 5f;        // 抛物线前向速度
-        private static float ArcLift = 7.0f;          // 抛物线初始垂直速度幅度
+        private static float ArcLift = 3.5f;          // 抛物线初始垂直速度幅度（当前一半）
         private static float Gravity = 0.14f;         // 抛物线重力（越小曲线越长）
-        private static int ArcTimeLimit = 70;         // 抛物线最长持续帧数
-        private static int ArcMinTime = 15;           // 至少跑这么多帧再允许进入追踪
+        private static int ArcTimeLimit = 55;         // 抛物线最长持续帧数
+        private static int ArcMinTime = 12;           // 至少跑这么多帧再允许进入追踪
         private static float HomingRange = 1920f;      // 追踪范围
         private static float HomingSpeedStart = 10f;  // 追踪初速度（开始较慢）
         private static float HomingSpeedMax = 66f;    // 追踪最大速度（后半段很快）
@@ -35,10 +35,10 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override void SetDefaults()
         {
-            // 贴图 32×32，碰撞盒匹配
-            Projectile.width = 32;
-            Projectile.height = 32;
-            Projectile.scale = 1.0f;
+            // 贴图缩至 1/4（8×8 碰撞盒 + 0.25 渲染缩放）
+            Projectile.width = 8;
+            Projectile.height = 8;
+            Projectile.scale = 0.25f;
 
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
@@ -139,7 +139,7 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
             // 沿飞行方向的速度阻尼
             float forwardSpeed = Vector2.Dot(Projectile.velocity, dir);
-            forwardSpeed *= 0.92f;
+            forwardSpeed *= 0.96f;
             // 垂直分量：减速（拉回飞行轴线），实现镜像对称的弧线
             float perpSpeed = Vector2.Dot(Projectile.velocity, perp);
             perpSpeed -= Gravity * arcSign; // 向飞行轴线拉回
@@ -162,7 +162,16 @@ namespace LeagueOfLegendThings.Content.Projectiles
         private void RunHomingPhase()
         {
             NPC target = FindTarget();
-            if (target == null) return;
+            if (target == null)
+            {
+                // 无目标时按存储的飞行方向漂移，避免卡在原地
+                if (Projectile.velocity.Length() < 1f)
+                {
+                    float angle = Projectile.ai[1];
+                    Projectile.velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 3f;
+                }
+                return;
+            }
 
             // 根据追踪时间逐帧提速，直到封顶
             float desiredSpeed = HomingSpeedStart + Projectile.localAI[1] * HomingAccel;
