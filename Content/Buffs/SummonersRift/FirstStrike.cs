@@ -11,7 +11,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
     // First Strike
     public class FirstStrikePlayer : ModPlayer
     {
-        public bool HasFirstStrike;
         private int trackingTimer;
         private int trackedTargetId = -1;
         private int sumDamage;
@@ -22,13 +21,6 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         public override void ResetEffects()
         {
-            HasFirstStrike = false;
-        }
-
-        public override void PostUpdateMiscEffects()
-        {
-            var save = ModContent.GetInstance<RuneSaveSystem>();
-            HasFirstStrike = save.FirstStrikeSelected;
         }
 
         public override void UpdateDead()
@@ -150,7 +142,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!HasFirstStrike || !target.boss)
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!save.FirstStrikeSelected || !target.boss)
                 return;
 
             if (cooldownTimer > 0)
@@ -174,7 +167,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!HasFirstStrike || !target.boss)
+            var save = ModContent.GetInstance<RuneSaveSystem>();
+            if (!save.FirstStrikeSelected || !target.boss)
                 return;
 
             if (cooldownTimer > 0)
@@ -281,6 +275,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                         PitchVariance = 0.1f
                     };
                     SoundEngine.PlaySound(sfxHit, npc2.Center);
+
+                    // 红/金色命中爆发
+                    RuneVisualHelper.SpawnGoldenBurst(npc2.Center, 10, 1.5f);
                 }
 
                 Projectile.Kill();

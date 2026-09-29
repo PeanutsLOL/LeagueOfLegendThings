@@ -93,6 +93,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             cooldownTimer = ProcCooldown;
 
+            // 暗影粒子爆发
+            RuneVisualHelper.SpawnShadowBurst(target.Center);
+
             // 生成原版 HallowBossLastingRainbow 射弹作为视觉特效，用 localAI[1]=777 标记以便染红
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

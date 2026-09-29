@@ -517,32 +517,5 @@ namespace LeagueOfLegendThings.Content.UI
             }
         }
 
-        // ============ 透明 PNG 无溢色绘制 ============
-
-        private class NonPremultipliedUIImage : UIElement
-        {
-            private readonly Asset<Texture2D> _texture;
-            public NonPremultipliedUIImage(Asset<Texture2D> t) { _texture = t; IgnoresMouseInteraction = true; }
-
-            protected override void DrawSelf(SpriteBatch spriteBatch)
-            {
-                if (_texture?.Value == null) return;
-                var tex = _texture.Value;
-                var dim = GetDimensions();
-                float s = System.Math.Min(dim.Width / tex.Width, dim.Height / tex.Height);
-                float x = dim.X + (dim.Width - tex.Width * s) / 2f;
-                float y = dim.Y + (dim.Height - tex.Height * s) / 2f;
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied,
-                    SamplerState.PointClamp, DepthStencilState.None,
-                    RasterizerState.CullNone, null, Main.UIScaleMatrix);
-                spriteBatch.Draw(tex, new Vector2(x, y), null, Color.White, 0f, Vector2.Zero, s, SpriteEffects.None, 0f);
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-                    SamplerState.PointClamp, DepthStencilState.None,
-                    RasterizerState.CullNone, null, Main.UIScaleMatrix);
-            }
-        }
-
     }
 }

@@ -10,7 +10,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class FleetFootwork : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Fleet_Footwork";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Fleet_Footwork";
 
         public override void SetStaticDefaults()
         {
@@ -44,8 +44,8 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
         public float Energy => energy;
         public const float MaxEnergy = 100f;
         
-        // 移动累积：每25像素1点能量
-        private const float PixelsPerEnergy = 10f * 16f; // 25方块 = 25*16像素
+        // 移动累积：每5像素1点能量
+        private const float PixelsPerEnergy = 5f * 16f; // 5方块 = 5*16像素
         private Vector2 lastPosition;
         
         // 攻击累积：每4次攻击1点能量

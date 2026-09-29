@@ -7,7 +7,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LegendHaste : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Legend_Haste";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Legend-_Haste";
 
         public override void SetStaticDefaults()
         {

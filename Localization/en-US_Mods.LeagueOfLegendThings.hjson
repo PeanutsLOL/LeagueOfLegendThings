@@ -114,19 +114,19 @@ Buffs: {
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sudden_Impact
 	}
 
-	EyeballCollection: {
-		DisplayName: Eyeball Collection
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Eyeball_Collection
+	GrislyMementos: {
+		DisplayName: Grisly Mementos
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Grisly_Mementos
 	}
 
-	RavenousHunter: {
-		DisplayName: Ravenous Hunter
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ravenous_Hunter
+	SixthSense: {
+		DisplayName: Sixth Sense
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sixth_Sense
 	}
 
-	IngeniousHunter: {
-		DisplayName: Ingenious Hunter
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ingenious_Hunter
+	DeepWard: {
+		DisplayName: Deep Ward
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Deep_Ward
 	}
 
 	TreasureHunter: {
@@ -139,14 +139,24 @@ Buffs: {
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Relentless_Hunter
 	}
 
+	UltimateHunter: {
+		DisplayName: Ultimate Hunter
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ultimate_Hunter
+	}
+
 	ArcaneComet: {
 		DisplayName: Arcane Comet
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Arcane_Comet
 	}
 
-	PhaseRush: {
-		DisplayName: Phase Rush
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Phase_Rush
+	StormraidersSurge: {
+		DisplayName: Stormraider's Surge
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Stormraiders_Surge
+	}
+
+	DeathfireTouch: {
+		DisplayName: Deathfire Touch
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Deathfire_Touch
 	}
 
 	AxiomArcanist: {
@@ -347,6 +357,7 @@ UI: {
 			PanelTitle: Rune Selection
 			ButtonLocked: Locked
 			ButtonUnlocked: Unlocked
+			Keystone: Keystone
 		}
 
 		HintNoRunes: No runes selected! Click the [Runes] button (above the Settings button) to choose your rune path and keystone.
@@ -399,14 +410,16 @@ UI: {
 			Cheap_Shot: Bonus damage vs crowd-controlled targets. 4s cooldown.
 			Taste_of_Blood: Heal 16 on hit when not full HP. 20s cooldown.
 			Sudden_Impact: Dash/teleport grants ready state. Next hit deals 40/140/240.
-			Eyeball_Collection: Kills stack up to 10. +0.8% damage per stack.
-			Ravenous_Hunter: Life steal 0.05% per hunter stack.
-			Ingenious_Hunter: Potion cooldown -3% per hunter stack.
+			Grisly_Mementos: Kills stack up to 10. +0.8% damage per stack.
+			Sixth_Sense: Every 60s, negate one fatal damage hit.
+			Deep_Ward: During boss fight, 20s without damage grants a 5s dodge buff. One hit negated.
 			Treasure_Hunter: Extra gold on kill based on hunter stacks.
 			Relentless_Hunter: +3% move speed per hunter stack after 5s no damage.
+			Ultimate_Hunter: -4% ability cooldown per hunter stack.
 			Summon_Aery: Summon Aery to help you.
 			Arcane_Comet: An Arcane comet goes around you. Strike while you hit an enemy.
-			Phase_Rush: Three consecutive hits on a target grant a short movement-speed burst.
+			Stormraiders_Surge: Three consecutive hits on a target grant a short movement-speed burst.
+			Deathfire_Touch: Magic damage burns the target for 3s. Scales with highest class bonus. Continuous burn after 3s deals +75% damage.
 			Axiom_Arcanist: +4% magic damage.
 			Manaflow_Band: +5 max mana per stack (max 6), hit cooldown 20s.
 			Nimbus_Cloak: After potion: +20% move speed for 2s.
@@ -728,3 +741,5 @@ MayhemPlayer: {
 		LifeSteal: Life Steal
 	}
 }
+
+Conditions.MayhemEnabled: Mods.LeagueOfLegendThings.Conditions.MayhemEnabled

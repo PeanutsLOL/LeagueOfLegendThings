@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LastStand : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Last_Stand";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Last_Stand";
 
         public override void SetStaticDefaults()
         {

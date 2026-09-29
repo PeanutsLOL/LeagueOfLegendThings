@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
-    // Phase Rush
+    // Stormraider's Surge (formerly Phase Rush)
     public class PhaseRushPlayer : ModPlayer
     {
         private const int ProcCooldown = 7 * 60;
@@ -60,7 +60,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 return;
 
             var runeSave = ModContent.GetInstance<RuneSaveSystem>();
-            if (!runeSave.PhaseRushSelected)
+            if (!runeSave.StormraidersSurgeSelected)
                 return;
 
             if (target.friendly || target.lifeMax <= 5)

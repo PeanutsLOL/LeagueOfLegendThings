@@ -40,18 +40,11 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         private void HandleArcaneComet(NPC target)
         {
-            // 触发条件：有预备好的彗星 + 攻击动画结束 + 目标合法
+            // 触发条件：有预备好的彗星 + 目标合法
             if (readyCometIndex == -1)
                 return;
 
-            if (Player.itemAnimation != 0)
-                return;
-
             if (target == null || !target.active || target.friendly || target.lifeMax <= 5)
-                return;
-
-            // 修正：只允许锁定非友方且生命值大于5的目标
-            if (target.friendly || target.lifeMax <= 5)
                 return;
 
             lastHitPosition = target.Center;

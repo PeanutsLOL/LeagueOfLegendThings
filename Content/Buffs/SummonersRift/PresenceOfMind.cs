@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class PresenceOfMind : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Presence_of_Mind";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Presence_of_Mind";
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;

@@ -41,13 +41,13 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         private void HandleCheapShot(NPC target, DamageClass damageType)
         {
-            if (!ModContent.GetInstance<RuneSaveSystem>().SecondaryPath.Equals("Domination") &&
-                !ModContent.GetInstance<RuneSaveSystem>().PrimaryPath.Equals("Domination"))
+            if (!ModContent.GetInstance<RuneSaveSystem>().SecondaryPath.Equals(RuneIds.PathDomination) &&
+                !ModContent.GetInstance<RuneSaveSystem>().PrimaryPath.Equals(RuneIds.PathDomination))
                 return;
 
             var runeSave = ModContent.GetInstance<RuneSaveSystem>();
-            if (!runeSave.PrimaryRow1.Equals("Cheap Shot") &&
-                !(runeSave.SecondaryPick1 == "Cheap Shot" || runeSave.SecondaryPick2 == "Cheap Shot"))
+            if (!runeSave.PrimaryRow1.Equals(RuneIds.RuneCheapShot) &&
+                !(runeSave.SecondaryPick1.Equals(RuneIds.RuneCheapShot) || runeSave.SecondaryPick2.Equals(RuneIds.RuneCheapShot)))
                 return;
 
             if (target.friendly || target.lifeMax <= 5)

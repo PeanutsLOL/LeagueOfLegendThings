@@ -30,13 +30,13 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
         public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (HasGlacialAugment && target.boss)
+            if (ModContent.GetInstance<RuneSaveSystem>().GlacialAugmentSelected && target.boss)
                 ApplyGlacialAugment(target);
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (HasGlacialAugment && target.boss)
+            if (ModContent.GetInstance<RuneSaveSystem>().GlacialAugmentSelected && target.boss)
                 ApplyGlacialAugment(target);
         }
 

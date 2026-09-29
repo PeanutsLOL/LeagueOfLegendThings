@@ -105,6 +105,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 };
                 SoundEngine.PlaySound(sfx, Player.Center);
 
+                // 金色冲击爆发
+                RuneVisualHelper.SpawnGoldenBurst(target.Center, 12, 1.6f);
+
                 buffTimer = ProcDamageBuffDuration;
                 hitCount = 0;
                 accumulatedDamage = 0;

@@ -9,7 +9,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class Conqueror : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Conqueror";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Conqueror";
         // 最大叠加层数
         public const int MaxStacks = 12;
         // 每层伤害加成（自适应之力）

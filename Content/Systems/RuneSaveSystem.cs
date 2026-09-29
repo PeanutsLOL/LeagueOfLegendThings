@@ -8,16 +8,67 @@ namespace LeagueOfLegendThings.Content.Systems
 {
     public class RuneSaveSystem : ModSystem
     {
-        public string PrimaryPath = "Precision";
-        public string SecondaryPath = "Domination";
+        // ---- 符文选择状态 ----
+        // 全部以「稳定 ID」存储（见 RuneIds / RuneRegistry），不再存可被翻译的显示名。
+        // setter 经 RuneRegistry.ToIdOrKeep 归一化，因此旧存档里的
+        // "Lethal Tempo" / "LethalTempo" / "Precision" 等历史值会自动升级为 ID。
+        private string _primaryPath = RuneIds.PathPrecision;
+        private string _secondaryPath = RuneIds.PathDomination;
+        private string _primaryKeystone = RuneIds.RuneLethalTempo;
+        private string _primaryRow1 = RuneIds.RuneAbsorbLife;
+        private string _primaryRow2 = RuneIds.RuneLegendAlacrity;
+        private string _primaryRow3 = RuneIds.RuneCoupDeGrace;
+        private string _secondaryPick1 = ""; // not forced, can be empty
+        private string _secondaryPick2 = ""; // not forced, can be empty
 
-        public string PrimaryKeystone = "Lethal Tempo";
-        public string PrimaryRow1 = "Absorb Life";
-        public string PrimaryRow2 = "Legend: Alacrity";
-        public string PrimaryRow3 = "Coup de Grace";
+        public string PrimaryPath
+        {
+            get => _primaryPath;
+            set => _primaryPath = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
 
-        public string SecondaryPick1 = ""; // not forced, can be empty
-        public string SecondaryPick2 = ""; // not forced, can be empty
+        public string SecondaryPath
+        {
+            get => _secondaryPath;
+            set => _secondaryPath = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string PrimaryKeystone
+        {
+            get => _primaryKeystone;
+            set => _primaryKeystone = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string PrimaryRow1
+        {
+            get => _primaryRow1;
+            set => _primaryRow1 = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string PrimaryRow2
+        {
+            get => _primaryRow2;
+            set => _primaryRow2 = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string PrimaryRow3
+        {
+            get => _primaryRow3;
+            set => _primaryRow3 = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string SecondaryPick1
+        {
+            get => _secondaryPick1;
+            set => _secondaryPick1 = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
+        public string SecondaryPick2
+        {
+            get => _secondaryPick2;
+            set => _secondaryPick2 = RuneRegistry.ToIdOrKeep(value) ?? "";
+        }
+
         public int SecondaryPick1Row = -1;
         public int SecondaryPick2Row = -1;
 
@@ -27,152 +78,156 @@ namespace LeagueOfLegendThings.Content.Systems
         // Mayhem 模式激活时强制禁用所有召唤师峡谷符文
         private bool MayhemActive => ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune;
 
-        public bool PressTheAttackSelected => !MayhemActive && PrimaryPath == "Precision" && PrimaryKeystone == "Press the Attack";
-        public bool LethalTempoSelected => !MayhemActive && PrimaryPath == "Precision" && PrimaryKeystone == "Lethal Tempo";
-        public bool ConquerorSelected => !MayhemActive && PrimaryPath == "Precision" && PrimaryKeystone == "Conqueror";
-        public bool FleetFootworkSelected => !MayhemActive && PrimaryPath == "Precision" && PrimaryKeystone == "Fleet Footwork";
+        public bool PressTheAttackSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryKeystone.Equals(RuneIds.RunePressTheAttack);
+        public bool LethalTempoSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryKeystone.Equals(RuneIds.RuneLethalTempo);
+        public bool ConquerorSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryKeystone.Equals(RuneIds.RuneConqueror);
+        public bool FleetFootworkSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryKeystone.Equals(RuneIds.RuneFleetFootwork);
         public bool AbsorbLifeSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow1 == "Absorb Life") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Absorb Life" || SecondaryPick2 == "Absorb Life"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow1.Equals(RuneIds.RuneAbsorbLife)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneAbsorbLife) || SecondaryPick2.Equals(RuneIds.RuneAbsorbLife)));
         public bool TriumphSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow1 == "Triumph") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Triumph" || SecondaryPick2 == "Triumph"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow1.Equals(RuneIds.RuneTriumph)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneTriumph) || SecondaryPick2.Equals(RuneIds.RuneTriumph)));
         public bool PresenceOfMindSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow1 == "Presence of Mind") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Presence of Mind" || SecondaryPick2 == "Presence of Mind"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow1.Equals(RuneIds.RunePresenceOfMind)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RunePresenceOfMind) || SecondaryPick2.Equals(RuneIds.RunePresenceOfMind)));
         public bool LegendAlacritySelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow2 == "Legend: Alacrity") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Legend: Alacrity" || SecondaryPick2 == "Legend: Alacrity"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow2.Equals(RuneIds.RuneLegendAlacrity)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneLegendAlacrity) || SecondaryPick2.Equals(RuneIds.RuneLegendAlacrity)));
         public bool LegendHasteSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow2 == "Legend: Haste") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Legend: Haste" || SecondaryPick2 == "Legend: Haste"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow2.Equals(RuneIds.RuneLegendHaste)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneLegendHaste) || SecondaryPick2.Equals(RuneIds.RuneLegendHaste)));
         public bool LegendBloodlineSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow2 == "Legend: Bloodline") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Legend: Bloodline" || SecondaryPick2 == "Legend: Bloodline"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow2.Equals(RuneIds.RuneLegendBloodline)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneLegendBloodline) || SecondaryPick2.Equals(RuneIds.RuneLegendBloodline)));
         public bool CoupDeGraceSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow3 == "Coup de Grace") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Coup de Grace" || SecondaryPick2 == "Coup de Grace"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow3.Equals(RuneIds.RuneCoupDeGrace)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneCoupDeGrace) || SecondaryPick2.Equals(RuneIds.RuneCoupDeGrace)));
         public bool CutDownSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow3 == "Cut Down") || SecondaryPath == "Precision" &&
-            (SecondaryPick1 == "Cut Down" || SecondaryPick2 == "Cut Down");
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow3.Equals(RuneIds.RuneCutDown)) || SecondaryPath.Equals(RuneIds.PathPrecision) &&
+            (SecondaryPick1.Equals(RuneIds.RuneCutDown) || SecondaryPick2.Equals(RuneIds.RuneCutDown));
         public bool LastStandSelected =>
-            !MayhemActive && (PrimaryPath == "Precision" && PrimaryRow3 == "Last Stand") ||
-            (SecondaryPath == "Precision" && (SecondaryPick1 == "Last Stand" || SecondaryPick2 == "Last Stand"));
-        public bool ElectrocuteSelected => !MayhemActive && PrimaryPath == "Domination" && PrimaryKeystone == "Electrocute";
-        public bool PredatorSelected => !MayhemActive && PrimaryPath == "Domination" && PrimaryKeystone == "Predator";
-        public bool DarkHarvestSelected => !MayhemActive && PrimaryPath == "Domination" && PrimaryKeystone == "Dark Harvest";
-        public bool HailOfBladesSelected => !MayhemActive && PrimaryPath == "Domination" && PrimaryKeystone == "Hail of Blades";
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathPrecision) && PrimaryRow3.Equals(RuneIds.RuneLastStand)) ||
+            (SecondaryPath.Equals(RuneIds.PathPrecision) && (SecondaryPick1.Equals(RuneIds.RuneLastStand) || SecondaryPick2.Equals(RuneIds.RuneLastStand)));
+        public bool ElectrocuteSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryKeystone.Equals(RuneIds.RuneElectrocute);
+        public bool PredatorSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryKeystone.Equals(RuneIds.RunePredator);
+        public bool DarkHarvestSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryKeystone.Equals(RuneIds.RuneDarkHarvest);
+        public bool HailOfBladesSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryKeystone.Equals(RuneIds.RuneHailOfBlades);
         public bool TasteOfBloodSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow1 == "Taste of Blood") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Taste of Blood" || SecondaryPick2 == "Taste of Blood"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow1.Equals(RuneIds.RuneTasteOfBlood)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneTasteOfBlood) || SecondaryPick2.Equals(RuneIds.RuneTasteOfBlood)));
         public bool SuddenImpactSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow1 == "Sudden Impact") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Sudden Impact" || SecondaryPick2 == "Sudden Impact"));
-        public bool EyeballCollectionSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow2 == "Eyeball Collection") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Eyeball Collection" || SecondaryPick2 == "Eyeball Collection"));
-        public bool RavenousHunterSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow2 == "Ravenous Hunter") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Ravenous Hunter" || SecondaryPick2 == "Ravenous Hunter"));
-        public bool IngeniousHunterSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow2 == "Ingenious Hunter") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Ingenious Hunter" || SecondaryPick2 == "Ingenious Hunter"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow1.Equals(RuneIds.RuneSuddenImpact)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneSuddenImpact) || SecondaryPick2.Equals(RuneIds.RuneSuddenImpact)));
+        public bool GrislyMementosSelected =>
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow2.Equals(RuneIds.RuneGrislyMementos)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneGrislyMementos) || SecondaryPick2.Equals(RuneIds.RuneGrislyMementos)));
+        public bool SixthSenseSelected =>
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow2.Equals(RuneIds.RuneSixthSense)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneSixthSense) || SecondaryPick2.Equals(RuneIds.RuneSixthSense)));
+        public bool DeepWardSelected =>
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow2.Equals(RuneIds.RuneDeepWard)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneDeepWard) || SecondaryPick2.Equals(RuneIds.RuneDeepWard)));
         public bool TreasureHunterSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow3 == "Treasure Hunter") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Treasure Hunter" || SecondaryPick2 == "Treasure Hunter"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow3.Equals(RuneIds.RuneTreasureHunter)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneTreasureHunter) || SecondaryPick2.Equals(RuneIds.RuneTreasureHunter)));
         public bool RelentlessHunterSelected =>
-            !MayhemActive && (PrimaryPath == "Domination" && PrimaryRow3 == "Relentless Hunter") ||
-            (SecondaryPath == "Domination" && (SecondaryPick1 == "Relentless Hunter" || SecondaryPick2 == "Relentless Hunter"));
-        public bool SummonAerySelected => !MayhemActive && PrimaryPath == "Sorcery" && PrimaryKeystone == "Summon Aery";
-        public bool ArcaneCometSelected => !MayhemActive && PrimaryPath == "Sorcery" && PrimaryKeystone == "Arcane Comet";
-        public bool PhaseRushSelected => !MayhemActive && PrimaryPath == "Sorcery" && PrimaryKeystone == "Phase Rush";
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow3.Equals(RuneIds.RuneRelentlessHunter)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneRelentlessHunter) || SecondaryPick2.Equals(RuneIds.RuneRelentlessHunter)));
+        public bool UltimateHunterSelected =>
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathDomination) && PrimaryRow3.Equals(RuneIds.RuneUltimateHunter)) ||
+            (SecondaryPath.Equals(RuneIds.PathDomination) && (SecondaryPick1.Equals(RuneIds.RuneUltimateHunter) || SecondaryPick2.Equals(RuneIds.RuneUltimateHunter)));
+        public bool SummonAerySelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryKeystone.Equals(RuneIds.RuneSummonAery);
+        public bool ArcaneCometSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryKeystone.Equals(RuneIds.RuneArcaneComet);
+        public bool StormraidersSurgeSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryKeystone.Equals(RuneIds.RuneStormraidersSurge);
+        public bool DeathfireTouchSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryKeystone.Equals(RuneIds.RuneDeathfireTouch);
         public bool AxiomArcanistSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow1 == "Axiom Arcanist") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Axiom Arcanist" || SecondaryPick2 == "Axiom Arcanist"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow1.Equals(RuneIds.RuneAxiomArcanist)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneAxiomArcanist) || SecondaryPick2.Equals(RuneIds.RuneAxiomArcanist)));
         public bool ManaflowBandSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow1 == "Manaflow Band") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Manaflow Band" || SecondaryPick2 == "Manaflow Band"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow1.Equals(RuneIds.RuneManaflowBand)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneManaflowBand) || SecondaryPick2.Equals(RuneIds.RuneManaflowBand)));
         public bool NimbusCloakSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow1 == "Nimbus Cloak") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Nimbus Cloak" || SecondaryPick2 == "Nimbus Cloak"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow1.Equals(RuneIds.RuneNimbusCloak)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneNimbusCloak) || SecondaryPick2.Equals(RuneIds.RuneNimbusCloak)));
         public bool TranscendenceSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow2 == "Transcendence") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Transcendence" || SecondaryPick2 == "Transcendence"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow2.Equals(RuneIds.RuneTranscendence)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneTranscendence) || SecondaryPick2.Equals(RuneIds.RuneTranscendence)));
         public bool CeleritySelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow2 == "Celerity") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Celerity" || SecondaryPick2 == "Celerity"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow2.Equals(RuneIds.RuneCelerity)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneCelerity) || SecondaryPick2.Equals(RuneIds.RuneCelerity)));
         public bool AbsoluteFocusSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow2 == "Absolute Focus") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Absolute Focus" || SecondaryPick2 == "Absolute Focus"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow2.Equals(RuneIds.RuneAbsoluteFocus)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneAbsoluteFocus) || SecondaryPick2.Equals(RuneIds.RuneAbsoluteFocus)));
         public bool ScorchSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow3 == "Scorch") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Scorch" || SecondaryPick2 == "Scorch"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow3.Equals(RuneIds.RuneScorch)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneScorch) || SecondaryPick2.Equals(RuneIds.RuneScorch)));
         public bool WaterwalkingSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow3 == "Waterwalking") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Waterwalking" || SecondaryPick2 == "Waterwalking"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow3.Equals(RuneIds.RuneWaterwalking)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneWaterwalking) || SecondaryPick2.Equals(RuneIds.RuneWaterwalking)));
         public bool GatheringStormSelected =>
-            !MayhemActive && (PrimaryPath == "Sorcery" && PrimaryRow3 == "Gathering Storm") ||
-            (SecondaryPath == "Sorcery" && (SecondaryPick1 == "Gathering Storm" || SecondaryPick2 == "Gathering Storm"));
-        public bool GraspOfTheUndyingSelected => !MayhemActive && PrimaryPath == "Resolve" && PrimaryKeystone == "Grasp of the Undying";
-        public bool AftershockSelected => !MayhemActive && PrimaryPath == "Resolve" && PrimaryKeystone == "Aftershock";
-        public bool GuardianSelected => !MayhemActive && PrimaryPath == "Resolve" && PrimaryKeystone == "Guardian";
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathSorcery) && PrimaryRow3.Equals(RuneIds.RuneGatheringStorm)) ||
+            (SecondaryPath.Equals(RuneIds.PathSorcery) && (SecondaryPick1.Equals(RuneIds.RuneGatheringStorm) || SecondaryPick2.Equals(RuneIds.RuneGatheringStorm)));
+        public bool GraspOfTheUndyingSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryKeystone.Equals(RuneIds.RuneGraspOfTheUndying);
+        public bool AftershockSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryKeystone.Equals(RuneIds.RuneAftershock);
+        public bool GuardianSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryKeystone.Equals(RuneIds.RuneGuardian);
         public bool DemolishSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow1 == "Demolish") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Demolish" || SecondaryPick2 == "Demolish"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow1.Equals(RuneIds.RuneDemolish)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneDemolish) || SecondaryPick2.Equals(RuneIds.RuneDemolish)));
         public bool FontOfLifeSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow1 == "Font of Life") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Font of Life" || SecondaryPick2 == "Font of Life"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow1.Equals(RuneIds.RuneFontOfLife)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneFontOfLife) || SecondaryPick2.Equals(RuneIds.RuneFontOfLife)));
         public bool ShieldBashSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow1 == "Shield Bash") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Shield Bash" || SecondaryPick2 == "Shield Bash"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow1.Equals(RuneIds.RuneShieldBash)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneShieldBash) || SecondaryPick2.Equals(RuneIds.RuneShieldBash)));
         public bool ConditioningSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow2 == "Conditioning") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Conditioning" || SecondaryPick2 == "Conditioning"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow2.Equals(RuneIds.RuneConditioning)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneConditioning) || SecondaryPick2.Equals(RuneIds.RuneConditioning)));
         public bool SecondWindSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow2 == "Second Wind") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Second Wind" || SecondaryPick2 == "Second Wind"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow2.Equals(RuneIds.RuneSecondWind)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneSecondWind) || SecondaryPick2.Equals(RuneIds.RuneSecondWind)));
         public bool BonePlatingSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow2 == "Bone Plating") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Bone Plating" || SecondaryPick2 == "Bone Plating"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow2.Equals(RuneIds.RuneBonePlating)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneBonePlating) || SecondaryPick2.Equals(RuneIds.RuneBonePlating)));
         public bool OvergrowthSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow3 == "Overgrowth") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Overgrowth" || SecondaryPick2 == "Overgrowth"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow3.Equals(RuneIds.RuneOvergrowth)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneOvergrowth) || SecondaryPick2.Equals(RuneIds.RuneOvergrowth)));
         public bool RevitalizeSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow3 == "Revitalize") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Revitalize" || SecondaryPick2 == "Revitalize"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow3.Equals(RuneIds.RuneRevitalize)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneRevitalize) || SecondaryPick2.Equals(RuneIds.RuneRevitalize)));
         public bool UnflinchingSelected =>
-            !MayhemActive && (PrimaryPath == "Resolve" && PrimaryRow3 == "Unflinching") ||
-            (SecondaryPath == "Resolve" && (SecondaryPick1 == "Unflinching" || SecondaryPick2 == "Unflinching"));
-        public bool GlacialAugmentSelected => !MayhemActive && PrimaryPath == "Inspiration" && PrimaryKeystone == "Glacial Augment";
-        public bool UnsealedSpellbookSelected => !MayhemActive && PrimaryPath == "Inspiration" && PrimaryKeystone == "Unsealed Spellbook";
-        public bool FirstStrikeSelected => !MayhemActive && PrimaryPath == "Inspiration" && PrimaryKeystone == "First Strike";
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathResolve) && PrimaryRow3.Equals(RuneIds.RuneUnflinching)) ||
+            (SecondaryPath.Equals(RuneIds.PathResolve) && (SecondaryPick1.Equals(RuneIds.RuneUnflinching) || SecondaryPick2.Equals(RuneIds.RuneUnflinching)));
+        public bool GlacialAugmentSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryKeystone.Equals(RuneIds.RuneGlacialAugment);
+        public bool UnsealedSpellbookSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryKeystone.Equals(RuneIds.RuneUnsealedSpellbook);
+        public bool FirstStrikeSelected => !MayhemActive && PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryKeystone.Equals(RuneIds.RuneFirstStrike);
         public bool HextechFlashtraptionSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow1 == "Hextech Flashtraption") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Hextech Flashtraption" || SecondaryPick2 == "Hextech Flashtraption"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow1.Equals(RuneIds.RuneHextechFlashtraption)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneHextechFlashtraption) || SecondaryPick2.Equals(RuneIds.RuneHextechFlashtraption)));
         public bool MagicalFootwearSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow1 == "Magical Footwear") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Magical Footwear" || SecondaryPick2 == "Magical Footwear"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow1.Equals(RuneIds.RuneMagicalFootwear)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneMagicalFootwear) || SecondaryPick2.Equals(RuneIds.RuneMagicalFootwear)));
         public bool CashBackSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow1 == "Cash Back") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Cash Back" || SecondaryPick2 == "Cash Back"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow1.Equals(RuneIds.RuneCashBack)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneCashBack) || SecondaryPick2.Equals(RuneIds.RuneCashBack)));
         public bool TripleTonicSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow2 == "Triple Tonic") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Triple Tonic" || SecondaryPick2 == "Triple Tonic"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow2.Equals(RuneIds.RuneTripleTonic)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneTripleTonic) || SecondaryPick2.Equals(RuneIds.RuneTripleTonic)));
         public bool TimeWarpTonicSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow2 == "Time Warp Tonic") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Time Warp Tonic" || SecondaryPick2 == "Time Warp Tonic"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow2.Equals(RuneIds.RuneTimeWarpTonic)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneTimeWarpTonic) || SecondaryPick2.Equals(RuneIds.RuneTimeWarpTonic)));
         public bool BiscuitDeliverySelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow2 == "Biscuit Delivery") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Biscuit Delivery" || SecondaryPick2 == "Biscuit Delivery"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow2.Equals(RuneIds.RuneBiscuitDelivery)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneBiscuitDelivery) || SecondaryPick2.Equals(RuneIds.RuneBiscuitDelivery)));
         public bool CosmicInsightSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow3 == "Cosmic Insight") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Cosmic Insight" || SecondaryPick2 == "Cosmic Insight"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow3.Equals(RuneIds.RuneCosmicInsight)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneCosmicInsight) || SecondaryPick2.Equals(RuneIds.RuneCosmicInsight)));
         public bool ApproachVelocitySelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow3 == "Approach Velocity") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Approach Velocity" || SecondaryPick2 == "Approach Velocity"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow3.Equals(RuneIds.RuneApproachVelocity)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneApproachVelocity) || SecondaryPick2.Equals(RuneIds.RuneApproachVelocity)));
         public bool JackOfAllTradesSelected =>
-            !MayhemActive && (PrimaryPath == "Inspiration" && PrimaryRow3 == "Jack of All Trades") ||
-            (SecondaryPath == "Inspiration" && (SecondaryPick1 == "Jack of All Trades" || SecondaryPick2 == "Jack of All Trades"));
+            !MayhemActive && (PrimaryPath.Equals(RuneIds.PathInspiration) && PrimaryRow3.Equals(RuneIds.RuneJackOfAllTrades)) ||
+            (SecondaryPath.Equals(RuneIds.PathInspiration) && (SecondaryPick1.Equals(RuneIds.RuneJackOfAllTrades) || SecondaryPick2.Equals(RuneIds.RuneJackOfAllTrades)));
 
         public override void OnWorldLoad()
         {

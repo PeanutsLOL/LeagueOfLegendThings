@@ -6,7 +6,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class LegendBloodline : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Legend_Bloodline";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Legend-_Bloodline";
 
         public override void SetStaticDefaults()
         {

@@ -16,6 +16,9 @@ obj/
 # Graphify knowledge graph
 graphify-out/
 
+# 图标迁移的源文件（webp 由 convert_webp.py 转成 png 后删除，tML 也不支持 webp）
+*.webp
+
 # OS junk
 .DS_Store
 *.log
@@ -31,5 +34,22 @@ packages/
 .history/
 .fake
 
-# Claude Code (local settings only)
+# Claude Code (local settings + memory)
 .claude/settings.local.json
+.claude/memory/
+.claude/projects/
+
+# tModLoader mod build output
+*.tmod
+*.enabled
+Mod Sources/
+!Mod Sources/LeagueOfLegendThings/
+
+# Backup & temp
+*.bak
+*.tmp
+*~
+
+# Roadmap / plans — local only, not part of mod
+# (uncomment if you prefer to keep it local)
+# ROADMAP.md

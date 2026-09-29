@@ -8,7 +8,7 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 {
     public class Triumph : ModBuff
     {
-        public override string Texture => "LeagueOfLegendThings/Content/Icon/Triumph";
+        public override string Texture => "LeagueOfLegendThings/Content/Icon/Runes/Triumph";
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = false;

@@ -469,49 +469,5 @@ namespace LeagueOfLegendThings.Content.UI
             }
         }
 
-        // ============ 修复透明PNG边缘溢色 ============
-
-        /// <summary>
-        /// 使用 BlendState.NonPremultiplied 绘制贴图，避免透明 PNG
-        /// 在 UI 缩放时产生边缘色溢（fringing）问题
-        /// </summary>
-        private class NonPremultipliedUIImage : UIElement
-        {
-            private readonly Asset<Texture2D> _texture;
-
-            public NonPremultipliedUIImage(Asset<Texture2D> texture)
-            {
-                _texture = texture;
-                IgnoresMouseInteraction = true;
-            }
-
-            protected override void DrawSelf(SpriteBatch spriteBatch)
-            {
-                if (_texture?.Value == null) return;
-                var tex = _texture.Value;
-                CalculatedStyle dim = GetDimensions();
-
-                float scale = Math.Min(dim.Width / tex.Width, dim.Height / tex.Height);
-                float drawW = tex.Width * scale;
-                float drawH = tex.Height * scale;
-                float x = dim.X + (dim.Width - drawW) / 2f;
-                float y = dim.Y + (dim.Height - drawH) / 2f;
-
-                // 保存并切换 blend state
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied,
-                    SamplerState.PointClamp, DepthStencilState.None,
-                    RasterizerState.CullNone, null, Main.UIScaleMatrix);
-
-                spriteBatch.Draw(tex, new Rectangle((int)x, (int)y, (int)drawW, (int)drawH),
-                    null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
-
-                // 恢复默认 blend state
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-                    SamplerState.PointClamp, DepthStencilState.None,
-                    RasterizerState.CullNone, null, Main.UIScaleMatrix);
-            }
-        }
     }
 }

@@ -130,7 +130,6 @@ namespace LeagueOfLegendThings.Content.Buffs.Mayhem
                     var rs = ModContent.GetInstance<RuneSaveSystem>();
                     if (rs.ConquerorSelected) total += 0.5f;
                     if (rs.LegendBloodlineSelected) total += 4.5f; // 满层 15×0.3%
-                    if (rs.RavenousHunterSelected) total += 0.25f;  // 满层 5×0.05%
                 }
 
                 return total;

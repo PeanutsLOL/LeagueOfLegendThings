@@ -114,19 +114,19 @@ Buffs: {
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sudden_Impact
 	}
 
-	EyeballCollection: {
-		DisplayName: 眼球收集器
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Eyeball_Collection
+	GrislyMementos: {
+		DisplayName: 可憎纪念品
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Grisly_Mementos
 	}
 
-	RavenousHunter: {
-		DisplayName: 贪婪猎手
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ravenous_Hunter
+	SixthSense: {
+		DisplayName: 第六感
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Sixth_Sense
 	}
 
-	IngeniousHunter: {
-		DisplayName: 灵性猎手
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ingenious_Hunter
+	DeepWard: {
+		DisplayName: 深入守卫
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Deep_Ward
 	}
 
 	TreasureHunter: {
@@ -139,14 +139,24 @@ Buffs: {
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Relentless_Hunter
 	}
 
+	UltimateHunter: {
+		DisplayName: 终极猎人
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Ultimate_Hunter
+	}
+
 	ArcaneComet: {
 		DisplayName: 奥术彗星
 		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Arcane_Comet
 	}
 
-	PhaseRush: {
-		DisplayName: 相位猛冲
-		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Phase_Rush
+	StormraidersSurge: {
+		DisplayName: 风暴骑士的狂涌
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Stormraiders_Surge
+	}
+
+	DeathfireTouch: {
+		DisplayName: 冥火之触
+		Description: Mods.LeagueOfLegendThings.UI.Runes.Desc.Deathfire_Touch
 	}
 
 	AxiomArcanist: {
@@ -329,13 +339,13 @@ Configs: {
 		}
 
 		LeechPoolBarX: {
-			// Label: Leech Pool Bar X
-			// Tooltip: ""
+			Label: 吸血池状态条 X 坐标
+			Tooltip: ""
 		}
 
 		LeechPoolBarY: {
-			// Label: Leech Pool Bar Y
-			// Tooltip: ""
+			Label: 吸血池状态条 Y 坐标
+			Tooltip: ""
 		}
 	}
 }
@@ -347,6 +357,7 @@ UI: {
 			PanelTitle: 符文选择
 			ButtonLocked: 锁定
 			ButtonUnlocked: 解锁
+			Keystone: 基石
 		}
 
 		HintNoRunes: 尚未选择符文！点击设置按钮上方的 [符文] 按钮选择你的符文路线和基石。
@@ -399,14 +410,16 @@ UI: {
 			Cheap_Shot: 对移动受损的目标造成额外伤害。4秒冷却。
 			Taste_of_Blood: 未满血时命中回复16生命。20秒冷却。
 			Sudden_Impact: 位移后进入准备状态，下一击造成额外伤害。
-			Eyeball_Collection: 击杀累计最多10层，每层增加约0.8%伤害。
-			Ravenous_Hunter: 每层给予少量吸血。
-			Ingenious_Hunter: 每层减少药水冷却。
+			Grisly_Mementos: 击杀累计最多10层，每层增加约0.8%伤害。
+			Sixth_Sense: 每60秒免疫一次致命伤害。
+			Deep_Ward: Boss战中无伤20秒获得5秒闪避，被命中不受伤而是消耗闪避。
 			Treasure_Hunter: 击杀时额外获得基于宝藏猎人层数的钱币。
 			Relentless_Hunter: 在5秒内未受伤后，每层增加约3%移动速度。
+			Ultimate_Hunter: 每层减少约4%技能冷却时间。
 			Summon_Aery: 召唤艾黎协助你。
 			Arcane_Comet: 周围会有奥术彗星，魔法攻击命中时触发额外攻击效果。
-			Phase_Rush: 对同一目标连续三次命中会短暂提高移动速度。
+			Stormraiders_Surge: 对同一目标连续三次命中会短暂提高移动速度。
+			Deathfire_Touch: 魔法伤害会灼烧目标3秒，伤害受最高职业加成影响。连续灼烧3秒后伤害提升75%。
 			Axiom_Arcanist: 增加4%法术伤害。
 			Manaflow_Band: 每层增加5点最大法力（最多6层），命中有冷却。
 			Nimbus_Cloak: 使用药水后短时间获得移动速度加成。
@@ -728,3 +741,5 @@ MayhemPlayer: {
 		LifeSteal: 生命偷取
 	}
 }
+
+// Conditions.MayhemEnabled: Mods.LeagueOfLegendThings.Conditions.MayhemEnabled

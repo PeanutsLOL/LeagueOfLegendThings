@@ -212,7 +212,7 @@ namespace LeagueOfLegendThings.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = ModContent.Request<Texture2D>(Texture, AssetRequestMode.ImmediateLoad).Value;
+            Texture2D tex = TextureAssets.Projectile[Type].Value;
             Vector2 origin = tex.Size() * 0.5f;
             Vector2 drawPos = Projectile.Center - Main.screenPosition;
 

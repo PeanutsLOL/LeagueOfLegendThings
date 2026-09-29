@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.Audio;
+using Microsoft.Xna.Framework;
 using System;
 using LeagueOfLegendThings.Content.Systems;
 using Terraria.ModLoader.IO;
@@ -184,6 +185,10 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
                 PitchVariance = 0.2f
             };
             SoundEngine.PlaySound(sfx, Player.position);
+
+			// 命中与治疗粒子
+			RuneVisualHelper.SpawnGoldenBurst(target.Center, 8, 1.2f);
+			RuneVisualHelper.SpawnHealBurst(Player.Center, 8, 1.2f);
 
 			// 治疗
 			int intHeal = (int)MathF.Max(1, heal);

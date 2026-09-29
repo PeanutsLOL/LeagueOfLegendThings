@@ -1,3 +1,4 @@
 displayName = League of Legend Things
 author = PeanutsLOL
-version = 0.3.40
+version = 0.3.43
+buildIgnore = graphify-out/*, *.md, *.py, *.sln, *.csproj, *.user, Properties/*

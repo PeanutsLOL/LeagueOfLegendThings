@@ -157,6 +157,9 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 
             LightningBoltSystem.SpawnBolt(startPos, endPos, Color.Red, duration: 60, width: 7.5f, segments: 14);
 
+            // 闪电路径上散布电火花粒子
+            RuneVisualHelper.SpawnElectricSpark(startPos, endPos, 8);
+
             // 闪电末端生成爆炸特效（仅视觉，不造成伤害）
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

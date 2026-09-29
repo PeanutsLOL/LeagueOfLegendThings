@@ -111,16 +111,17 @@ namespace LeagueOfLegendThings.Content.Items.Mayhem
     }
 
     /// <summary>
-    /// 将 StatBonusAnvilItem 添加到军火商商店（仅 Mayhem 模式）
+    /// 将 StatBonusAnvilItem 添加到军火商商店（Mayhem 模式，动态条件实时更新）
     /// </summary>
     public class MayhemGlobalNPC : GlobalNPC
     {
         public override void ModifyShop(NPCShop shop)
         {
             if (shop.NpcType != NPCID.ArmsDealer) return;
-            if (!ModContent.GetInstance<RuneConfig>().EnableAramMayhemRune) return;
 
-            shop.Add(ModContent.ItemType<StatBonusAnvilItem>());
+            shop.Add(ModContent.ItemType<StatBonusAnvilItem>(),
+                new Condition("Mods.LeagueOfLegendThings.Conditions.MayhemEnabled",
+                    () => ModContent.GetInstance<Config.RuneConfig>().EnableAramMayhemRune));
         }
     }
 }

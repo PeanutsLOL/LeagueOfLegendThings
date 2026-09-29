@@ -113,6 +113,11 @@ namespace LeagueOfLegendThings.Content.Buffs.SummonersRift
 				PitchVariance = 0.3f
 			};
 			SoundEngine.PlaySound(sfx2, Player.position);
+
+			// 地面冲击波粒子 + 护盾闪烁光环
+			RuneVisualHelper.SpawnShockwave(Player.Center);
+			RuneVisualHelper.SpawnRingBurst(Player.Center, DustID.GoldCoin, 10, 35f, 2.5f, 1.1f);
+
 			// Damage calculation: base 25 - 120 based on player maxHP, clamp
 			int baseDamage = 50 + (int)(Player.statLifeMax2 / 15f);
 			baseDamage = Math.Clamp(baseDamage, 50, 200);
